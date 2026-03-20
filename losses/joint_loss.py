@@ -28,10 +28,9 @@ class JointDistillationLoss(nn.Module):
         self.mse_loss = nn.MSELoss()
         self.grad_loss = GradientLoss()
         
-        # 根据日志，0.004 的基础 loss 太小了，
-        # 我们把 lambda_mse 和 lambda_grad 提高到 20.0，让蒸馏真正发力！
-        self.lambda_mse = 20.0 
-        self.lambda_grad = 20.0 
+        # 把 lambda_mse 和 lambda_grad 提高到 20.0
+        self.lambda_mse = 10.0 
+        self.lambda_grad = 30.0 
 
     def forward(self, seg_pred, mask_target, enhanced_img, teacher_img):
         # 1. 基础分割 Loss (BCE + Dice)

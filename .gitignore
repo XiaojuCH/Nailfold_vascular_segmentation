@@ -1,5 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# 数据集
 dataset_raw_split/
-*/__pycache__
+third_party/QH_Dataset/
+third_party/project_TransUNet/
+
+# 实验结果
+results/experiments/
+results/checkpoints/
+results/visualizations/
+
+# 模型权重
 *.pth
+*.npz
+model/vit_checkpoint/
+
+# 可视化
 *.png
-experiments/
+
+# 临时文件
+~$*.xlsx
+.DS_Store
+
+*.zip

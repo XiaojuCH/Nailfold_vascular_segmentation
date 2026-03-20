@@ -14,18 +14,39 @@ from models.unet_plus_plus import UNetPlusPlus
 from models.transunet import TransUNet
 from models.joint_framework import Enhancer, JointModel
 
+def overlay_mask(image, mask, color=(1, 0, 0), alpha=0.5):
+    """
+    将二值 Mask 以半透明颜色叠加到 RGB 原图上
+    :param image: 原图, shape (H, W, 3), 范围 [0, 1]
+    :param mask: 二值掩码, shape (H, W), 范围 {0, 1}
+    :param color: 叠加颜色, RGB 格式, 例如红色为 (1, 0, 0), 绿色为 (0, 1, 0)
+    :param alpha: 透明度 (0~1)
+    :return: 叠加后的 RGB 图像
+    """
+    overlay = image.copy()
+    for c in range(3):
+        # np.where: 如果 mask 为 1，则混合颜色；否则保持原图颜色
+        overlay[:, :, c] = np.where(
+            mask > 0, 
+            image[:, :, c] * (1 - alpha) + color[c] * alpha, 
+            image[:, :, c]
+        )
+    # 限制范围在 [0, 1] 防止 matplotlib 报错
+    return np.clip(overlay, 0, 1)
+
 def main():
     # ================= 1. 路径与配置设置 =================
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
     DATA_DIR = "./dataset_raw_split"
     
-    # 权重路径配置 (确保这四个文件都真实存在！)
+    # 权重路径配置 (确保这四个文件都真实存在)
     CKPT_UNET = "./experiments/baselines/unet/best_model.pth"
     CKPT_UNET_PP = "./experiments/baselines/unet++/best_model.pth"
     CKPT_TRANSUNET = "./experiments/baselines/transunet/best_model.pth"
     CKPT_OURS = "./experiments/ours_transunet/best_model.pth"
     
-    SAVE_DIR = "./vis_results_sci_all_models"
+    # 保存叠加对比图的新文件夹
+    SAVE_DIR = "./vis_results_overlay"
     os.makedirs(SAVE_DIR, exist_ok=True)
 
     # ================= 2. 加载测试集 =================
@@ -50,27 +71,17 @@ def main():
             print(f" [!] 警告: 找不到权重文件 -> {ckpt_path}")
         return model
 
-    # 1. U-Net
-    model_unet = UNet(n_channels=3, n_classes=1).to(DEVICE)
-    model_unet = load_weights(model_unet, CKPT_UNET, "U-Net")
-
-    # 2. U-Net++
-    model_unet_pp = UNetPlusPlus(n_channels=3, n_classes=1).to(DEVICE)
-    model_unet_pp = load_weights(model_unet_pp, CKPT_UNET_PP, "U-Net++")
-
-    # 3. TransUNet
-    model_transunet = TransUNet(n_channels=3, n_classes=1, img_size=256).to(DEVICE)
-    model_transunet = load_weights(model_transunet, CKPT_TRANSUNET, "TransUNet")
-
-    # 4. OURS (Enhancer + TransUNet)
+    model_unet = load_weights(UNet(n_channels=3, n_classes=1).to(DEVICE), CKPT_UNET, "U-Net")
+    model_unet_pp = load_weights(UNetPlusPlus(n_channels=3, n_classes=1).to(DEVICE), CKPT_UNET_PP, "U-Net++")
+    model_transunet = load_weights(TransUNet(n_channels=3, n_classes=1, img_size=256).to(DEVICE), CKPT_TRANSUNET, "TransUNet")
+    
     enhancer = Enhancer(in_channels=3, out_channels=3)
     segmentor = TransUNet(n_channels=3, n_classes=1, img_size=256)
-    model_ours = JointModel(enhancer, segmentor).to(DEVICE)
-    model_ours = load_weights(model_ours, CKPT_OURS, "OURS (Joint Distillation)")
+    model_ours = load_weights(JointModel(enhancer, segmentor).to(DEVICE), CKPT_OURS, "OURS")
 
     # ================= 4. 开始推理与绘图 =================
-    print(f"[*] 开始生成 SCI 4模型对比大图，将保存至 {SAVE_DIR} ...")
-    num_to_plot = 20  # 选前20张画图
+    print(f"[*] 开始生成 SCI 叠加对比大图，将保存至 {SAVE_DIR} ...")
+    num_to_plot = 50  # 选前50张画图
 
     with torch.no_grad():
         for i, batch in enumerate(tqdm(test_loader, total=num_to_plot)):
@@ -83,51 +94,50 @@ def main():
             pred_unet = torch.sigmoid(model_unet(image)) > 0.5
             pred_unet_pp = torch.sigmoid(model_unet_pp(image)) > 0.5
             pred_transunet = torch.sigmoid(model_transunet(image)) > 0.5
-            
-            # OURS 推理 (需解包)
             out_ours, _ = model_ours(image)
             pred_ours = torch.sigmoid(out_ours) > 0.5
 
-            # --- 数据提取与转换 ---
-            img_show = image[0].cpu().numpy().transpose(1, 2, 0)
-            gt_show = mask_gt[0, 0].cpu().numpy()
+            # --- 数据提取与转换 (转到 CPU numpy, 并确保尺寸正确) ---
+            # image 原本是 [1, 3, 256, 256]，转为 [256, 256, 3] 以供 matplotlib 画图
+            img_np = image[0].cpu().numpy().transpose(1, 2, 0)
             
-            show_unet = pred_unet[0, 0].cpu().numpy()
-            show_unet_pp = pred_unet_pp[0, 0].cpu().numpy()
-            show_transunet = pred_transunet[0, 0].cpu().numpy()
-            show_ours = pred_ours[0, 0].cpu().numpy()
+            # Mask 转为二维数组 [256, 256]
+            gt_np = mask_gt[0, 0].cpu().numpy() > 0.5
+            unet_np = pred_unet[0, 0].cpu().numpy()
+            unet_pp_np = pred_unet_pp[0, 0].cpu().numpy()
+            transunet_np = pred_transunet[0, 0].cpu().numpy()
+            ours_np = pred_ours[0, 0].cpu().numpy()
+
+            # --- 生成色彩叠加图 ---
+            # 金标准用绿色 (0, 1, 0)
+            img_gt = overlay_mask(img_np, gt_np, color=(0, 1, 0), alpha=0.4)
+            # 预测结果统一用红色 (1, 0, 0)
+            img_unet = overlay_mask(img_np, unet_np, color=(1, 0, 0), alpha=0.4)
+            img_unet_pp = overlay_mask(img_np, unet_pp_np, color=(1, 0, 0), alpha=0.4)
+            img_transunet = overlay_mask(img_np, transunet_np, color=(1, 0, 0), alpha=0.4)
+            img_ours = overlay_mask(img_np, ours_np, color=(1, 0, 0), alpha=0.4)
 
             # --- 绘图排版 (1行6列大图) ---
-            # figsize设得宽一点，保证论文里每张图的正方形比例
             fig, axes = plt.subplots(1, 6, figsize=(24, 4)) 
             
-            # 统一配置参数
-            titles = ["Original", "Ground Truth", "U-Net", "U-Net++", "TransUNet", "OURS (Proposed)"]
-            images_to_show = [img_show, gt_show, show_unet, show_unet_pp, show_transunet, show_ours]
+            titles = ["Original", "Ground Truth (Green)", "U-Net", "U-Net++", "TransUNet", "OURS (Proposed)"]
+            images_to_show = [img_np, img_gt, img_unet, img_unet_pp, img_transunet, img_ours]
             
             for ax, img, title in zip(axes, images_to_show, titles):
-                if title == "Original":
-                    ax.imshow(img)
-                else:
-                    ax.imshow(img, cmap="gray")
-                
-                # 突出显示我们自己的模型名称
+                ax.imshow(img)
                 if title == "OURS (Proposed)":
                     ax.set_title(title, fontsize=16, fontweight='bold', color="red")
                 else:
                     ax.set_title(title, fontsize=16)
-                    
-                ax.axis("off") # 关闭坐标轴，让画面更干净
+                ax.axis("off") # 关闭坐标轴
             
-            # 缩减子图之间的空白间距
             plt.subplots_adjust(wspace=0.05, hspace=0)
             
-            # 保存高质量图片
-            save_path = os.path.join(SAVE_DIR, f"compare_4models_{i+1:03d}.png")
+            save_path = os.path.join(SAVE_DIR, f"overlay_compare_{i+1:03d}.png")
             plt.savefig(save_path, dpi=300, bbox_inches='tight', pad_inches=0.05)
             plt.close()
 
-    print(f"[*] 🎉 4模型全景图绘制完成！请前往 {SAVE_DIR} 文件夹查看！")
+    print(f"[*] 🎉 4模型色彩叠加图绘制完成！请前往 {SAVE_DIR} 文件夹查看！")
 
 if __name__ == "__main__":
     main()
