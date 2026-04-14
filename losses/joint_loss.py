@@ -8,8 +8,8 @@ class GradientLoss(nn.Module):
         super(GradientLoss, self).__init__()
         kernel_x = [[-1., 0., 1.], [-2., 0., 2.], [-1., 0., 1.]]
         kernel_y = [[-1., -2., -1.], [0., 0., 0.], [1., 2., 1.]]
-        self.kernel_x = torch.FloatTensor(kernel_x).unsqueeze(0).unsqueeze(0).cuda()
-        self.kernel_y = torch.FloatTensor(kernel_y).unsqueeze(0).unsqueeze(0).cuda()
+        self.register_buffer('kernel_x', torch.FloatTensor(kernel_x).unsqueeze(0).unsqueeze(0))
+        self.register_buffer('kernel_y', torch.FloatTensor(kernel_y).unsqueeze(0).unsqueeze(0))
 
     def forward(self, pred, target):
         pred_g = pred[:, 1:2, :, :]
@@ -21,16 +21,13 @@ class GradientLoss(nn.Module):
         return F.mse_loss(grad_x_pred, grad_x_gt) + F.mse_loss(grad_y_pred, grad_y_gt)
 
 class JointDistillationLoss(nn.Module):
-    def __init__(self, lambda_mse=5.0, lambda_grad=5.0):
+    def __init__(self, lambda_mse=10.0, lambda_grad=30.0):
         super(JointDistillationLoss, self).__init__()
-        # 回归最纯粹的 BCE，和 Baseline 保持绝对公平
-        self.bce_loss = nn.BCEWithLogitsLoss() 
+        self.bce_loss = nn.BCEWithLogitsLoss()
         self.mse_loss = nn.MSELoss()
         self.grad_loss = GradientLoss()
-        
-        # 把 lambda_mse 和 lambda_grad 提高到 20.0
-        self.lambda_mse = 10.0 
-        self.lambda_grad = 30.0 
+        self.lambda_mse = lambda_mse
+        self.lambda_grad = lambda_grad
 
     def forward(self, seg_pred, mask_target, enhanced_img, teacher_img):
         # 1. 基础分割 Loss (BCE + Dice)

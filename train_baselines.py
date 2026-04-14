@@ -1,11 +1,31 @@
+"""
+Baseline模型对比训练脚本 - UNet 和 UNet++
+
+References:
+- UNet: Ronneberger et al. "U-Net: Convolutional Networks for Biomedical Image Segmentation"
+  MICCAI, 2015. https://arxiv.org/abs/1505.04597
+- UNet++: Zhou et al. "UNet++: A Nested U-Net Architecture for Medical Image Segmentation"
+  DLMIA, 2018. https://arxiv.org/abs/1807.10165
+"""
 import os
 import argparse
+import random
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+
+def set_seed(seed=42):
+    """设置随机种子以确保可复现性"""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 # 导入你的 Dataset
 from datasets.dataset_vessel import VesselDataset
@@ -18,28 +38,49 @@ from models.transunet import TransUNet
 
 def get_args():
     parser = argparse.ArgumentParser(description="Baseline Model Sweeper for Vessel Segmentation")
-    parser.add_argument("--model", type=str, default="transunet", choices=["unet", "unet++", "transunet"],
-                        help="选择要测试的基线网络")
-    parser.add_argument("--data_dir", type=str, default="./dataset_raw_split", help="数据集根目录")
-    parser.add_argument("--save_dir", type=str, default="./experiments/baselines", help="保存路径")
+    parser.add_argument("--model", type=str, default="unet", choices=["unet", "unet++"],
+                        help="选择要测试的基线网络（TransUNet请使用train_unified.py）")
+
+    # 数据集选择
+    DATASETS = {
+        "jiabi":         "./dataset_raw_split",
+        "anfc256":       "./dataset_anfc256_split",
+        "all":           "./dataset_all_split",
+        "all_filtered":  "./dataset_all_filtered",
+    }
+    parser.add_argument("--dataset", type=str, default="jiabi", choices=list(DATASETS.keys()),
+                        help="数据集: jiabi / anfc256 / all / all_filtered(连通域筛选后)")
+    parser.add_argument("--data_dir", type=str, default="", help="自定义数据集路径，留空则使用--dataset对应路径")
+    parser.add_argument("--save_dir", type=str, default="./results/experiments", help="保存根目录")
     parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--lr", type=float, default=1e-4)
-    return parser.parse_args()
+
+    args = parser.parse_args()
+    # 处理数据集路径
+    if not args.data_dir:
+        args.data_dir = DATASETS[args.dataset]
+    return args
 
 def main():
     args = get_args()
+
+    # 设置随机种子以确保可复现性
+    set_seed(42)
+
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
     
-    # 动态创建该模型的保存文件夹
-    model_save_dir = os.path.join(args.save_dir, args.model)
+    # 动态创建保存路径（按数据集/模型分类）
+    model_save_dir = os.path.join(args.save_dir, args.dataset, args.model)
     os.makedirs(model_save_dir, exist_ok=True)
-    
+
     # 强制加上 utf-8 编码，防止 Windows 报错
     log_file = open(os.path.join(model_save_dir, "training_log.txt"), "w", encoding="utf-8")
 
     print(f"[*] 启动 Baseline 摸底测试...")
+    print(f"[*] 数据集: {args.dataset} ({args.data_dir})")
     print(f"[*] 当前测试网络: {args.model.upper()} | 设备: {DEVICE}")
+    print(f"[*] 保存路径: {model_save_dir}")
 
     # ================= 1. 数据加载 =================
     train_dataset = VesselDataset(

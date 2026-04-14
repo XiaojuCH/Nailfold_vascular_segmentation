@@ -38,11 +38,11 @@ def generate_teacher_priors(input_dir, output_dir, clip_limit=2.0, tile_grid_siz
 
 if __name__ == "__main__":
     # 请根据你的实际路径修改
-    TRAIN_IMG_DIR = "dataset_raw_split/train/images"
-    TRAIN_TEACHER_DIR = "dataset_raw_split/train/teacher_priors"
+    TRAIN_IMG_DIR = "dataset_all_filtered/train/images"
+    TRAIN_TEACHER_DIR = "dataset_all_filtered/train/teacher_priors"
     
     generate_teacher_priors(TRAIN_IMG_DIR, TRAIN_TEACHER_DIR)
     
     # Val 和 Test 也同样处理
-    generate_teacher_priors("dataset_raw_split/val/images", "dataset_raw_split/val/teacher_priors")
-    generate_teacher_priors("dataset_raw_split/test/images", "dataset_raw_split/test/teacher_priors")
+    generate_teacher_priors("dataset_all_filtered/val/images", "dataset_all_filtered/val/teacher_priors")
+    generate_teacher_priors("dataset_all_filtered/test/images", "dataset_all_filtered/test/teacher_priors")

@@ -1,14 +1,29 @@
 """
 统一训练脚本 - 支持 Baseline 和 Ours 模式
+
+References:
+- TransUNet: Chen et al. "TransUNet: Transformers Make Strong Encoders for Medical Image Segmentation"
+  Medical Image Analysis, 2021. https://github.com/Beckschen/TransUNet
 """
 import os
 import sys
 import argparse
+import random
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+
+def set_seed(seed=42):
+    """设置随机种子以确保可复现性"""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = False
 
 # 确保导入项目的 utils，而不是 TransUNet 的
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -27,8 +42,22 @@ def get_args():
                         choices=["baseline", "ours"],
                         help="训练模式: baseline(纯TransUNet) 或 ours(联合蒸馏)")
 
-    # 数据路径
-    parser.add_argument("--data_dir", type=str, default="./dataset_raw_split")
+    # 实验名称（用于区分不同对比实验/消融实验）
+    parser.add_argument("--exp_name", type=str, default="",
+                        help="实验名称，留空则自动生成 {mode}_transunet")
+
+    # 数据集选择
+    DATASETS = {
+        "jiabi":         "./dataset_raw_split",
+        "anfc256":       "./dataset_anfc256_split",
+        "all":           "./dataset_all_split",
+        "all_filtered":  "./dataset_all_filtered",
+    }
+    parser.add_argument("--dataset", type=str, default="jiabi",
+                        choices=list(DATASETS.keys()),
+                        help="数据集: jiabi(JiaBi) / anfc256(纯ANFC,68患者) / all(混合数据集) / all_filtered(连通域筛选后)")
+    parser.add_argument("--data_dir", type=str, default="",
+                        help="自定义数据集路径，留空则使用 --dataset 对应的默认路径")
     parser.add_argument("--save_dir", type=str, default="./results/experiments")
 
     # 训练参数
@@ -40,25 +69,41 @@ def get_args():
     parser.add_argument("--lambda_mse", type=float, default=10.0)
     parser.add_argument("--lambda_grad", type=float, default=30.0)
 
-    # 预训练权重
-    parser.add_argument("--pretrained", type=str,
-                        default="model/vit_checkpoint/imagenet21k/R50+ViT-B_16.npz",
-                        help="TransUNet预训练权重路径")
-    parser.add_argument("--no_pretrained", action="store_true",
-                        help="不使用预训练权重（从头训练）")
+    # 预训练权重（默认不用，加 --pretrained 开启）
+    parser.add_argument("--pretrained", type=str, default="",
+                        help="TransUNet预训练权重路径，留空则从头训练（默认）。"
+                             "例: model/vit_checkpoint/imagenet21k/R50+ViT-B_16.npz")
 
     return parser.parse_args()
 
 def main():
     args = get_args()
+
+    # 设置随机种子以确保可复现性
+    set_seed(42)
+
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-    # 创建保存目录
-    exp_name = f"{args.mode}_transunet"
+    # 数据集路径处理
+    DATASETS = {
+        "jiabi":         "./dataset_raw_split",
+        "anfc256":       "./dataset_anfc256_split",
+        "all":           "./dataset_all_split",
+        "all_filtered":  "./dataset_all_filtered",
+    }
+    if not args.data_dir:
+        args.data_dir = DATASETS[args.dataset]
+
+    # 创建保存目录（按数据集和方法分类）
+    if args.exp_name:
+        exp_name = args.exp_name
+    else:
+        exp_name = f"{args.dataset}/{args.mode}"
     save_path = os.path.join(args.save_dir, exp_name)
     os.makedirs(save_path, exist_ok=True)
 
     print(f"[*] 训练模式: {args.mode.upper()}")
+    print(f"[*] 数据集: {args.dataset} ({args.data_dir})")
     print(f"[*] 保存路径: {save_path}")
     print(f"[*] 设备: {DEVICE}")
 
@@ -90,7 +135,7 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
     # ================= 2. 模型创建 =================
-    pretrained_path = None if args.no_pretrained else args.pretrained
+    pretrained_path = args.pretrained if args.pretrained else None
 
     segmentor = TransUNetOfficial(
         n_channels=3, n_classes=1, img_size=256,
@@ -123,8 +168,9 @@ def main():
 
     # 日志文件
     log_file = open(os.path.join(save_path, "training_log.txt"), "w", encoding="utf-8")
-    log_file.write(f"=== {args.mode.upper()} MODE ===\n")
-    log_file.write(f"Epochs: {args.epochs}, Batch: {args.batch_size}, LR: {args.lr}\n")
+    log_file.write(f"=== {exp_name} ===\n")
+    log_file.write(f"Mode: {args.mode.upper()}, Epochs: {args.epochs}, Batch: {args.batch_size}, LR: {args.lr}\n")
+    log_file.write(f"Data: {args.data_dir}\n")
     if args.mode == "ours":
         log_file.write(f"Lambda MSE: {args.lambda_mse}, Lambda Grad: {args.lambda_grad}\n")
     log_file.write("\n")
