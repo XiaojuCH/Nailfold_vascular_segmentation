@@ -52,6 +52,7 @@ def get_args():
         "anfc256":       "./dataset_anfc256_split",
         "all":           "./dataset_all_split",
         "all_filtered":  "./dataset_all_filtered",
+        "all_filtered_VT_Turn":  "./dataset_all_filtered_VT_Turn",
     }
     parser.add_argument("--dataset", type=str, default="jiabi",
                         choices=list(DATASETS.keys()),
@@ -90,6 +91,7 @@ def main():
         "anfc256":       "./dataset_anfc256_split",
         "all":           "./dataset_all_split",
         "all_filtered":  "./dataset_all_filtered",
+        "all_filtered_VT_Turn":  "./dataset_all_filtered_VT_Turn",
     }
     if not args.data_dir:
         args.data_dir = DATASETS[args.dataset]
