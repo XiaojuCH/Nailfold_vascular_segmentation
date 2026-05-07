@@ -62,7 +62,8 @@ def get_args():
     parser.add_argument("--save_dir", type=str, default="./results/experiments")
 
     # 训练参数
-    parser.add_argument("--epochs", type=int, default=50)
+    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--patience", type=int, default=20, help="早停耐心值")
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--lr", type=float, default=1e-4)
 
@@ -114,20 +115,20 @@ def main():
     teacher_dir = os.path.join(args.data_dir, "train/teacher_priors") if args.mode == "ours" else None
 
     train_dataset = VesselDataset(
-        image_dir=os.path.join(args.data_dir, "train/images"),
+        image_dir=os.path.join(args.data_dir, "train/teacher_priors"),
         mask_dir=os.path.join(args.data_dir, "train/masks"),
         teacher_dir=teacher_dir,
         img_size=256, augment=True
     )
 
     val_dataset = VesselDataset(
-        image_dir=os.path.join(args.data_dir, "val/images"),
+        image_dir=os.path.join(args.data_dir, "val/teacher_priors"),
         mask_dir=os.path.join(args.data_dir, "val/masks"),
         teacher_dir=None, img_size=256, augment=False
     )
 
     test_dataset = VesselDataset(
-        image_dir=os.path.join(args.data_dir, "test/images"),
+        image_dir=os.path.join(args.data_dir, "test/teacher_priors"),
         mask_dir=os.path.join(args.data_dir, "test/masks"),
         teacher_dir=None, img_size=256, augment=False
     )
@@ -178,6 +179,7 @@ def main():
     log_file.write("\n")
 
     best_dice = 0.0
+    patience_counter = 0
     history = {"train_loss": [], "val_dice": [], "val_hd95": []}
 
     # ================= 4. 训练循环 =================
@@ -250,8 +252,14 @@ def main():
         # 保存最优模型
         if avg_metrics['dice'] > best_dice:
             best_dice = avg_metrics['dice']
+            patience_counter = 0
             torch.save(model.state_dict(), os.path.join(save_path, "best_model.pth"))
             print(f"[*] 更新最优模型: Dice = {best_dice:.4f}")
+        else:
+            patience_counter += 1
+            if patience_counter >= args.patience:
+                print(f"[*] 早停触发，连续 {args.patience} 个 epoch 无提升")
+                break
 
     log_file.close()
 

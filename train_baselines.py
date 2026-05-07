@@ -52,7 +52,8 @@ def get_args():
                         help="数据集: jiabi / anfc256 / all / all_filtered(连通域筛选后)")
     parser.add_argument("--data_dir", type=str, default="", help="自定义数据集路径，留空则使用--dataset对应路径")
     parser.add_argument("--save_dir", type=str, default="./results/experiments", help="保存根目录")
-    parser.add_argument("--epochs", type=int, default=50)
+    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--patience", type=int, default=20, help="早停耐心值")
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--lr", type=float, default=1e-4)
 
@@ -140,7 +141,8 @@ def main():
     log_file.flush()
 
     best_dice = 0.0
-    
+    patience_counter = 0
+
     # 记录每个 Epoch 的数据用于画图
     history = {
         "train_loss": [],
@@ -210,8 +212,14 @@ def main():
         # 保存最优模型
         if avg_metrics['dice'] > best_dice:
             best_dice = avg_metrics['dice']
+            patience_counter = 0
             torch.save(model.state_dict(), os.path.join(model_save_dir, "best_model.pth"))
-            print(f"[*] 🚀 更新最优模型: Dice = {best_dice:.4f}")
+            print(f"[*] 更新最优模型: Dice = {best_dice:.4f}")
+        else:
+            patience_counter += 1
+            if patience_counter >= args.patience:
+                print(f"[*] 早停触发，连续 {args.patience} 个 epoch 无提升")
+                break
 
     log_file.close()
     print(f"[*] {args.model.upper()} 训练与验证完成。验证集最高 Dice: {best_dice:.4f}")

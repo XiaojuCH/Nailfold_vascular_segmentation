@@ -81,22 +81,22 @@ L_total = L_seg(BCE + Dice) + λ_mse * L_mse + λ_grad * L_grad
 
 ```bash
 # UNet
-python train_baselines.py --model unet --dataset anfc256 --epochs 50 --batch_size 4
+python train_baselines.py --model unet --dataset all_filtered --epochs 50 --batch_size 4
 
 # UNet++
-python train_baselines.py --model unet++ --dataset anfc256 --epochs 50 --batch_size 4
+python train_baselines.py --model unet++ --dataset all_filtered --epochs 50 --batch_size 4
 ```
 
 ### TransUNet Baseline
 
 ```bash
-python train_unified.py --mode baseline --dataset anfc256 --epochs 50 --batch_size 4
+python train_unified.py --mode baseline --dataset all_filtered --epochs 50 --batch_size 4
 ```
 
 ### Ours（联合蒸馏）
 
 ```bash
-python train_unified.py --mode ours --dataset anfc256 --lambda_mse 10.0 --lambda_grad 30.0 --epochs 50 --batch_size 4
+python train_unified.py --mode ours --dataset all_filtered --lambda_mse 10.0 --lambda_grad 30.0 --epochs 50 --batch_size 4
 ```
 
 ### 使用筛选后数据集
