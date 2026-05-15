@@ -69,10 +69,13 @@ def main():
     # 设置随机种子以确保可复现性
     set_seed(42)
 
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%m%d_%H%M")
+
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-    
-    # 动态创建保存路径（按数据集/模型分类）
-    model_save_dir = os.path.join(args.save_dir, args.dataset, args.model)
+
+    # 动态创建保存路径（按数据集/模型/时间戳分类，避免覆盖）
+    model_save_dir = os.path.join(args.save_dir, args.dataset, args.model, timestamp)
     os.makedirs(model_save_dir, exist_ok=True)
 
     # 强制加上 utf-8 编码，防止 Windows 报错

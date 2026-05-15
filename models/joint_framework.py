@@ -45,3 +45,36 @@ class JointModel(nn.Module):
         
         # 训练时我们需要 enhanced_img 来和 Teacher 算 Loss，推理时其实只用 seg_out
         return seg_out, enhanced_img
+
+
+class JointModel_V2(nn.Module):
+    """
+    升级版联合框架：融入绿通道先验的空间注意力机制 (Spatial Attention Gate)
+    """
+    def __init__(self, enhancer, segmentor):
+        super(JointModel_V2, self).__init__()
+        self.enhancer = enhancer
+        self.segmentor = segmentor
+
+    def forward(self, x):
+        # 1. 物理先验增强分支 (提取类似绿通道的血管高亮特征)
+        enhanced_feat = self.enhancer(x)
+        
+        # 2. 生成空间注意力掩膜 (Spatial Attention Mask)
+        # 因为 enhanced_feat 是 3 通道，我们按通道求平均变成单通道的概率图，
+        # 然后经过 sigmoid 确保值域在 (0, 1) 之间。
+        # 越接近 1 代表越可能是血管，越接近 0 代表是背景皮肤。
+        attention_mask = torch.sigmoid(enhanced_feat.mean(dim=1, keepdim=True))
+        
+        # 3. 物理先验融合 (残差注意力叠加)
+        # X_fused = X + X * Mask
+        # 这样既过滤了背景噪声（X * Mask），又保留了原图的基础信息结构（+ X）
+        x_fused = x + x * attention_mask
+        
+        # 4. 送入下游的 TransUNet 进行特征提取和分割
+        seg_out = self.segmentor(x_fused)
+        
+        # 返回 seg_out 用于计算 Dice Loss
+        # 返回 enhanced_feat 用于计算 MSE 和 Gradient Loss (向绿通道蒸馏)
+        # 额外返回 attention_mask 方便以后我们做可视化证明
+        return seg_out, enhanced_feat, attention_mask

@@ -31,7 +31,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from datasets.dataset_vessel import VesselDataset
 from utils.metrics import calculate_comprehensive_metrics
 from models.transunet_official import TransUNetOfficial
-from models.joint_framework import Enhancer, JointModel
+from models.joint_framework import Enhancer, JointModel, JointModel_V2
 from losses.joint_loss import JointDistillationLoss
 
 def get_args():
@@ -62,7 +62,7 @@ def get_args():
     parser.add_argument("--save_dir", type=str, default="./results/experiments")
 
     # 训练参数
-    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--epochs", type=int, default=50)
     parser.add_argument("--patience", type=int, default=20, help="早停耐心值")
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--lr", type=float, default=1e-4)
@@ -71,7 +71,9 @@ def get_args():
     parser.add_argument("--lambda_mse", type=float, default=10.0)
     parser.add_argument("--lambda_grad", type=float, default=30.0)
 
-    # 预训练权重（默认不用，加 --pretrained 开启）
+    parser.add_argument("--teacher_mode", type=str, default="green+clahe",
+                        choices=["green+clahe", "clahe_only", "green_only"],
+                        help="消融实验：教师先验生成方式")
     parser.add_argument("--pretrained", type=str, default="",
                         help="TransUNet预训练权重路径，留空则从头训练（默认）。"
                              "例: model/vit_checkpoint/imagenet21k/R50+ViT-B_16.npz")
@@ -97,12 +99,15 @@ def main():
     if not args.data_dir:
         args.data_dir = DATASETS[args.dataset]
 
-    # 创建保存目录（按数据集和方法分类）
+    from datetime import datetime
+    timestamp = datetime.now().strftime("%m%d_%H%M")
+
+    # 创建保存目录（按数据集和方法分类，加时间戳避免覆盖）
     if args.exp_name:
         exp_name = args.exp_name
     else:
-        exp_name = f"{args.dataset}/{args.mode}"
-    save_path = os.path.join(args.save_dir, exp_name)
+        exp_name = f"{args.dataset}/{args.mode}" if args.teacher_mode == "green+clahe" else f"{args.dataset}/{args.mode}_{args.teacher_mode.replace('+', '_')}"
+    save_path = os.path.join(args.save_dir, exp_name, timestamp)
     os.makedirs(save_path, exist_ok=True)
 
     print(f"[*] 训练模式: {args.mode.upper()}")
@@ -111,24 +116,26 @@ def main():
     print(f"[*] 设备: {DEVICE}")
 
     # ================= 1. 数据加载 =================
-    # Ours 模式需要 Teacher Prior
-    teacher_dir = os.path.join(args.data_dir, "train/teacher_priors") if args.mode == "ours" else None
+    # Ours 模式需要 Teacher Prior，根据 teacher_mode 选择对应目录
+    teacher_suffix = args.teacher_mode.replace("+", "_")
+    teacher_priors_dir = f"teacher_priors_{teacher_suffix}" if args.teacher_mode != "green+clahe" else "teacher_priors"
+    teacher_dir = os.path.join(args.data_dir, f"train/{teacher_priors_dir}") if args.mode == "ours" else None
 
     train_dataset = VesselDataset(
-        image_dir=os.path.join(args.data_dir, "train/teacher_priors"),
+        image_dir=os.path.join(args.data_dir, "train/images"),
         mask_dir=os.path.join(args.data_dir, "train/masks"),
         teacher_dir=teacher_dir,
         img_size=256, augment=True
     )
 
     val_dataset = VesselDataset(
-        image_dir=os.path.join(args.data_dir, "val/teacher_priors"),
+        image_dir=os.path.join(args.data_dir, "val/images"),
         mask_dir=os.path.join(args.data_dir, "val/masks"),
         teacher_dir=None, img_size=256, augment=False
     )
 
     test_dataset = VesselDataset(
-        image_dir=os.path.join(args.data_dir, "test/teacher_priors"),
+        image_dir=os.path.join(args.data_dir, "test/images"),
         mask_dir=os.path.join(args.data_dir, "test/masks"),
         teacher_dir=None, img_size=256, augment=False
     )
@@ -159,7 +166,7 @@ def main():
     else:
         # Ours: Enhancer + TransUNet + 联合蒸馏
         enhancer = Enhancer(in_channels=3, out_channels=3)
-        model = JointModel(enhancer, segmentor).to(DEVICE)
+        model = JointModel_V2(enhancer, segmentor).to(DEVICE)
         criterion = JointDistillationLoss(
             lambda_mse=args.lambda_mse,
             lambda_grad=args.lambda_grad
@@ -201,7 +208,7 @@ def main():
             else:
                 # Ours: 联合蒸馏
                 teachers = batch["teacher"].to(DEVICE)
-                seg_preds, enhanced_imgs = model(images)
+                seg_preds, enhanced_imgs, attention_mask = model(images)
                 loss, l_seg, l_mse, l_grad = criterion(seg_preds, masks, enhanced_imgs, teachers)
                 train_seg += l_seg.item()
                 train_mse += l_mse.item()
@@ -226,7 +233,7 @@ def main():
                 if args.mode == "baseline":
                     outputs = model(images)
                 else:
-                    outputs, _ = model(images)
+                    outputs, _, _ = model(images)
 
                 batch_metrics = calculate_comprehensive_metrics(outputs, masks)
                 for k in metrics_sum.keys():
@@ -279,7 +286,7 @@ def main():
             if args.mode == "baseline":
                 outputs = model(images)
             else:
-                outputs, _ = model(images)
+                outputs, _, _ = model(images)
 
             batch_metrics = calculate_comprehensive_metrics(outputs, masks)
             for k in test_metrics_sum.keys():

@@ -26,3 +26,7 @@ model/vit_checkpoint/
 .DS_Store
 
 *.zip
+
+*.mp4
+*.rar
+*.avi

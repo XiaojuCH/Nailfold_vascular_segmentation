@@ -81,7 +81,7 @@ L_total = L_seg(BCE + Dice) + λ_mse * L_mse + λ_grad * L_grad
 
 ```bash
 # UNet
-python train_baselines.py --model unet --dataset all_filtered --epochs 50 --batch_size 4
+D:/anaconda3/envs/pytorch/python.exe train_baselines.py --model unet --dataset all_filtered --epochs 50 --batch_size 4
 
 # UNet++
 python train_baselines.py --model unet++ --dataset all_filtered --epochs 50 --batch_size 4
@@ -102,7 +102,7 @@ python train_unified.py --mode ours --dataset all_filtered --lambda_mse 10.0 --l
 ### 使用筛选后数据集
 
 ```bash
-python train_unified.py --mode ours --dataset all_filtered --lambda_mse 10.0 --lambda_grad 30.0 --epochs 50 --batch_size 4
+D:/anaconda3/envs/pytorch/python.exe train_unified.py --mode ours --dataset all_filtered --lambda_mse 10.0 --lambda_grad 30.0 --epochs 50 --batch_size 4
 ```
 
 ### 生成教师先验（训练 ours 前需要）
@@ -128,3 +128,6 @@ pip install torch torchvision opencv-python scikit-image tqdm matplotlib
 ```
 
 TransUNet 官方实现位于 `third_party/TransUNet/`，需按其 README 配置预训练权重。
+
+
+D:\anaconda3\envs\pytorch\python.exe  visualize_features.py --img dataset_all_filtered/test/images/ANFC_000497.png --baseline_weight results/experiments/all_filtered/baseline/best_model.pth --ours_weight results\experiments\all_filtered\ours_green_only\best_model.pth --out_dir results/feature_vis
