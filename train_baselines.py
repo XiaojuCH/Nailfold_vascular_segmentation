@@ -121,7 +121,14 @@ def main():
     elif args.model == "transunet":
         model = TransUNet(n_channels=3, n_classes=1, img_size=256).to(DEVICE)
 
-    criterion = nn.BCEWithLogitsLoss()
+    bce_loss = nn.BCEWithLogitsLoss()
+
+    def criterion(outputs, masks):
+        loss_bce = bce_loss(outputs, masks)
+        pred_sig = torch.sigmoid(outputs)
+        intersection = (pred_sig * masks).sum()
+        dice_loss = 1 - (2. * intersection + 1e-6) / (pred_sig.sum() + masks.sum() + 1e-6)
+        return loss_bce + dice_loss
     optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=args.lr * 0.01)
 
@@ -136,7 +143,7 @@ def main():
         f"Initial LR:     {args.lr}\n"
         f"Optimizer:      AdamW (weight_decay=1e-4)\n"
         f"Scheduler:      CosineAnnealingLR\n"
-        f"Loss Function:  BCEWithLogitsLoss\n"
+        f"Loss Function:  BCEWithLogitsLoss + DiceLoss\n"
         f"Image Size:     256x256\n"
         f"========================================\n\n"
     )

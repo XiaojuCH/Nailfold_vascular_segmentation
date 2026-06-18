@@ -31,7 +31,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from datasets.dataset_vessel import VesselDataset
 from utils.metrics import calculate_comprehensive_metrics
 from models.transunet_official import TransUNetOfficial
-from models.joint_framework import Enhancer, JointModel, JointModel_V2
+from models.joint_framework import Enhancer, MultiScaleEnhancer, JointModel, JointModel_V2, JointModel_Gated
 from losses.joint_loss import JointDistillationLoss
 
 def get_args():
@@ -70,10 +70,22 @@ def get_args():
     # 蒸馏权重（仅 ours 模式使用）
     parser.add_argument("--lambda_mse", type=float, default=10.0)
     parser.add_argument("--lambda_grad", type=float, default=30.0)
+    parser.add_argument("--loss_weighting", type=str, default="fixed",
+                        choices=["fixed", "learnable"],
+                        help="ours 模式蒸馏损失权重: fixed(固定lambda) / learnable(可学习权重)")
 
     parser.add_argument("--teacher_mode", type=str, default="green+clahe",
                         choices=["green+clahe", "clahe_only", "green_only"],
                         help="消融实验：教师先验生成方式")
+    parser.add_argument("--enhancer", type=str, default="basic",
+                        choices=["basic", "multiscale"],
+                        help="ours 模式增强器结构: basic(原始轻量Enhancer) / multiscale(多尺度分支Enhancer)")
+    parser.add_argument("--joint_model", type=str, default="v1",
+                        choices=["v1", "v2", "gated"],
+                        help="ours 模式联合框架: v1(增强图直接分割) / v2(空间注意力残差融合) / gated(原图与增强图自适应门控融合)")
+    parser.add_argument("--attention_mode", type=str, default="normal",
+                        choices=["normal", "inverse"],
+                        help="仅 joint_model=v2 时生效: normal(原始注意力) / inverse(反向注意力)")
     parser.add_argument("--pretrained", type=str, default="",
                         help="TransUNet预训练权重路径，留空则从头训练（默认）。"
                              "例: model/vit_checkpoint/imagenet21k/R50+ViT-B_16.npz")
@@ -165,15 +177,27 @@ def main():
             return loss_bce + dice_loss
     else:
         # Ours: Enhancer + TransUNet + 联合蒸馏
-        enhancer = Enhancer(in_channels=3, out_channels=3)
-        model = JointModel_V2(enhancer, segmentor).to(DEVICE)
+        if args.enhancer == "multiscale":
+            enhancer = MultiScaleEnhancer(in_channels=3, out_channels=3)
+        else:
+            enhancer = Enhancer(in_channels=3, out_channels=3)
+        if args.joint_model == "v2":
+            model = JointModel_V2(enhancer, segmentor, attention_mode=args.attention_mode).to(DEVICE)
+        elif args.joint_model == "gated":
+            model = JointModel_Gated(enhancer, segmentor).to(DEVICE)
+        else:
+            model = JointModel(enhancer, segmentor).to(DEVICE)
         criterion = JointDistillationLoss(
             lambda_mse=args.lambda_mse,
-            lambda_grad=args.lambda_grad
+            lambda_grad=args.lambda_grad,
+            weight_mode=args.loss_weighting
         ).to(DEVICE)
 
     # ================= 3. 优化器 =================
-    optimizer = optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
+    optim_params = list(model.parameters())
+    if args.mode == "ours" and args.loss_weighting == "learnable":
+        optim_params += list(criterion.parameters())
+    optimizer = optim.AdamW(optim_params, lr=args.lr, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=args.lr * 0.01)
 
     # 日志文件
@@ -183,6 +207,10 @@ def main():
     log_file.write(f"Data: {args.data_dir}\n")
     if args.mode == "ours":
         log_file.write(f"Lambda MSE: {args.lambda_mse}, Lambda Grad: {args.lambda_grad}\n")
+        log_file.write(f"Loss Weighting: {args.loss_weighting}\n")
+        log_file.write(f"Enhancer: {args.enhancer}\n")
+        log_file.write(f"Joint Model: {args.joint_model}\n")
+        log_file.write(f"Attention Mode: {args.attention_mode}\n")
     log_file.write("\n")
 
     best_dice = 0.0
@@ -208,7 +236,10 @@ def main():
             else:
                 # Ours: 联合蒸馏
                 teachers = batch["teacher"].to(DEVICE)
-                seg_preds, enhanced_imgs, attention_mask = model(images)
+                if args.joint_model in ["v2", "gated"]:
+                    seg_preds, enhanced_imgs, aux_map = model(images)
+                else:
+                    seg_preds, enhanced_imgs = model(images)
                 loss, l_seg, l_mse, l_grad = criterion(seg_preds, masks, enhanced_imgs, teachers)
                 train_seg += l_seg.item()
                 train_mse += l_mse.item()
@@ -233,7 +264,10 @@ def main():
                 if args.mode == "baseline":
                     outputs = model(images)
                 else:
-                    outputs, _, _ = model(images)
+                    if args.joint_model in ["v2", "gated"]:
+                        outputs, _, _ = model(images)
+                    else:
+                        outputs, _ = model(images)
 
                 batch_metrics = calculate_comprehensive_metrics(outputs, masks)
                 for k in metrics_sum.keys():
@@ -249,8 +283,10 @@ def main():
             log_str = f"Ep {epoch+1:03d} | Loss: {avg_loss:.4f} | Dice: {avg_metrics['dice']:.4f} | HD95: {avg_metrics['hd95']:.2f}"
         else:
             N = len(train_loader)
+            weights = criterion.get_distill_weights()
             log_str = (f"Ep {epoch+1:03d} | Loss(Tot:{avg_loss:.3f} Seg:{train_seg/N:.3f} "
                       f"MSE:{train_mse/N:.3f} Grad:{train_grad/N:.3f}) | "
+                      f"W(MSE:{weights['mse']:.2f} Grad:{weights['grad']:.2f}) | "
                       f"Dice: {avg_metrics['dice']:.4f} | HD95: {avg_metrics['hd95']:.2f}")
         print(log_str)
         log_file.write(log_str + "\n")
@@ -270,6 +306,13 @@ def main():
 
     log_file.close()
 
+    if args.mode == "ours":
+        final_weights = criterion.get_distill_weights()
+        final_weight_str = f"[FINAL DISTILL WEIGHTS] MSE: {final_weights['mse']:.4f}, Grad: {final_weights['grad']:.4f}"
+        print(final_weight_str)
+        with open(os.path.join(save_path, "training_log.txt"), "a", encoding="utf-8") as f:
+            f.write(final_weight_str + "\n")
+
     # ================= 6. 测试集评估 =================
     print("\n" + "="*50)
     print("[*] 加载最佳模型进行测试...")
@@ -286,7 +329,10 @@ def main():
             if args.mode == "baseline":
                 outputs = model(images)
             else:
-                outputs, _, _ = model(images)
+                if args.joint_model in ["v2", "gated"]:
+                    outputs, _, _ = model(images)
+                else:
+                    outputs, _ = model(images)
 
             batch_metrics = calculate_comprehensive_metrics(outputs, masks)
             for k in test_metrics_sum.keys():
@@ -316,6 +362,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
