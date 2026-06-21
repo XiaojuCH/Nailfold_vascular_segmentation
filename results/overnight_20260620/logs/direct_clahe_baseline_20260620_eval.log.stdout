@@ -1,0 +1,9 @@
+
+[Eval] TransUNet_direct_clahe
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\direct_clahe_baseline_20260620\0620_0358\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_next_20260620\20260620_050933\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_next_20260620\20260620_050933\aggregate_results.xlsx
+TransUNet_direct_clahe: Dice=0.7425, IoU=0.6019, Recall=0.8032, Precision=0.7121, Spec=0.9601, Acc=0.9437, HD95=26.60, clDice=0.8293, BoundaryF1=0.6239

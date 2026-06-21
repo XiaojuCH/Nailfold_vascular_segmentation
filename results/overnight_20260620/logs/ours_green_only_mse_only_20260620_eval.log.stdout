@@ -1,0 +1,9 @@
+
+[Eval] Ours_green_only_mse_only
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_only_mse_only_20260620\0620_0616\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_next_20260620\20260620_074510\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_next_20260620\20260620_074510\aggregate_results.xlsx
+Ours_green_only_mse_only: Dice=0.7571, IoU=0.6193, Recall=0.7960, Precision=0.7399, Spec=0.9661, Acc=0.9485, HD95=23.27, clDice=0.8451, BoundaryF1=0.6477

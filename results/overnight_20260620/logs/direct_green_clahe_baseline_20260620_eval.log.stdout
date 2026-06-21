@@ -1,0 +1,9 @@
+
+[Eval] TransUNet_direct_green_clahe
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\direct_green_clahe_baseline_20260620\0620_0509\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_next_20260620\20260620_061620\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_next_20260620\20260620_061620\aggregate_results.xlsx
+TransUNet_direct_green_clahe: Dice=0.7497, IoU=0.6102, Recall=0.7917, Precision=0.7323, Spec=0.9650, Acc=0.9469, HD95=24.00, clDice=0.8362, BoundaryF1=0.6303

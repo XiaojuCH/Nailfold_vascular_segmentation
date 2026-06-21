@@ -1,0 +1,102 @@
+{
+  "notes": "Fixed weight registry for sequential key re-evaluation on dataset_all_filtered/test. Re-evaluation loads existing weights and predicts; it does not retrain models. Keep threshold=0.5 and img_size=256 unless a validation-set threshold policy is explicitly added.",
+  "experiments": [
+    {
+      "name": "UNet",
+      "model_type": "unet",
+      "weight": "results/experiments/all_filtered/unet/best_model.pth"
+    },
+    {
+      "name": "UNet++",
+      "model_type": "unet++",
+      "weight": "results/experiments/all_filtered/unet++/best_model.pth"
+    },
+    {
+      "name": "TransUNet",
+      "model_type": "transunet",
+      "weight": "results/experiments/all_filtered/baseline_retrain_20260619/0619_0232/best_model.pth",
+      "status": "verified_retrain",
+      "note": "Retrained baseline. 2026-06-19 unified re-evaluation gives Dice 0.7522, IoU 0.6140, clDice 0.8403."
+    },
+    {
+      "name": "Ours green+CLAHE",
+      "model_type": "ours",
+      "weight": "results/experiments/all_filtered/ours/best_model.pth",
+      "status": "suspect_retrain_needed",
+      "note": "2026-06-19 unified re-evaluation gives Dice 0.5295, inconsistent with training_log Dice 0.7537.",
+      "teacher_mode": "green+clahe",
+      "enhancer": "basic",
+      "joint_model": "v1",
+      "loss_weighting": "fixed",
+      "lambda_mse": 10.0,
+      "lambda_grad": 30.0
+    },
+    {
+      "name": "Ours CLAHE only",
+      "model_type": "ours",
+      "weight": "results/experiments/all_filtered/ours_clahe_only/best_model.pth",
+      "teacher_mode": "clahe_only",
+      "enhancer": "basic",
+      "joint_model": "v1",
+      "loss_weighting": "fixed",
+      "lambda_mse": 10.0,
+      "lambda_grad": 30.0
+    },
+    {
+      "name": "Ours green only",
+      "model_type": "ours",
+      "weight": "results/experiments/all_filtered/ours_green_only/best_model.pth",
+      "teacher_mode": "green_only",
+      "enhancer": "basic",
+      "joint_model": "v1",
+      "loss_weighting": "fixed",
+      "lambda_mse": 10.0,
+      "lambda_grad": 30.0
+    },
+    {
+      "name": "Ours green only multiscale",
+      "model_type": "ours",
+      "weight": "results/experiments/all_filtered/ours_green_only_multiscale/0529_1358/best_model.pth",
+      "teacher_mode": "green_only",
+      "enhancer": "multiscale",
+      "joint_model": "v1",
+      "loss_weighting": "fixed",
+      "lambda_mse": 10.0,
+      "lambda_grad": 30.0
+    },
+    {
+      "name": "Ours green only gated",
+      "model_type": "ours",
+      "weight": "results/experiments/all_filtered/ours_green_only_gated/0529_1755/best_model.pth",
+      "teacher_mode": "green_only",
+      "enhancer": "basic",
+      "joint_model": "gated",
+      "loss_weighting": "fixed",
+      "lambda_mse": 10.0,
+      "lambda_grad": 30.0
+    },
+    {
+      "name": "Ours green only inverse attention",
+      "model_type": "ours",
+      "weight": "results/experiments/all_filtered/ours_green_only_v2_inverse_attention/0529_1619/best_model.pth",
+      "teacher_mode": "green_only",
+      "enhancer": "basic",
+      "joint_model": "v2",
+      "attention_mode": "inverse",
+      "loss_weighting": "fixed",
+      "lambda_mse": 10.0,
+      "lambda_grad": 30.0
+    },
+    {
+      "name": "Ours green only learnable loss",
+      "model_type": "ours",
+      "weight": "results/experiments/all_filtered/ours_green_only_v1_learnable/0529_1133/best_model.pth",
+      "teacher_mode": "green_only",
+      "enhancer": "basic",
+      "joint_model": "v1",
+      "loss_weighting": "learnable",
+      "lambda_mse": 10.0,
+      "lambda_grad": 30.0
+    }
+  ]
+}

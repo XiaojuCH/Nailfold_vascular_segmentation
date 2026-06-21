@@ -1,0 +1,9 @@
+
+[Eval] TransUNet_direct_green
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\direct_green_baseline_20260620\0620_0244\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_next_20260620\20260620_035748\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_next_20260620\20260620_035748\aggregate_results.xlsx
+TransUNet_direct_green: Dice=0.7479, IoU=0.6086, Recall=0.8132, Precision=0.7128, Spec=0.9600, Acc=0.9447, HD95=25.13, clDice=0.8332, BoundaryF1=0.6247

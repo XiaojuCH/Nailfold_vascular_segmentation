@@ -2,22 +2,18 @@ import argparse
 import os
 import sys
 
-import numpy as np
 import torch
-import torch.nn.functional as F
-from scipy.ndimage import binary_dilation, distance_transform_edt
-from skimage.morphology import skeletonize
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from datasets.dataset_vessel import VesselDataset
-from utils.metrics import calculate_comprehensive_metrics
-from models.joint_framework import Enhancer, JointModel, JointModel_Gated, JointModel_V2, MultiScaleEnhancer
-from models.transunet_official import TransUNetOfficial
+from utils.metrics import calculate_comprehensive_metrics, per_image_metrics_from_logits, average_metric_rows
 from models.unet_baseline import UNet
 from models.unet_plus_plus import UNetPlusPlus
+from models.joint_framework import Enhancer, JointModel, JointModel_Gated, JointModel_V2, MultiScaleEnhancer
+from models.transunet_official import TransUNetOfficial
 
 
 DATASETS = {
@@ -27,62 +23,6 @@ DATASETS = {
     "all_filtered": "./dataset_all_filtered",
     "all_filtered_VT_Turn": "./dataset_all_filtered_VT_Turn",
 }
-
-
-def cl_score(pred, target, smooth=1e-6):
-    pred = np.asarray(pred, dtype=bool)
-    target = np.asarray(target, dtype=bool)
-    if pred.sum() == 0 and target.sum() == 0:
-        return 1.0
-    if pred.sum() == 0 or target.sum() == 0:
-        return 0.0
-
-    skel_pred = skeletonize(pred)
-    skel_target = skeletonize(target)
-    if skel_pred.sum() == 0 or skel_target.sum() == 0:
-        return 0.0
-
-    tprec = (skel_pred * target).sum() / (skel_pred.sum() + smooth)
-    tsens = (skel_target * pred).sum() / (skel_target.sum() + smooth)
-    return (2.0 * tprec * tsens) / (tprec + tsens + smooth)
-
-
-def boundary_f1(pred, target, tolerance=2, smooth=1e-6):
-    pred = np.asarray(pred, dtype=bool)
-    target = np.asarray(target, dtype=bool)
-    if pred.sum() == 0 and target.sum() == 0:
-        return 1.0
-    if pred.sum() == 0 or target.sum() == 0:
-        return 0.0
-
-    pred_boundary = pred ^ binary_dilation(pred)
-    target_boundary = target ^ binary_dilation(target)
-    if pred_boundary.sum() == 0 or target_boundary.sum() == 0:
-        return 0.0
-
-    pred_match = distance_transform_edt(~target_boundary) <= tolerance
-    target_match = distance_transform_edt(~pred_boundary) <= tolerance
-    precision = (pred_boundary & pred_match).sum() / (pred_boundary.sum() + smooth)
-    recall = (target_boundary & target_match).sum() / (target_boundary.sum() + smooth)
-    return (2.0 * precision * recall) / (precision + recall + smooth)
-
-
-def extra_structure_metrics(pred_logits, target_masks, threshold=0.5):
-    pred_probs = torch.sigmoid(pred_logits)
-    preds = (pred_probs > threshold).float().cpu().numpy()
-    targets = target_masks.float().cpu().numpy()
-
-    cldice_values = []
-    bf1_values = []
-    for i in range(preds.shape[0]):
-        pred = preds[i, 0] > 0.5
-        target = targets[i, 0] > 0.5
-        cldice_values.append(cl_score(pred, target))
-        bf1_values.append(boundary_f1(pred, target))
-    return {
-        "cldice": float(np.mean(cldice_values)),
-        "boundary_f1": float(np.mean(bf1_values)),
-    }
 
 
 def build_model(args, device):
@@ -111,6 +51,13 @@ def forward_logits(model, images, args):
     if args.model_type == "ours":
         return outputs[0]
     return outputs
+
+
+def load_state_dict(path, device):
+    try:
+        return torch.load(path, map_location=device, weights_only=True)
+    except TypeError:
+        return torch.load(path, map_location=device)
 
 
 def get_args():
@@ -144,21 +91,11 @@ def main():
     loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
     model = build_model(args, device)
-    state_dict = torch.load(args.weight, map_location=device, weights_only=True)
+    state_dict = load_state_dict(args.weight, device)
     model.load_state_dict(state_dict)
     model.eval()
 
-    metrics_sum = {
-        "dice": 0.0,
-        "iou": 0.0,
-        "accuracy": 0.0,
-        "precision": 0.0,
-        "sensitivity": 0.0,
-        "specificity": 0.0,
-        "hd95": 0.0,
-        "cldice": 0.0,
-        "boundary_f1": 0.0,
-    }
+    metric_rows = []
 
     with torch.no_grad():
         for batch in tqdm(loader, desc=f"Eval {args.split}"):
@@ -166,12 +103,9 @@ def main():
             masks = batch["mask"].to(device)
             logits = forward_logits(model, images, args)
 
-            base_metrics = calculate_comprehensive_metrics(logits, masks)
-            struct_metrics = extra_structure_metrics(logits, masks, threshold=args.threshold)
-            for key, value in {**base_metrics, **struct_metrics}.items():
-                metrics_sum[key] += value
+            metric_rows.extend(per_image_metrics_from_logits(logits, masks, threshold=args.threshold))
 
-    avg_metrics = {key: value / len(loader) for key, value in metrics_sum.items()}
+    avg_metrics = average_metric_rows(metric_rows)
     print("\n[FINAL EVAL RESULTS]")
     print(f"Model:     {args.model_type}")
     print(f"Weight:    {args.weight}")

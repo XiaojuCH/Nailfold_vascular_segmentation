@@ -1,0 +1,69 @@
+[*] 训练模式: BASELINE
+[*] 数据集: all_filtered (.\dataset_all_filtered_direct_green_clahe)
+[*] 保存路径: ./results/experiments\all_filtered/direct_green_clahe_baseline_20260620\0620_0509
+[*] 设备: cuda
+[*] 未加载预训练权重，从头训练
+Ep 001 | Loss: 0.9086 | Dice: 0.7499 | HD95: 34.22
+[*] 更新最优模型: Dice = 0.7499
+Ep 002 | Loss: 0.5928 | Dice: 0.7670 | HD95: 26.65
+[*] 更新最优模型: Dice = 0.7670
+Ep 003 | Loss: 0.5260 | Dice: 0.7646 | HD95: 26.16
+Ep 004 | Loss: 0.5083 | Dice: 0.7480 | HD95: 23.65
+Ep 005 | Loss: 0.4945 | Dice: 0.7324 | HD95: 37.35
+Ep 006 | Loss: 0.4878 | Dice: 0.7666 | HD95: 23.55
+Ep 007 | Loss: 0.4783 | Dice: 0.7736 | HD95: 22.82
+[*] 更新最优模型: Dice = 0.7736
+Ep 008 | Loss: 0.4731 | Dice: 0.7767 | HD95: 21.99
+[*] 更新最优模型: Dice = 0.7767
+Ep 009 | Loss: 0.4690 | Dice: 0.7748 | HD95: 21.15
+Ep 010 | Loss: 0.4612 | Dice: 0.7722 | HD95: 20.74
+Ep 011 | Loss: 0.4616 | Dice: 0.7812 | HD95: 22.01
+[*] 更新最优模型: Dice = 0.7812
+Ep 012 | Loss: 0.4544 | Dice: 0.7776 | HD95: 21.66
+Ep 013 | Loss: 0.4503 | Dice: 0.7809 | HD95: 20.37
+Ep 014 | Loss: 0.4479 | Dice: 0.7834 | HD95: 19.80
+[*] 更新最优模型: Dice = 0.7834
+Ep 015 | Loss: 0.4438 | Dice: 0.7744 | HD95: 22.51
+Ep 016 | Loss: 0.4386 | Dice: 0.7827 | HD95: 20.89
+Ep 017 | Loss: 0.4341 | Dice: 0.7715 | HD95: 21.26
+Ep 018 | Loss: 0.4289 | Dice: 0.7765 | HD95: 20.57
+Ep 019 | Loss: 0.4275 | Dice: 0.7777 | HD95: 21.66
+Ep 020 | Loss: 0.4233 | Dice: 0.7844 | HD95: 20.99
+[*] 更新最优模型: Dice = 0.7844
+Ep 021 | Loss: 0.4179 | Dice: 0.7643 | HD95: 30.01
+Ep 022 | Loss: 0.4180 | Dice: 0.7792 | HD95: 20.97
+Ep 023 | Loss: 0.4086 | Dice: 0.7833 | HD95: 19.64
+Ep 024 | Loss: 0.4065 | Dice: 0.7824 | HD95: 20.13
+Ep 025 | Loss: 0.4050 | Dice: 0.7777 | HD95: 20.20
+Ep 026 | Loss: 0.4002 | Dice: 0.7803 | HD95: 19.68
+Ep 027 | Loss: 0.3978 | Dice: 0.7819 | HD95: 21.01
+Ep 028 | Loss: 0.3890 | Dice: 0.7817 | HD95: 21.01
+Ep 029 | Loss: 0.3866 | Dice: 0.7798 | HD95: 20.41
+Ep 030 | Loss: 0.3844 | Dice: 0.7830 | HD95: 20.21
+Ep 031 | Loss: 0.3771 | Dice: 0.7736 | HD95: 20.51
+Ep 032 | Loss: 0.3788 | Dice: 0.7837 | HD95: 21.57
+Ep 033 | Loss: 0.3750 | Dice: 0.7825 | HD95: 20.05
+Ep 034 | Loss: 0.3729 | Dice: 0.7787 | HD95: 19.73
+Ep 035 | Loss: 0.3686 | Dice: 0.7794 | HD95: 20.17
+Ep 036 | Loss: 0.3658 | Dice: 0.7824 | HD95: 19.60
+Ep 037 | Loss: 0.3624 | Dice: 0.7843 | HD95: 19.87
+Ep 038 | Loss: 0.3596 | Dice: 0.7820 | HD95: 19.42
+Ep 039 | Loss: 0.3568 | Dice: 0.7812 | HD95: 19.59
+Ep 040 | Loss: 0.3554 | Dice: 0.7781 | HD95: 19.78
+[*] 早停触发，连续 20 个 epoch 无提升
+
+==================================================
+[*] 加载最佳模型进行测试...
+
+[FINAL TEST RESULTS] BASELINE
+--------------------------------------------------
+Dice:  0.7497
+IoU:   0.6102
+HD95:  24.00
+Sens:  0.7917
+Spec:  0.9650
+Acc:   0.9469
+Prec:  0.7323
+--------------------------------------------------
+
+[*] 训练完成！结果保存至: ./results/experiments\all_filtered/direct_green_clahe_baseline_20260620\0620_0509
