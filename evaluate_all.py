@@ -1,4 +1,4 @@
-﻿import argparse
+import argparse
 import csv
 import json
 import os
@@ -142,6 +142,12 @@ def get_args():
     parser.add_argument("--loss_weighting", default="fixed")
     parser.add_argument("--lambda_mse", type=float, default=10.0)
     parser.add_argument("--lambda_grad", type=float, default=30.0)
+    parser.add_argument("--seg_loss", default="bce_dice")
+    parser.add_argument("--cldice_weight", type=float, default=0.5)
+    parser.add_argument("--boundary_weight", type=float, default=0.5)
+    parser.add_argument("--focal_alpha", type=float, default=0.3)
+    parser.add_argument("--focal_beta", type=float, default=0.7)
+    parser.add_argument("--focal_gamma", type=float, default=0.75)
     parser.add_argument("--out_dir", default="results/unified_eval")
     return parser.parse_args()
 
@@ -168,6 +174,12 @@ def load_manifest(args):
                 "loss_weighting": args.loss_weighting,
                 "lambda_mse": args.lambda_mse,
                 "lambda_grad": args.lambda_grad,
+                "seg_loss": args.seg_loss,
+                "cldice_weight": args.cldice_weight,
+                "boundary_weight": args.boundary_weight,
+                "focal_alpha": args.focal_alpha,
+                "focal_beta": args.focal_beta,
+                "focal_gamma": args.focal_gamma,
             }
         ]
 
@@ -182,6 +194,12 @@ def load_manifest(args):
         item.setdefault("loss_weighting", "fixed")
         item.setdefault("lambda_mse", "")
         item.setdefault("lambda_grad", "")
+        item.setdefault("seg_loss", "")
+        item.setdefault("cldice_weight", "")
+        item.setdefault("boundary_weight", "")
+        item.setdefault("focal_alpha", "")
+        item.setdefault("focal_beta", "")
+        item.setdefault("focal_gamma", "")
         normalized.append(item)
     return normalized
 
@@ -320,6 +338,12 @@ def evaluate_one(exp, dataset, loader, args, device, run_dir):
         "loss_weighting": exp.get("loss_weighting", ""),
         "lambda_mse": exp.get("lambda_mse", ""),
         "lambda_grad": exp.get("lambda_grad", ""),
+        "seg_loss": exp.get("seg_loss", ""),
+        "cldice_weight": exp.get("cldice_weight", ""),
+        "boundary_weight": exp.get("boundary_weight", ""),
+        "focal_alpha": exp.get("focal_alpha", ""),
+        "focal_beta": exp.get("focal_beta", ""),
+        "focal_gamma": exp.get("focal_gamma", ""),
         "n_images": len(rows),
         **avg,
         "per_image_csv": per_image_path,
@@ -394,6 +418,12 @@ def main():
         "loss_weighting",
         "lambda_mse",
         "lambda_grad",
+        "seg_loss",
+        "cldice_weight",
+        "boundary_weight",
+        "focal_alpha",
+        "focal_beta",
+        "focal_gamma",
         "n_images",
         *METRIC_KEYS,
         "per_image_csv",
@@ -415,4 +445,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

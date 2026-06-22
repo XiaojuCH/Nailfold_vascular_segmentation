@@ -1,0 +1,9 @@
+
+[Eval] Ours_green_mse10_grad0_unified_focal
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_mse10_grad0_unified_focal_20260621\0621_1239\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_seg_loss_20260621\ours_green_mse10_grad0_unified_focal_20260621\20260621_132434\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_seg_loss_20260621\ours_green_mse10_grad0_unified_focal_20260621\20260621_132434\aggregate_results.xlsx
+Ours_green_mse10_grad0_unified_focal: Dice=0.7184, IoU=0.5744, Recall=0.8448, Precision=0.6489, Spec=0.9455, Acc=0.9337, HD95=31.12, clDice=0.7990, BoundaryF1=0.5638

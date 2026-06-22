@@ -1,0 +1,79 @@
+[*] 训练模式: OURS
+[*] 数据集: all_filtered (./dataset_all_filtered)
+[*] 保存路径: ./results/experiments\all_filtered/ours_green_mse10_grad0_cldice_20260621\0621_1324
+[*] 设备: cuda
+[*] 随机种子: 42
+[*] 分割损失: bce_dice_cldice
+[*] 未加载预训练权重，从头训练
+Ep 001 | Loss(Tot:1.324 Seg:1.138 MSE:0.019 Grad:0.223) | W(MSE:10.00 Grad:0.00) | Dice: 0.7352 | HD95: 27.83
+[*] 更新最优模型: Dice = 0.7352
+Ep 002 | Loss(Tot:0.801 Seg:0.735 MSE:0.007 Grad:0.065) | W(MSE:10.00 Grad:0.00) | Dice: 0.7340 | HD95: 23.47
+Ep 003 | Loss(Tot:0.712 Seg:0.656 MSE:0.006 Grad:0.035) | W(MSE:10.00 Grad:0.00) | Dice: 0.7559 | HD95: 21.80
+[*] 更新最优模型: Dice = 0.7559
+Ep 004 | Loss(Tot:0.671 Seg:0.623 MSE:0.005 Grad:0.023) | W(MSE:10.00 Grad:0.00) | Dice: 0.7630 | HD95: 21.43
+[*] 更新最优模型: Dice = 0.7630
+Ep 005 | Loss(Tot:0.655 Seg:0.609 MSE:0.005 Grad:0.017) | W(MSE:10.00 Grad:0.00) | Dice: 0.7687 | HD95: 20.84
+[*] 更新最优模型: Dice = 0.7687
+Ep 006 | Loss(Tot:0.639 Seg:0.595 MSE:0.004 Grad:0.014) | W(MSE:10.00 Grad:0.00) | Dice: 0.7725 | HD95: 21.25
+[*] 更新最优模型: Dice = 0.7725
+Ep 007 | Loss(Tot:0.626 Seg:0.583 MSE:0.004 Grad:0.012) | W(MSE:10.00 Grad:0.00) | Dice: 0.7682 | HD95: 21.43
+Ep 008 | Loss(Tot:0.621 Seg:0.578 MSE:0.004 Grad:0.010) | W(MSE:10.00 Grad:0.00) | Dice: 0.7712 | HD95: 20.65
+Ep 009 | Loss(Tot:0.611 Seg:0.571 MSE:0.004 Grad:0.009) | W(MSE:10.00 Grad:0.00) | Dice: 0.7720 | HD95: 21.03
+Ep 010 | Loss(Tot:0.603 Seg:0.563 MSE:0.004 Grad:0.008) | W(MSE:10.00 Grad:0.00) | Dice: 0.7769 | HD95: 19.99
+[*] 更新最优模型: Dice = 0.7769
+Ep 011 | Loss(Tot:0.600 Seg:0.559 MSE:0.004 Grad:0.008) | W(MSE:10.00 Grad:0.00) | Dice: 0.7754 | HD95: 19.45
+Ep 012 | Loss(Tot:0.592 Seg:0.553 MSE:0.004 Grad:0.007) | W(MSE:10.00 Grad:0.00) | Dice: 0.7773 | HD95: 20.45
+[*] 更新最优模型: Dice = 0.7773
+Ep 013 | Loss(Tot:0.589 Seg:0.548 MSE:0.004 Grad:0.007) | W(MSE:10.00 Grad:0.00) | Dice: 0.7794 | HD95: 21.11
+[*] 更新最优模型: Dice = 0.7794
+Ep 014 | Loss(Tot:0.585 Seg:0.546 MSE:0.004 Grad:0.006) | W(MSE:10.00 Grad:0.00) | Dice: 0.7765 | HD95: 19.94
+Ep 015 | Loss(Tot:0.578 Seg:0.541 MSE:0.004 Grad:0.006) | W(MSE:10.00 Grad:0.00) | Dice: 0.7643 | HD95: 19.88
+Ep 016 | Loss(Tot:0.574 Seg:0.533 MSE:0.004 Grad:0.006) | W(MSE:10.00 Grad:0.00) | Dice: 0.7758 | HD95: 24.32
+Ep 017 | Loss(Tot:0.570 Seg:0.530 MSE:0.004 Grad:0.005) | W(MSE:10.00 Grad:0.00) | Dice: 0.7790 | HD95: 20.83
+Ep 018 | Loss(Tot:0.564 Seg:0.526 MSE:0.004 Grad:0.005) | W(MSE:10.00 Grad:0.00) | Dice: 0.7877 | HD95: 19.42
+[*] 更新最优模型: Dice = 0.7877
+Ep 019 | Loss(Tot:0.558 Seg:0.520 MSE:0.004 Grad:0.005) | W(MSE:10.00 Grad:0.00) | Dice: 0.7846 | HD95: 20.73
+Ep 020 | Loss(Tot:0.557 Seg:0.517 MSE:0.004 Grad:0.005) | W(MSE:10.00 Grad:0.00) | Dice: 0.7819 | HD95: 20.48
+Ep 021 | Loss(Tot:0.551 Seg:0.514 MSE:0.004 Grad:0.005) | W(MSE:10.00 Grad:0.00) | Dice: 0.7824 | HD95: 19.54
+Ep 022 | Loss(Tot:0.546 Seg:0.508 MSE:0.004 Grad:0.005) | W(MSE:10.00 Grad:0.00) | Dice: 0.7801 | HD95: 20.08
+Ep 023 | Loss(Tot:0.542 Seg:0.504 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7849 | HD95: 19.17
+Ep 024 | Loss(Tot:0.532 Seg:0.494 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7880 | HD95: 20.16
+[*] 更新最优模型: Dice = 0.7880
+Ep 025 | Loss(Tot:0.526 Seg:0.489 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7862 | HD95: 20.04
+Ep 026 | Loss(Tot:0.525 Seg:0.488 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7795 | HD95: 20.20
+Ep 027 | Loss(Tot:0.525 Seg:0.487 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7852 | HD95: 18.99
+Ep 028 | Loss(Tot:0.517 Seg:0.478 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7852 | HD95: 20.20
+Ep 029 | Loss(Tot:0.512 Seg:0.474 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7863 | HD95: 19.22
+Ep 030 | Loss(Tot:0.509 Seg:0.471 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7870 | HD95: 20.16
+Ep 031 | Loss(Tot:0.501 Seg:0.465 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7848 | HD95: 19.71
+Ep 032 | Loss(Tot:0.500 Seg:0.463 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7814 | HD95: 20.04
+Ep 033 | Loss(Tot:0.497 Seg:0.459 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7821 | HD95: 19.84
+Ep 034 | Loss(Tot:0.492 Seg:0.454 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7839 | HD95: 19.57
+Ep 035 | Loss(Tot:0.484 Seg:0.447 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7838 | HD95: 20.32
+Ep 036 | Loss(Tot:0.482 Seg:0.446 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7870 | HD95: 19.70
+Ep 037 | Loss(Tot:0.481 Seg:0.444 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7867 | HD95: 20.57
+Ep 038 | Loss(Tot:0.476 Seg:0.439 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7857 | HD95: 19.83
+Ep 039 | Loss(Tot:0.471 Seg:0.435 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7860 | HD95: 20.22
+Ep 040 | Loss(Tot:0.470 Seg:0.435 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7839 | HD95: 19.96
+Ep 041 | Loss(Tot:0.469 Seg:0.432 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7859 | HD95: 19.88
+Ep 042 | Loss(Tot:0.465 Seg:0.427 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7875 | HD95: 19.42
+Ep 043 | Loss(Tot:0.461 Seg:0.424 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7850 | HD95: 19.99
+Ep 044 | Loss(Tot:0.460 Seg:0.423 MSE:0.004 Grad:0.004) | W(MSE:10.00 Grad:0.00) | Dice: 0.7843 | HD95: 19.85
+[*] 早停触发，连续 20 个 epoch 无提升
+[FINAL DISTILL WEIGHTS] MSE: 10.0000, Grad: 0.0000
+
+==================================================
+[*] 加载最佳模型进行测试...
+
+[FINAL TEST RESULTS] OURS
+--------------------------------------------------
+Dice:  0.7507
+IoU:   0.6113
+HD95:  23.95
+Sens:  0.8208
+Spec:  0.9597
+Acc:   0.9454
+Prec:  0.7088
+--------------------------------------------------
+
+[*] 训练完成！结果保存至: ./results/experiments\all_filtered/ours_green_mse10_grad0_cldice_20260621\0621_1324

@@ -1,0 +1,53 @@
+[*] 训练模式: OURS
+[*] 数据集: all_filtered (./dataset_all_filtered)
+[*] 保存路径: ./results/experiments\all_filtered/ours_green_mse10_grad0_unified_focal_20260621\0621_1239
+[*] 设备: cuda
+[*] 随机种子: 42
+[*] 分割损失: unified_focal
+[*] 未加载预训练权重，从头训练
+Ep 001 | Loss(Tot:0.532 Seg:0.382 MSE:0.015 Grad:0.187) | W(MSE:10.00 Grad:0.00) | Dice: 0.7393 | HD95: 29.89
+[*] 更新最优模型: Dice = 0.7393
+Ep 002 | Loss(Tot:0.336 Seg:0.283 MSE:0.005 Grad:0.035) | W(MSE:10.00 Grad:0.00) | Dice: 0.7470 | HD95: 22.33
+[*] 更新最优模型: Dice = 0.7470
+Ep 003 | Loss(Tot:0.307 Seg:0.260 MSE:0.005 Grad:0.016) | W(MSE:10.00 Grad:0.00) | Dice: 0.7693 | HD95: 22.68
+[*] 更新最优模型: Dice = 0.7693
+Ep 004 | Loss(Tot:0.292 Seg:0.251 MSE:0.004 Grad:0.010) | W(MSE:10.00 Grad:0.00) | Dice: 0.7716 | HD95: 25.52
+[*] 更新最优模型: Dice = 0.7716
+Ep 005 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 006 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 007 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 008 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 009 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 010 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 011 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 012 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 013 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 014 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 015 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 016 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 017 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 018 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 019 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 020 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 021 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 022 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 023 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+Ep 024 | Loss(Tot:nan Seg:nan MSE:nan Grad:nan) | W(MSE:10.00 Grad:0.00) | Dice: 0.0000 | HD95: 256.00
+[*] 早停触发，连续 20 个 epoch 无提升
+[FINAL DISTILL WEIGHTS] MSE: 10.0000, Grad: 0.0000
+
+==================================================
+[*] 加载最佳模型进行测试...
+
+[FINAL TEST RESULTS] OURS
+--------------------------------------------------
+Dice:  0.7184
+IoU:   0.5744
+HD95:  31.12
+Sens:  0.8448
+Spec:  0.9455
+Acc:   0.9337
+Prec:  0.6489
+--------------------------------------------------
+
+[*] 训练完成！结果保存至: ./results/experiments\all_filtered/ours_green_mse10_grad0_unified_focal_20260621\0621_1239

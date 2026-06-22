@@ -1,16 +1,19 @@
+import math
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import math
+
 
 class GradientLoss(nn.Module):
-    """边缘梯度约束 (基于 Sobel 算子)"""
+    """Sobel gradient consistency on the green channel of enhanced/teacher images."""
+
     def __init__(self):
-        super(GradientLoss, self).__init__()
-        kernel_x = [[-1., 0., 1.], [-2., 0., 2.], [-1., 0., 1.]]
-        kernel_y = [[-1., -2., -1.], [0., 0., 0.], [1., 2., 1.]]
-        self.register_buffer('kernel_x', torch.FloatTensor(kernel_x).unsqueeze(0).unsqueeze(0))
-        self.register_buffer('kernel_y', torch.FloatTensor(kernel_y).unsqueeze(0).unsqueeze(0))
+        super().__init__()
+        kernel_x = [[-1.0, 0.0, 1.0], [-2.0, 0.0, 2.0], [-1.0, 0.0, 1.0]]
+        kernel_y = [[-1.0, -2.0, -1.0], [0.0, 0.0, 0.0], [1.0, 2.0, 1.0]]
+        self.register_buffer("kernel_x", torch.FloatTensor(kernel_x).unsqueeze(0).unsqueeze(0))
+        self.register_buffer("kernel_y", torch.FloatTensor(kernel_y).unsqueeze(0).unsqueeze(0))
 
     def forward(self, pred, target):
         pred_g = pred[:, 1:2, :, :]
@@ -21,10 +24,184 @@ class GradientLoss(nn.Module):
         grad_y_gt = F.conv2d(target_g, self.kernel_y, padding=1)
         return F.mse_loss(grad_x_pred, grad_x_gt) + F.mse_loss(grad_y_pred, grad_y_gt)
 
-class JointDistillationLoss(nn.Module):
-    def __init__(self, lambda_mse=10.0, lambda_grad=30.0, weight_mode="fixed"):
-        super(JointDistillationLoss, self).__init__()
+
+class BCEDiceLoss(nn.Module):
+    def __init__(self, smooth=1e-6):
+        super().__init__()
         self.bce_loss = nn.BCEWithLogitsLoss()
+        self.smooth = smooth
+
+    def forward(self, logits, target):
+        loss_bce = self.bce_loss(logits, target)
+        probs = torch.sigmoid(logits)
+        intersection = (probs * target).sum()
+        dice_loss = 1.0 - (2.0 * intersection + self.smooth) / (
+            probs.sum() + target.sum() + self.smooth
+        )
+        return loss_bce + dice_loss
+
+
+class FocalTverskyLoss(nn.Module):
+    def __init__(self, alpha=0.3, beta=0.7, gamma=0.75, smooth=1e-6):
+        super().__init__()
+        self.alpha = alpha
+        self.beta = beta
+        self.gamma = gamma
+        self.smooth = smooth
+
+    def forward(self, logits, target):
+        probs = torch.sigmoid(logits)
+        dims = tuple(range(1, probs.ndim))
+        tp = (probs * target).sum(dim=dims)
+        fp = (probs * (1.0 - target)).sum(dim=dims)
+        fn = ((1.0 - probs) * target).sum(dim=dims)
+        tversky = (tp + self.smooth) / (tp + self.alpha * fp + self.beta * fn + self.smooth)
+        return torch.pow(1.0 - tversky, self.gamma).mean()
+
+
+class UnifiedFocalLoss(nn.Module):
+    """Lightweight unified focal loss: focal BCE + focal Tversky."""
+
+    def __init__(self, alpha=0.75, beta=0.7, gamma=0.75, smooth=1e-6):
+        super().__init__()
+        self.alpha = alpha
+        self.gamma = gamma
+        self.focal_tversky = FocalTverskyLoss(alpha=1.0 - beta, beta=beta, gamma=gamma, smooth=smooth)
+
+    def forward(self, logits, target):
+        bce = F.binary_cross_entropy_with_logits(logits, target, reduction="none")
+        pt = torch.exp(-bce)
+        alpha_factor = target * self.alpha + (1.0 - target) * (1.0 - self.alpha)
+        focal_bce = (alpha_factor * torch.pow(1.0 - pt, self.gamma) * bce).mean()
+        return 0.5 * focal_bce + 0.5 * self.focal_tversky(logits, target)
+
+
+def _soft_erode(img):
+    if img.shape[2] <= 2 or img.shape[3] <= 2:
+        return img
+    p1 = -F.max_pool2d(-img, kernel_size=(3, 1), stride=1, padding=(1, 0))
+    p2 = -F.max_pool2d(-img, kernel_size=(1, 3), stride=1, padding=(0, 1))
+    return torch.min(p1, p2)
+
+
+def _soft_dilate(img):
+    return F.max_pool2d(img, kernel_size=3, stride=1, padding=1)
+
+
+def _soft_open(img):
+    return _soft_dilate(_soft_erode(img))
+
+
+def _soft_skeletonize(img, iterations=10):
+    img1 = _soft_open(img)
+    skel = F.relu(img - img1)
+    for _ in range(iterations):
+        img = _soft_erode(img)
+        img1 = _soft_open(img)
+        delta = F.relu(img - img1)
+        skel = skel + F.relu(delta - skel * delta)
+    return skel
+
+
+class SoftClDiceLoss(nn.Module):
+    def __init__(self, iterations=10, smooth=1e-6):
+        super().__init__()
+        self.iterations = iterations
+        self.smooth = smooth
+
+    def forward(self, logits, target):
+        probs = torch.sigmoid(logits)
+        skel_pred = _soft_skeletonize(probs, iterations=self.iterations)
+        skel_target = _soft_skeletonize(target, iterations=self.iterations)
+        tprec = (skel_pred * target).sum() / (skel_pred.sum() + self.smooth)
+        tsens = (skel_target * probs).sum() / (skel_target.sum() + self.smooth)
+        cldice = (2.0 * tprec * tsens + self.smooth) / (tprec + tsens + self.smooth)
+        return 1.0 - cldice
+
+
+class BoundaryDiceLoss(nn.Module):
+    """Differentiable boundary Dice loss using soft erosion boundaries."""
+
+    def __init__(self, smooth=1e-6):
+        super().__init__()
+        self.smooth = smooth
+
+    def forward(self, logits, target):
+        probs = torch.sigmoid(logits)
+        pred_boundary = F.relu(probs - _soft_erode(probs))
+        target_boundary = F.relu(target - _soft_erode(target))
+        intersection = (pred_boundary * target_boundary).sum()
+        denom = pred_boundary.sum() + target_boundary.sum()
+        return 1.0 - (2.0 * intersection + self.smooth) / (denom + self.smooth)
+
+
+class CompositeSegmentationLoss(nn.Module):
+    def __init__(self, base_loss, cldice_weight=0.0, boundary_weight=0.0):
+        super().__init__()
+        self.base_loss = base_loss
+        self.cldice_weight = cldice_weight
+        self.boundary_weight = boundary_weight
+        self.cldice_loss = SoftClDiceLoss() if cldice_weight > 0 else None
+        self.boundary_loss = BoundaryDiceLoss() if boundary_weight > 0 else None
+
+    def forward(self, logits, target):
+        loss = self.base_loss(logits, target)
+        if self.cldice_loss is not None:
+            loss = loss + self.cldice_weight * self.cldice_loss(logits, target)
+        if self.boundary_loss is not None:
+            loss = loss + self.boundary_weight * self.boundary_loss(logits, target)
+        return loss
+
+
+def build_segmentation_loss(
+    seg_loss="bce_dice",
+    cldice_weight=0.5,
+    boundary_weight=0.5,
+    focal_alpha=0.3,
+    focal_beta=0.7,
+    focal_gamma=0.75,
+):
+    if seg_loss == "bce_dice":
+        return BCEDiceLoss()
+    if seg_loss == "focal_tversky":
+        return FocalTverskyLoss(alpha=focal_alpha, beta=focal_beta, gamma=focal_gamma)
+    if seg_loss == "unified_focal":
+        return UnifiedFocalLoss(alpha=focal_alpha, beta=focal_beta, gamma=focal_gamma)
+    if seg_loss == "bce_dice_cldice":
+        return CompositeSegmentationLoss(BCEDiceLoss(), cldice_weight=cldice_weight, boundary_weight=0.0)
+    if seg_loss == "bce_dice_boundary":
+        return CompositeSegmentationLoss(BCEDiceLoss(), cldice_weight=0.0, boundary_weight=boundary_weight)
+    if seg_loss == "bce_dice_cldice_boundary":
+        return CompositeSegmentationLoss(
+            BCEDiceLoss(),
+            cldice_weight=cldice_weight,
+            boundary_weight=boundary_weight,
+        )
+    raise ValueError(f"Unknown seg_loss: {seg_loss}")
+
+
+class JointDistillationLoss(nn.Module):
+    def __init__(
+        self,
+        lambda_mse=10.0,
+        lambda_grad=30.0,
+        weight_mode="fixed",
+        seg_loss="bce_dice",
+        cldice_weight=0.5,
+        boundary_weight=0.5,
+        focal_alpha=0.3,
+        focal_beta=0.7,
+        focal_gamma=0.75,
+    ):
+        super().__init__()
+        self.seg_loss = build_segmentation_loss(
+            seg_loss=seg_loss,
+            cldice_weight=cldice_weight,
+            boundary_weight=boundary_weight,
+            focal_alpha=focal_alpha,
+            focal_beta=focal_beta,
+            focal_gamma=focal_gamma,
+        )
         self.mse_loss = nn.MSELoss()
         self.grad_loss = GradientLoss()
         self.lambda_mse = lambda_mse
@@ -32,7 +209,11 @@ class JointDistillationLoss(nn.Module):
         self.weight_mode = weight_mode
 
         if weight_mode == "learnable":
-            # Uncertainty-style learnable weights, initialized to match fixed lambdas.
+            if lambda_mse <= 0 or lambda_grad <= 0:
+                raise ValueError(
+                    "learnable loss weighting requires positive lambda_mse and lambda_grad "
+                    f"(got lambda_mse={lambda_mse}, lambda_grad={lambda_grad})"
+                )
             self.log_var_mse = nn.Parameter(torch.tensor(-math.log(lambda_mse), dtype=torch.float32))
             self.log_var_grad = nn.Parameter(torch.tensor(-math.log(lambda_grad), dtype=torch.float32))
         elif weight_mode != "fixed":
@@ -42,34 +223,26 @@ class JointDistillationLoss(nn.Module):
         if self.weight_mode == "learnable":
             return {
                 "mse": torch.exp(-self.log_var_mse).detach().item(),
-                "grad": torch.exp(-self.log_var_grad).detach().item()
+                "grad": torch.exp(-self.log_var_grad).detach().item(),
             }
         return {"mse": float(self.lambda_mse), "grad": float(self.lambda_grad)}
 
     def forward(self, seg_pred, mask_target, enhanced_img, teacher_img):
-        # 1. 基础分割 Loss (BCE + Dice)
-        loss_bce = self.bce_loss(seg_pred, mask_target)
-        
-        pred_sig = torch.sigmoid(seg_pred)
-        intersection = (pred_sig * mask_target).sum()
-        dice_loss = 1 - (2. * intersection + 1e-6) / (pred_sig.sum() + mask_target.sum() + 1e-6)
-        
-        total_seg_loss = loss_bce + dice_loss
-        
-        # 2. 物理先验蒸馏 Loss
+        total_seg_loss = self.seg_loss(seg_pred, mask_target)
         loss_mse = self.mse_loss(enhanced_img, teacher_img)
         loss_grad = self.grad_loss(enhanced_img, teacher_img)
-        
-        # 3. 联合总 Loss
+
         if self.weight_mode == "learnable":
             weight_mse = torch.exp(-self.log_var_mse)
             weight_grad = torch.exp(-self.log_var_grad)
             total_loss = (
                 total_seg_loss
-                + weight_mse * loss_mse + self.log_var_mse
-                + weight_grad * loss_grad + self.log_var_grad
+                + weight_mse * loss_mse
+                + self.log_var_mse
+                + weight_grad * loss_grad
+                + self.log_var_grad
             )
         else:
             total_loss = total_seg_loss + self.lambda_mse * loss_mse + self.lambda_grad * loss_grad
-        
+
         return total_loss, total_seg_loss, loss_mse, loss_grad

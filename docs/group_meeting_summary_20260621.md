@@ -245,3 +245,60 @@ Evaluation: dataset_all_filtered/test, threshold=0.5
 - multiscale enhancer：旧结果略好，但 multiscale + MSE-only 没有复现增益。
 - gated / inverse attention / learnable loss：当前没有稳定收益。
 - old Ours green+CLAHE 权重：统一复评异常，不可用于正式表格。
+
+## 11. 2026-06-21 追加实验：阈值选择与结构/边界损失
+
+### 11.1 Val 阈值选择
+
+对当前两个已有权重做了 val 阈值选择：在 `dataset_all_filtered/val` 上扫 `threshold=0.30:0.70:0.02`，按 Dice 选最佳阈值，再固定到 test 上评估。
+
+| 模型 | Val 选择阈值 | Test Dice | IoU | Recall | Precision | HD95 | clDice | Boundary F1 | 结论 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| TransUNet baseline | 0.32 | 0.7511 | 0.6126 | 0.8151 | 0.7147 | 24.08 | 0.8410 | 0.6258 | 低阈值提高 Recall，但 Precision/Boundary 下降 |
+| Ours MSE10 Grad0 | 0.32 | 0.7549 | 0.6167 | 0.8291 | 0.7099 | 24.63 | 0.8431 | 0.6330 | 不如固定 0.5 的原结果 |
+
+结论：**不建议把 val-selected threshold 作为当前主表结果**。虽然 val 上 Dice 最优阈值是 0.32，但 test 上 Precision 和 Boundary F1 下降，说明固定 `threshold=0.5` 更稳。阈值选择可以作为补充分析，不能作为当前提升来源。
+
+### 11.2 结构/边界 loss sweep
+
+所有实验固定：`green_only + MSE10 + Grad0 + JointModel v1 + basic Enhancer + threshold 0.5 + seed 42`。
+
+| 实验 | Seg Loss | Dice | IoU | Recall | Precision | HD95 | clDice | Boundary F1 | 判断 |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---|
+| Ours MSE10 Grad0 旧最佳 | BCE + Dice | **0.7571** | **0.6193** | 0.7960 | 0.7399 | **23.27** | 0.8451 | 0.6477 | Dice/IoU/HD95 仍最好 |
+| Ours clDice + Boundary | BCE + Dice + soft-clDice + Boundary | 0.7567 | 0.6183 | 0.7928 | **0.7421** | 23.55 | **0.8533** | **0.6519** | 结构指标最强，值得作为新候选分支 |
+| Ours Boundary | BCE + Dice + Boundary | 0.7546 | 0.6155 | 0.7914 | 0.7378 | 23.72 | 0.8422 | 0.6429 | 单独 boundary 不够 |
+| Ours clDice | BCE + Dice + soft-clDice | 0.7507 | 0.6113 | 0.8208 | 0.7088 | 23.95 | 0.8504 | 0.6256 | clDice 升，但误检明显增加 |
+| Ours Focal Tversky | Focal Tversky | 0.7457 | 0.6056 | **0.8558** | 0.6785 | 26.26 | 0.8382 | 0.6007 | Recall 过高，Precision 崩，不推荐 |
+| Ours Unified Focal | Unified Focal | 0.7184 | 0.5744 | 0.8448 | 0.6489 | 31.12 | 0.7990 | 0.5638 | 明显失败，不推荐 |
+
+### 11.3 Paired 分析补充
+
+`Ours clDice + Boundary` 相对 TransUNet：
+
+| 指标 | 平均差值 | 95% CI | Wilcoxon p | 解读 |
+|---|---:|---:|---:|---|
+| Dice | +0.0045 | [+0.0008, +0.0083] | 0.1361 | 均值略升，但非显著 |
+| IoU | +0.0044 | [+0.0001, +0.0086] | 0.1642 | 与 Dice 类似 |
+| clDice | +0.0130 | [+0.0083, +0.0178] | 1.71e-10 | 结构连通性显著提升 |
+| Boundary F1 | +0.0115 | [+0.0069, +0.0160] | 2.48e-06 | 边界指标显著提升 |
+
+`Ours clDice + Boundary` 相对旧最佳 `Ours MSE10 Grad0`：
+
+| 指标 | 平均差值 | 95% CI | Wilcoxon p | 解读 |
+|---|---:|---:|---:|---|
+| Dice | -0.0005 | [-0.0033, +0.0024] | 0.3305 | Dice 基本持平 |
+| Precision | +0.0022 | [-0.0013, +0.0058] | 0.0066 | Precision 略好 |
+| clDice | +0.0082 | [+0.0050, +0.0114] | 3.43e-08 | 结构明显更好 |
+| Boundary F1 | +0.0042 | [+0.0010, +0.0074] | 0.0010 | 边界明显更好 |
+
+结论：**如果论文主指标是 Dice，旧最佳 `MSE10 Grad0` 仍是主线；如果论文强调甲襞毛细血管的管状结构完整性和边界质量，`clDice + Boundary` 更适合作为结构增强主线候选。**
+
+### 11.4 下一步建议
+
+1. 保留两个候选主线：
+   - Dice 主线：`green_only + MSE10 + Grad0 + BCE-Dice`。
+   - 结构主线：`green_only + MSE10 + Grad0 + BCE-Dice + soft-clDice(0.3) + Boundary(0.3)`。
+2. 对这两个候选和 TransUNet baseline 做多 seed：建议 seed 43/44，已有 seed 42 可保留。
+3. 暂停 Focal Tversky / Unified Focal，除非以后专门重新扫更保守的 beta/gamma。
+4. 下一轮如果继续追求更大 Dice 提升，不建议继续只加 loss；应转向边界辅助头、结构 teacher 或更强 backbone/baseline。

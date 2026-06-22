@@ -32,7 +32,7 @@ from datasets.dataset_vessel import VesselDataset
 from utils.metrics import calculate_comprehensive_metrics
 from models.transunet_official import TransUNetOfficial
 from models.joint_framework import Enhancer, MultiScaleEnhancer, JointModel, JointModel_V2, JointModel_Gated
-from losses.joint_loss import JointDistillationLoss
+from losses.joint_loss import JointDistillationLoss, build_segmentation_loss
 
 def get_args():
     parser = argparse.ArgumentParser(description="统一训练脚本")
@@ -66,6 +66,18 @@ def get_args():
     parser.add_argument("--patience", type=int, default=20, help="早停耐心值")
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--lr", type=float, default=1e-4)
+    parser.add_argument("--seed", type=int, default=42, help="随机种子")
+
+    # 分割损失，可用于结构/边界消融
+    parser.add_argument("--seg_loss", type=str, default="bce_dice",
+                        choices=["bce_dice", "focal_tversky", "unified_focal",
+                                 "bce_dice_cldice", "bce_dice_boundary", "bce_dice_cldice_boundary"],
+                        help="分割损失类型")
+    parser.add_argument("--cldice_weight", type=float, default=0.5, help="soft-clDice loss 权重")
+    parser.add_argument("--boundary_weight", type=float, default=0.5, help="soft boundary loss 权重")
+    parser.add_argument("--focal_alpha", type=float, default=0.3, help="Focal Tversky alpha/FP 权重")
+    parser.add_argument("--focal_beta", type=float, default=0.7, help="Focal Tversky beta/FN 权重")
+    parser.add_argument("--focal_gamma", type=float, default=0.75, help="Focal/Tversky gamma")
 
     # 蒸馏权重（仅 ours 模式使用）
     parser.add_argument("--lambda_mse", type=float, default=10.0)
@@ -96,7 +108,7 @@ def main():
     args = get_args()
 
     # 设置随机种子以确保可复现性
-    set_seed(42)
+    set_seed(args.seed)
 
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -126,6 +138,8 @@ def main():
     print(f"[*] 数据集: {args.dataset} ({args.data_dir})")
     print(f"[*] 保存路径: {save_path}")
     print(f"[*] 设备: {DEVICE}")
+    print(f"[*] 随机种子: {args.seed}")
+    print(f"[*] 分割损失: {args.seg_loss}")
 
     # ================= 1. 数据加载 =================
     # Ours 模式需要 Teacher Prior，根据 teacher_mode 选择对应目录
@@ -165,16 +179,16 @@ def main():
     )
 
     if args.mode == "baseline":
-        # Baseline: 纯 TransUNet (BCE + Dice)
+        # Baseline: 纯 TransUNet，可切换分割损失
         model = segmentor.to(DEVICE)
-        bce_loss = nn.BCEWithLogitsLoss()
-
-        def criterion(outputs, masks):
-            loss_bce = bce_loss(outputs, masks)
-            pred_sig = torch.sigmoid(outputs)
-            intersection = (pred_sig * masks).sum()
-            dice_loss = 1 - (2. * intersection + 1e-6) / (pred_sig.sum() + masks.sum() + 1e-6)
-            return loss_bce + dice_loss
+        criterion = build_segmentation_loss(
+            seg_loss=args.seg_loss,
+            cldice_weight=args.cldice_weight,
+            boundary_weight=args.boundary_weight,
+            focal_alpha=args.focal_alpha,
+            focal_beta=args.focal_beta,
+            focal_gamma=args.focal_gamma,
+        ).to(DEVICE)
     else:
         # Ours: Enhancer + TransUNet + 联合蒸馏
         if args.enhancer == "multiscale":
@@ -190,7 +204,13 @@ def main():
         criterion = JointDistillationLoss(
             lambda_mse=args.lambda_mse,
             lambda_grad=args.lambda_grad,
-            weight_mode=args.loss_weighting
+            weight_mode=args.loss_weighting,
+            seg_loss=args.seg_loss,
+            cldice_weight=args.cldice_weight,
+            boundary_weight=args.boundary_weight,
+            focal_alpha=args.focal_alpha,
+            focal_beta=args.focal_beta,
+            focal_gamma=args.focal_gamma,
         ).to(DEVICE)
 
     # ================= 3. 优化器 =================
@@ -205,6 +225,8 @@ def main():
     log_file.write(f"=== {exp_name} ===\n")
     log_file.write(f"Mode: {args.mode.upper()}, Epochs: {args.epochs}, Batch: {args.batch_size}, LR: {args.lr}\n")
     log_file.write(f"Data: {args.data_dir}\n")
+    log_file.write(f"Seed: {args.seed}\n")
+    log_file.write(f"Seg Loss: {args.seg_loss}, clDice_w: {args.cldice_weight}, boundary_w: {args.boundary_weight}, focal: ({args.focal_alpha}, {args.focal_beta}, {args.focal_gamma})\n")
     if args.mode == "ours":
         log_file.write(f"Lambda MSE: {args.lambda_mse}, Lambda Grad: {args.lambda_grad}\n")
         log_file.write(f"Loss Weighting: {args.loss_weighting}\n")
@@ -213,7 +235,7 @@ def main():
         log_file.write(f"Attention Mode: {args.attention_mode}\n")
     log_file.write("\n")
 
-    best_dice = 0.0
+    best_dice = -1.0
     patience_counter = 0
     history = {"train_loss": [], "val_dice": [], "val_hd95": []}
 
@@ -362,3 +384,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+

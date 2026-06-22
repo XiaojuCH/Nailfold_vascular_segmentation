@@ -1,0 +1,9 @@
+
+[Eval] Ours_green_mse10_grad0_cldice_boundary
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_mse10_grad0_cldice_boundary_20260621\0621_1622\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_seg_loss_20260621\ours_green_mse10_grad0_cldice_boundary_20260621\20260621_182316\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_seg_loss_20260621\ours_green_mse10_grad0_cldice_boundary_20260621\20260621_182316\aggregate_results.xlsx
+Ours_green_mse10_grad0_cldice_boundary: Dice=0.7567, IoU=0.6183, Recall=0.7928, Precision=0.7421, Spec=0.9667, Acc=0.9484, HD95=23.55, clDice=0.8533, BoundaryF1=0.6519
