@@ -1,0 +1,9 @@
+
+[Eval] Ours_green_mse10_grad0_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_mse10_grad0_pretrained_20260622\0623_1145\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_pretrained_p0_20260622\ours_green_mse10_grad0_pretrained_20260622\20260623_130656\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_pretrained_p0_20260622\ours_green_mse10_grad0_pretrained_20260622\20260623_130656\aggregate_results.xlsx
+Ours_green_mse10_grad0_pretrained: Dice=0.7583, IoU=0.6208, Recall=0.8031, Precision=0.7347, Spec=0.9648, Acc=0.9482, HD95=22.05, clDice=0.8465, BoundaryF1=0.6414

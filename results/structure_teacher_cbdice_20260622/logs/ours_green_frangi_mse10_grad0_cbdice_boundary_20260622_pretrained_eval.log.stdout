@@ -1,0 +1,9 @@
+
+[Eval] Ours_green_frangi_cbdice_boundary_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_frangi_mse10_grad0_cbdice_boundary_20260622_pretrained\0624_0114\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_structure_teacher_cbdice_20260622\ours_green_frangi_mse10_grad0_cbdice_boundary_20260622_pretrained\20260624_023837\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_structure_teacher_cbdice_20260622\ours_green_frangi_mse10_grad0_cbdice_boundary_20260622_pretrained\20260624_023837\aggregate_results.xlsx
+Ours_green_frangi_cbdice_boundary_pretrained: Dice=0.7516, IoU=0.6126, Recall=0.7933, Precision=0.7342, Spec=0.9651, Acc=0.9470, HD95=23.74, clDice=0.8471, BoundaryF1=0.6308

@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from datasets.dataset_vessel import VesselDataset
 from utils.metrics import METRIC_KEYS, average_metric_rows, per_image_metrics_from_logits
-from models.joint_framework import Enhancer, JointModel, JointModel_Gated, JointModel_V2, MultiScaleEnhancer
+from models.joint_framework import Enhancer, JointModel, JointModel_BoundaryRefine, JointModel_Gated, JointModel_V2, MultiScaleEnhancer
 from models.transunet_official import TransUNetOfficial
 from models.unet_baseline import UNet
 from models.unet_plus_plus import UNetPlusPlus
@@ -136,7 +136,7 @@ def get_args():
     parser.add_argument("--threshold", type=float, default=0.5)
     parser.add_argument("--boundary_tolerance", type=int, default=2)
     parser.add_argument("--enhancer", default="basic", choices=["basic", "multiscale"])
-    parser.add_argument("--joint_model", default="v1", choices=["v1", "v2", "gated"])
+    parser.add_argument("--joint_model", default="v1", choices=["v1", "v2", "gated", "boundary_refine"])
     parser.add_argument("--attention_mode", default="normal", choices=["normal", "inverse"])
     parser.add_argument("--teacher_mode", default="")
     parser.add_argument("--loss_weighting", default="fixed")
@@ -145,6 +145,8 @@ def get_args():
     parser.add_argument("--seg_loss", default="bce_dice")
     parser.add_argument("--cldice_weight", type=float, default=0.5)
     parser.add_argument("--boundary_weight", type=float, default=0.5)
+    parser.add_argument("--cbdice_weight", type=float, default=0.5)
+    parser.add_argument("--boundary_aux_weight", type=float, default=0.3)
     parser.add_argument("--focal_alpha", type=float, default=0.3)
     parser.add_argument("--focal_beta", type=float, default=0.7)
     parser.add_argument("--focal_gamma", type=float, default=0.75)
@@ -177,6 +179,8 @@ def load_manifest(args):
                 "seg_loss": args.seg_loss,
                 "cldice_weight": args.cldice_weight,
                 "boundary_weight": args.boundary_weight,
+                "cbdice_weight": args.cbdice_weight,
+                "boundary_aux_weight": args.boundary_aux_weight,
                 "focal_alpha": args.focal_alpha,
                 "focal_beta": args.focal_beta,
                 "focal_gamma": args.focal_gamma,
@@ -197,6 +201,8 @@ def load_manifest(args):
         item.setdefault("seg_loss", "")
         item.setdefault("cldice_weight", "")
         item.setdefault("boundary_weight", "")
+        item.setdefault("cbdice_weight", "")
+        item.setdefault("boundary_aux_weight", "")
         item.setdefault("focal_alpha", "")
         item.setdefault("focal_beta", "")
         item.setdefault("focal_gamma", "")
@@ -223,6 +229,8 @@ def build_model(exp, img_size, device):
             model = JointModel_V2(enhancer, segmentor, attention_mode=exp.get("attention_mode", "normal"))
         elif exp.get("joint_model", "v1") == "gated":
             model = JointModel_Gated(enhancer, segmentor)
+        elif exp.get("joint_model", "v1") == "boundary_refine":
+            model = JointModel_BoundaryRefine(enhancer, segmentor)
         else:
             model = JointModel(enhancer, segmentor)
     else:
@@ -341,6 +349,8 @@ def evaluate_one(exp, dataset, loader, args, device, run_dir):
         "seg_loss": exp.get("seg_loss", ""),
         "cldice_weight": exp.get("cldice_weight", ""),
         "boundary_weight": exp.get("boundary_weight", ""),
+        "cbdice_weight": exp.get("cbdice_weight", ""),
+        "boundary_aux_weight": exp.get("boundary_aux_weight", ""),
         "focal_alpha": exp.get("focal_alpha", ""),
         "focal_beta": exp.get("focal_beta", ""),
         "focal_gamma": exp.get("focal_gamma", ""),
@@ -421,6 +431,8 @@ def main():
         "seg_loss",
         "cldice_weight",
         "boundary_weight",
+        "cbdice_weight",
+        "boundary_aux_weight",
         "focal_alpha",
         "focal_beta",
         "focal_gamma",
@@ -445,5 +457,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

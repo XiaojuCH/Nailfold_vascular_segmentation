@@ -135,14 +135,47 @@ class BoundaryDiceLoss(nn.Module):
         return 1.0 - (2.0 * intersection + self.smooth) / (denom + self.smooth)
 
 
+class CenterlineBoundaryDiceLoss(nn.Module):
+    """Soft centerline-boundary Dice for vascular structures.
+
+    This approximates the cbDice idea with differentiable skeleton and boundary maps:
+    centerline pixels are rewarded when they fall inside the target/predicted vessel,
+    while soft boundaries keep vessel width from drifting too much.
+    """
+
+    def __init__(self, iterations=10, smooth=1e-6):
+        super().__init__()
+        self.iterations = iterations
+        self.smooth = smooth
+
+    def forward(self, logits, target):
+        probs = torch.sigmoid(logits)
+        skel_pred = _soft_skeletonize(probs, iterations=self.iterations)
+        skel_target = _soft_skeletonize(target, iterations=self.iterations)
+        pred_boundary = F.relu(probs - _soft_erode(probs))
+        target_boundary = F.relu(target - _soft_erode(target))
+
+        center_precision = (skel_pred * target).sum() / (skel_pred.sum() + self.smooth)
+        center_sensitivity = (skel_target * probs).sum() / (skel_target.sum() + self.smooth)
+        boundary_overlap = (pred_boundary * target_boundary).sum() / (pred_boundary.sum() + target_boundary.sum() + self.smooth)
+
+        cbdice = (2.0 * center_precision * center_sensitivity + self.smooth) / (
+            center_precision + center_sensitivity + self.smooth
+        )
+        cbdice = 0.7 * cbdice + 0.3 * (2.0 * boundary_overlap)
+        return 1.0 - cbdice.clamp(0.0, 1.0)
+
+
 class CompositeSegmentationLoss(nn.Module):
-    def __init__(self, base_loss, cldice_weight=0.0, boundary_weight=0.0):
+    def __init__(self, base_loss, cldice_weight=0.0, boundary_weight=0.0, cbdice_weight=0.0):
         super().__init__()
         self.base_loss = base_loss
         self.cldice_weight = cldice_weight
         self.boundary_weight = boundary_weight
+        self.cbdice_weight = cbdice_weight
         self.cldice_loss = SoftClDiceLoss() if cldice_weight > 0 else None
         self.boundary_loss = BoundaryDiceLoss() if boundary_weight > 0 else None
+        self.cbdice_loss = CenterlineBoundaryDiceLoss() if cbdice_weight > 0 else None
 
     def forward(self, logits, target):
         loss = self.base_loss(logits, target)
@@ -150,13 +183,15 @@ class CompositeSegmentationLoss(nn.Module):
             loss = loss + self.cldice_weight * self.cldice_loss(logits, target)
         if self.boundary_loss is not None:
             loss = loss + self.boundary_weight * self.boundary_loss(logits, target)
+        if self.cbdice_loss is not None:
+            loss = loss + self.cbdice_weight * self.cbdice_loss(logits, target)
         return loss
-
 
 def build_segmentation_loss(
     seg_loss="bce_dice",
     cldice_weight=0.5,
     boundary_weight=0.5,
+    cbdice_weight=0.5,
     focal_alpha=0.3,
     focal_beta=0.7,
     focal_gamma=0.75,
@@ -168,15 +203,20 @@ def build_segmentation_loss(
     if seg_loss == "unified_focal":
         return UnifiedFocalLoss(alpha=focal_alpha, beta=focal_beta, gamma=focal_gamma)
     if seg_loss == "bce_dice_cldice":
-        return CompositeSegmentationLoss(BCEDiceLoss(), cldice_weight=cldice_weight, boundary_weight=0.0)
+        return CompositeSegmentationLoss(BCEDiceLoss(), cldice_weight=cldice_weight, boundary_weight=0.0, cbdice_weight=0.0)
     if seg_loss == "bce_dice_boundary":
-        return CompositeSegmentationLoss(BCEDiceLoss(), cldice_weight=0.0, boundary_weight=boundary_weight)
+        return CompositeSegmentationLoss(BCEDiceLoss(), cldice_weight=0.0, boundary_weight=boundary_weight, cbdice_weight=0.0)
     if seg_loss == "bce_dice_cldice_boundary":
         return CompositeSegmentationLoss(
             BCEDiceLoss(),
             cldice_weight=cldice_weight,
             boundary_weight=boundary_weight,
+            cbdice_weight=0.0,
         )
+    if seg_loss == "bce_dice_cbdice":
+        return CompositeSegmentationLoss(BCEDiceLoss(), cldice_weight=0.0, boundary_weight=0.0, cbdice_weight=cbdice_weight)
+    if seg_loss == "bce_dice_cbdice_boundary":
+        return CompositeSegmentationLoss(BCEDiceLoss(), cldice_weight=0.0, boundary_weight=boundary_weight, cbdice_weight=cbdice_weight)
     raise ValueError(f"Unknown seg_loss: {seg_loss}")
 
 
@@ -189,6 +229,7 @@ class JointDistillationLoss(nn.Module):
         seg_loss="bce_dice",
         cldice_weight=0.5,
         boundary_weight=0.5,
+        cbdice_weight=0.5,
         focal_alpha=0.3,
         focal_beta=0.7,
         focal_gamma=0.75,
@@ -198,6 +239,7 @@ class JointDistillationLoss(nn.Module):
             seg_loss=seg_loss,
             cldice_weight=cldice_weight,
             boundary_weight=boundary_weight,
+            cbdice_weight=cbdice_weight,
             focal_alpha=focal_alpha,
             focal_beta=focal_beta,
             focal_gamma=focal_gamma,
@@ -246,3 +288,25 @@ class JointDistillationLoss(nn.Module):
             total_loss = total_seg_loss + self.lambda_mse * loss_mse + self.lambda_grad * loss_grad
 
         return total_loss, total_seg_loss, loss_mse, loss_grad
+
+def soft_boundary_target(mask):
+    return F.relu(mask - _soft_erode(mask))
+
+
+class JointDistillationBoundaryLoss(JointDistillationLoss):
+    def __init__(self, boundary_aux_weight=0.3, **kwargs):
+        super().__init__(**kwargs)
+        self.boundary_aux_weight = boundary_aux_weight
+        self.boundary_aux_loss = BCEDiceLoss()
+
+    def forward(self, seg_pred, mask_target, enhanced_img, teacher_img, boundary_pred):
+        total_loss, total_seg_loss, loss_mse, loss_grad = super().forward(
+            seg_pred,
+            mask_target,
+            enhanced_img,
+            teacher_img,
+        )
+        boundary_target = soft_boundary_target(mask_target)
+        loss_boundary_aux = self.boundary_aux_loss(boundary_pred, boundary_target)
+        total_loss = total_loss + self.boundary_aux_weight * loss_boundary_aux
+        return total_loss, total_seg_loss, loss_mse, loss_grad, loss_boundary_aux

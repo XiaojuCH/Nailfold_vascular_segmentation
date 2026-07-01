@@ -244,3 +244,129 @@ Dice 0.7522, IoU 0.6140, clDice 0.8403, BoundaryF1 0.6405, HD95 24.11
 ```text
 我们已经证明 green-channel prior 不是简单预处理，它作为一致性监督能在强 TransUNet 上带来稳定的小幅结构收益。由于 Dice 提升仍偏小，下一步将围绕血管任务最相关的结构连通性、边界和类别不平衡进行低成本 loss sweep；若找到更优组合，再做多 seed 和统计检验。如果 loss sweep 无法带来明显提升，则转向强 baseline 和结构辅助头/backbone 改进。
 ```
+## 9. 2026-06-22 P0：先补 TransUNet 预训练实验
+
+当前最可能带来 1-2 个点级别变化的，不是继续扫小 loss，而是启用 TransUNet 官方 ImageNet21k 预训练权重。项目里已经存在：
+
+```text
+model/vit_checkpoint/imagenet21k/R50+ViT-B_16.npz
+```
+
+已验证加载链路正常，日志会出现：
+
+```text
+load_pretrained: grid-size from 14 to 16
+[*] 已加载预训练权重: model/vit_checkpoint/imagenet21k/R50+ViT-B_16.npz
+```
+
+### 为什么这是 P0
+
+前面所有主要实验基本都是 `未加载预训练权重，从头训练`。但 TransUNet 的 R50+ViT-B_16 本来就依赖大规模预训练初始化；对 1838 张 train 图的小医学数据，从头训练很可能限制了绝对性能。若预训练 baseline 本身从 `0.752` 提到 `0.77+`，则论文表格需要整体更新；若 Ours 在预训练基础上还能再提升，则更接近 SCI 2-3 区需要的幅度。
+
+### 直接运行命令
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\scripts\run_pretrained_p0_20260622.ps1
+```
+
+该脚本会串联训练并统一复评：
+
+| 实验 | 目的 |
+|---|---|
+| `TransUNet_pretrained` | 判断强 baseline 的真实水平 |
+| `Ours_green_mse10_grad0_pretrained` | 判断 green prior 在预训练 backbone 上是否仍有效 |
+| `Ours_green_mse10_grad0_cldice_boundary_pretrained` | 判断结构/边界 loss 在预训练 backbone 上是否进一步改善 clDice/BoundaryF1 |
+
+输出：
+
+```text
+results/pretrained_p0_20260622/metrics_summary.csv
+results/pretrained_p0_20260622/run_summary.csv
+results/pretrained_p0_20260622/logs
+results/unified_eval_pretrained_p0_20260622
+```
+
+### 跑完后的判断标准
+
+| 情况 | 判断 |
+|---|---|
+| `TransUNet_pretrained` 明显高于 0.752，且 Ours 仍有 +0.005 以上 | 论文主表整体切换到 pretrained baseline/ours |
+| `TransUNet_pretrained` 高很多，但 Ours 不再提升 | 说明 green prior 主要补的是从头训练不足，创新风险增加，需要转向结构 teacher/边界辅助头 |
+| `Ours_pretrained` 比 `TransUNet_pretrained` 高 0.01 以上 | 有希望作为新主线，继续做 seed 43/44 |
+| `Ours_pretrained` 绝对 Dice 达到 0.77+ | 接近 SCI 2-3 区更可讲的性能水平 |
+| `clDice_boundary_pretrained` Dice 持平但结构指标显著更高 | 继续走“结构完整性”故事，而不是只追 Dice |
+
+## 10. 如果预训练仍不够，下一层高收益方向
+
+1. `cbDice`：2024 年 vascular segmentation 针对 clDice 不考虑血管宽度的问题提出 centerline-boundary Dice。我们当前 clDice+Boundary 已经有效，cbDice 是自然升级。
+2. `边界辅助头`：不要只把 boundary 当 loss，而是在分割输出旁边加一个 boundary logits，GT boundary 由 mask erosion/Sobel 生成。这样更直接优化 BoundaryF1。
+3. `结构 teacher`：green prior 不只做图像 MSE，而是生成 green/top-hat/frangi/skeleton/boundary teacher，蒸馏到 mask logits 或 attention map，减少背景纹理干扰。
+4. `更强 baseline/backbone`：至少补 Attention U-Net / DeepLabV3+ / MedNeXt 或 U-Mamba 之一。若我们的提升小，强 baseline 是审稿必须补的。
+5. `多 seed + 可视化`：如果预训练结果达到可用水平，立刻做 seed 43/44 和成功/失败案例图，不要再无限扩实验。
+## 11. 2026-06-22 P1：结构 Teacher + cbDice 实验
+
+如果预训练 P0 仍然不能带来足够提升，下一步不再继续 Focal/Tversky，而是围绕血管结构先验做实验。当前已实现：
+
+### 新增 teacher prior
+
+`scripts/generate_teacher.py` 现在支持：
+
+| teacher_mode | 含义 | 风险 |
+|---|---|---|
+| `green_blackhat` | 对 green channel 做 morphological black-hat，突出暗细血管 | 比较稳，建议优先看 |
+| `green_clahe_blackhat` | green CLAHE 后再 black-hat | 可能增强血管，也可能增强噪声 |
+| `green_frangi` | green channel 上做 Frangi vesselness | 有些图可能接近全黑，先作为探索 |
+
+训练入口 `train_unified.py` 已支持这些 `teacher_mode`。
+
+### 新增 cbDice loss
+
+`losses/joint_loss.py` 已加入：
+
+```text
+bce_dice_cbdice
+bce_dice_cbdice_boundary
+--cbdice_weight
+```
+
+这是对之前 `soft-clDice + boundary` 的升级尝试，目标是同时约束中心线连通性和边界/宽度。
+
+### 运行命令
+
+普通从头训练版本：
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\scripts\run_structure_teacher_cbdice_20260622.ps1
+```
+
+如果预训练 P0 结果显示预训练有用，可以跑预训练版本：
+
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\scripts\run_structure_teacher_cbdice_20260622.ps1 -UsePretrained
+```
+
+输出：
+
+```text
+results/structure_teacher_cbdice_20260622/metrics_summary.csv
+results/structure_teacher_cbdice_20260622/run_summary.csv
+results/unified_eval_structure_teacher_cbdice_20260622
+```
+
+### 判断标准
+
+| 情况 | 判断 |
+|---|---|
+| `green_blackhat + cbDiceBoundary` Dice 达到 0.762+ | 升为下一候选主线，做 seed 43/44 |
+| Dice 不涨但 clDice/BoundaryF1 继续涨 | 只作为结构指标分支，不作为 Dice 主线 |
+| Frangi 明显差 | 不继续 Frangi，避免噪声 teacher 误导 enhancer |
+| blackhat teacher 比 green_only 差 | 回到 green_only，转向边界辅助头或 backbone |
+
+当前优先级：
+
+1. 先跑 `run_pretrained_p0_20260622.ps1`。
+2. 如果 P0 有希望，再跑 `run_structure_teacher_cbdice_20260622.ps1 -UsePretrained`。
+3. 如果 P0 没希望，再跑普通 `run_structure_teacher_cbdice_20260622.ps1`，判断结构 teacher 是否能独立贡献。

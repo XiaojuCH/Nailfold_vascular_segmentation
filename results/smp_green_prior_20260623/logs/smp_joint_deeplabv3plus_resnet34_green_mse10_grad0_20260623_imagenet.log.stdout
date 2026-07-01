@@ -1,0 +1,54 @@
+[*] SMP joint: deeplabv3plus, encoder=resnet34, weights=imagenet
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] teacher_mode: green_only (./dataset_all_filtered\train\teacher_priors_green_only)
+[*] enhancer=basic, joint_model=v1, seg_loss=bce_dice
+[*] distill: lambda_mse=10.0, lambda_grad=0.0, loss_weighting=fixed
+[*] save_path: ./results/experiments\all_filtered/smp_joint_deeplabv3plus_resnet34_green_mse10_grad0_20260623_imagenet\0626_0956
+[*] device: cuda, seed=42
+Epoch 001 | LR=0.000100 | TrainLoss=0.9971 | Seg=0.8601 | MSE=0.0137 | Grad=0.1893 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7402 | IoU=0.5972 | Recall=0.7295 | Precision=0.7786 | HD95=22.60 | clDice=0.8342 | BoundaryF1=0.5935
+[*] Saved best model: val Dice=0.7402
+Epoch 002 | LR=0.000100 | TrainLoss=0.6142 | Seg=0.5594 | MSE=0.0055 | Grad=0.0378 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7451 | IoU=0.6037 | Recall=0.7212 | Precision=0.8035 | HD95=22.03 | clDice=0.8407 | BoundaryF1=0.6167
+[*] Saved best model: val Dice=0.7451
+Epoch 003 | LR=0.000099 | TrainLoss=0.5677 | Seg=0.5209 | MSE=0.0047 | Grad=0.0180 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7621 | IoU=0.6240 | Recall=0.7666 | Precision=0.7848 | HD95=20.69 | clDice=0.8548 | BoundaryF1=0.6355
+[*] Saved best model: val Dice=0.7621
+Epoch 004 | LR=0.000098 | TrainLoss=0.5466 | Seg=0.5041 | MSE=0.0043 | Grad=0.0135 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7696 | IoU=0.6329 | Recall=0.7568 | Precision=0.8045 | HD95=19.55 | clDice=0.8629 | BoundaryF1=0.6486
+[*] Saved best model: val Dice=0.7696
+Epoch 005 | LR=0.000098 | TrainLoss=0.5275 | Seg=0.4861 | MSE=0.0041 | Grad=0.0106 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7686 | IoU=0.6317 | Recall=0.7595 | Precision=0.8032 | HD95=21.08 | clDice=0.8639 | BoundaryF1=0.6513
+Epoch 006 | LR=0.000097 | TrainLoss=0.5160 | Seg=0.4746 | MSE=0.0041 | Grad=0.0084 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7746 | IoU=0.6393 | Recall=0.7889 | Precision=0.7855 | HD95=21.00 | clDice=0.8655 | BoundaryF1=0.6583
+[*] Saved best model: val Dice=0.7746
+Epoch 007 | LR=0.000095 | TrainLoss=0.5073 | Seg=0.4666 | MSE=0.0041 | Grad=0.0071 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7644 | IoU=0.6261 | Recall=0.7318 | Precision=0.8266 | HD95=21.29 | clDice=0.8630 | BoundaryF1=0.6489
+Epoch 008 | LR=0.000094 | TrainLoss=0.5007 | Seg=0.4592 | MSE=0.0042 | Grad=0.0065 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7676 | IoU=0.6316 | Recall=0.7511 | Precision=0.8132 | HD95=20.91 | clDice=0.8640 | BoundaryF1=0.6556
+Epoch 009 | LR=0.000092 | TrainLoss=0.4884 | Seg=0.4479 | MSE=0.0041 | Grad=0.0061 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7659 | IoU=0.6299 | Recall=0.7413 | Precision=0.8210 | HD95=21.39 | clDice=0.8613 | BoundaryF1=0.6572
+Epoch 010 | LR=0.000091 | TrainLoss=0.4786 | Seg=0.4407 | MSE=0.0038 | Grad=0.0054 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7683 | IoU=0.6315 | Recall=0.7363 | Precision=0.8310 | HD95=19.49 | clDice=0.8668 | BoundaryF1=0.6569
+Epoch 011 | LR=0.000089 | TrainLoss=0.4705 | Seg=0.4314 | MSE=0.0039 | Grad=0.0051 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7780 | IoU=0.6447 | Recall=0.7640 | Precision=0.8161 | HD95=19.85 | clDice=0.8743 | BoundaryF1=0.6698
+[*] Saved best model: val Dice=0.7780
+Epoch 012 | LR=0.000087 | TrainLoss=0.4620 | Seg=0.4241 | MSE=0.0038 | Grad=0.0046 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7758 | IoU=0.6414 | Recall=0.7523 | Precision=0.8238 | HD95=19.17 | clDice=0.8718 | BoundaryF1=0.6654
+Epoch 013 | LR=0.000084 | TrainLoss=0.4572 | Seg=0.4182 | MSE=0.0039 | Grad=0.0044 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7797 | IoU=0.6472 | Recall=0.7733 | Precision=0.8099 | HD95=20.08 | clDice=0.8748 | BoundaryF1=0.6726
+[*] Saved best model: val Dice=0.7797
+Epoch 014 | LR=0.000082 | TrainLoss=0.4483 | Seg=0.4120 | MSE=0.0036 | Grad=0.0042 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7838 | IoU=0.6529 | Recall=0.7923 | Precision=0.7972 | HD95=19.96 | clDice=0.8772 | BoundaryF1=0.6756
+[*] Saved best model: val Dice=0.7838
+Epoch 015 | LR=0.000080 | TrainLoss=0.4379 | Seg=0.4031 | MSE=0.0035 | Grad=0.0040 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7762 | IoU=0.6418 | Recall=0.7592 | Precision=0.8179 | HD95=19.70 | clDice=0.8742 | BoundaryF1=0.6690
+Epoch 016 | LR=0.000077 | TrainLoss=0.4309 | Seg=0.3941 | MSE=0.0037 | Grad=0.0036 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7808 | IoU=0.6481 | Recall=0.7870 | Precision=0.7968 | HD95=19.87 | clDice=0.8752 | BoundaryF1=0.6738
+Epoch 017 | LR=0.000074 | TrainLoss=0.4273 | Seg=0.3898 | MSE=0.0038 | Grad=0.0035 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7821 | IoU=0.6504 | Recall=0.7791 | Precision=0.8072 | HD95=19.67 | clDice=0.8785 | BoundaryF1=0.6736
+Epoch 018 | LR=0.000072 | TrainLoss=0.4207 | Seg=0.3824 | MSE=0.0038 | Grad=0.0036 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7716 | IoU=0.6362 | Recall=0.7433 | Precision=0.8259 | HD95=19.41 | clDice=0.8718 | BoundaryF1=0.6639
+Epoch 019 | LR=0.000069 | TrainLoss=0.4146 | Seg=0.3780 | MSE=0.0037 | Grad=0.0036 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7830 | IoU=0.6514 | Recall=0.7819 | Precision=0.8052 | HD95=18.35 | clDice=0.8775 | BoundaryF1=0.6737
+Epoch 020 | LR=0.000066 | TrainLoss=0.4080 | Seg=0.3709 | MSE=0.0037 | Grad=0.0034 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7762 | IoU=0.6421 | Recall=0.7742 | Precision=0.8017 | HD95=20.16 | clDice=0.8758 | BoundaryF1=0.6649
+Epoch 021 | LR=0.000063 | TrainLoss=0.4019 | Seg=0.3651 | MSE=0.0037 | Grad=0.0033 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7775 | IoU=0.6434 | Recall=0.7579 | Precision=0.8200 | HD95=19.39 | clDice=0.8768 | BoundaryF1=0.6703
+Epoch 022 | LR=0.000060 | TrainLoss=0.3934 | Seg=0.3575 | MSE=0.0036 | Grad=0.0031 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7808 | IoU=0.6489 | Recall=0.7954 | Precision=0.7865 | HD95=20.09 | clDice=0.8760 | BoundaryF1=0.6675
+Epoch 023 | LR=0.000057 | TrainLoss=0.3885 | Seg=0.3526 | MSE=0.0036 | Grad=0.0030 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7801 | IoU=0.6476 | Recall=0.7820 | Precision=0.8009 | HD95=18.90 | clDice=0.8756 | BoundaryF1=0.6671
+Epoch 024 | LR=0.000054 | TrainLoss=0.3805 | Seg=0.3439 | MSE=0.0037 | Grad=0.0030 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7785 | IoU=0.6458 | Recall=0.7769 | Precision=0.8056 | HD95=19.25 | clDice=0.8772 | BoundaryF1=0.6713
+Epoch 025 | LR=0.000050 | TrainLoss=0.3769 | Seg=0.3393 | MSE=0.0038 | Grad=0.0029 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7761 | IoU=0.6421 | Recall=0.7634 | Precision=0.8128 | HD95=21.16 | clDice=0.8746 | BoundaryF1=0.6686
+Epoch 026 | LR=0.000047 | TrainLoss=0.3696 | Seg=0.3336 | MSE=0.0036 | Grad=0.0029 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7758 | IoU=0.6413 | Recall=0.7629 | Precision=0.8117 | HD95=19.67 | clDice=0.8762 | BoundaryF1=0.6683
+Epoch 027 | LR=0.000044 | TrainLoss=0.3651 | Seg=0.3294 | MSE=0.0036 | Grad=0.0028 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7770 | IoU=0.6435 | Recall=0.7679 | Precision=0.8092 | HD95=19.69 | clDice=0.8755 | BoundaryF1=0.6674
+Epoch 028 | LR=0.000041 | TrainLoss=0.3593 | Seg=0.3233 | MSE=0.0036 | Grad=0.0027 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7770 | IoU=0.6428 | Recall=0.7636 | Precision=0.8125 | HD95=19.29 | clDice=0.8755 | BoundaryF1=0.6667
+Epoch 029 | LR=0.000038 | TrainLoss=0.3518 | Seg=0.3177 | MSE=0.0034 | Grad=0.0027 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7765 | IoU=0.6420 | Recall=0.7573 | Precision=0.8192 | HD95=19.48 | clDice=0.8771 | BoundaryF1=0.6665
+Epoch 030 | LR=0.000035 | TrainLoss=0.3508 | Seg=0.3137 | MSE=0.0037 | Grad=0.0027 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7711 | IoU=0.6354 | Recall=0.7418 | Precision=0.8282 | HD95=19.59 | clDice=0.8723 | BoundaryF1=0.6642
+Epoch 031 | LR=0.000032 | TrainLoss=0.3438 | Seg=0.3081 | MSE=0.0036 | Grad=0.0026 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7721 | IoU=0.6372 | Recall=0.7532 | Precision=0.8177 | HD95=20.23 | clDice=0.8734 | BoundaryF1=0.6637
+Epoch 032 | LR=0.000029 | TrainLoss=0.3378 | Seg=0.3030 | MSE=0.0035 | Grad=0.0026 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7745 | IoU=0.6404 | Recall=0.7569 | Precision=0.8180 | HD95=19.31 | clDice=0.8750 | BoundaryF1=0.6668
+Epoch 033 | LR=0.000027 | TrainLoss=0.3359 | Seg=0.3008 | MSE=0.0035 | Grad=0.0026 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7757 | IoU=0.6416 | Recall=0.7644 | Precision=0.8109 | HD95=19.28 | clDice=0.8754 | BoundaryF1=0.6678
+Epoch 034 | LR=0.000024 | TrainLoss=0.3327 | Seg=0.2979 | MSE=0.0035 | Grad=0.0025 | Bnd=0.0000 | W(MSE=10.00,Grad=0.00) | Dice=0.7758 | IoU=0.6409 | Recall=0.7615 | Precision=0.8129 | HD95=19.81 | clDice=0.8771 | BoundaryF1=0.6671
+[*] Early stopping at epoch 34
+
+[SMP Joint Evaluation Complete]
+Aggregate CSV: ./results/experiments\all_filtered/smp_joint_deeplabv3plus_resnet34_green_mse10_grad0_20260623_imagenet\0626_0956\aggregate_results.csv
+all_filtered/smp_joint_deeplabv3plus_resnet34_green_mse10_grad0_20260623_imagenet: Dice=0.7463, IoU=0.6066, Recall=0.7863, Precision=0.7298, HD95=25.14, clDice=0.8352, BoundaryF1=0.6226
