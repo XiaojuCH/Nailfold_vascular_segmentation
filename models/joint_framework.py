@@ -3,7 +3,7 @@ import torch.nn as nn
 
 class Enhancer(nn.Module):
     """
-    杞婚噺绾у浘鍍忓寮虹綉缁?(Student) - 甯︽畫宸繛鎺?
+    图像增强网络(Student) - 带残差连接
     """
     def __init__(self, in_channels=3, out_channels=3):
         super(Enhancer, self).__init__()
@@ -23,7 +23,7 @@ class Enhancer(nn.Module):
         residual = self.conv1(x)
         residual = self.conv2(residual)
         residual = self.conv3(residual)
-        # 娈嬪樊杩炴帴锛氳緭鍏ュ姞涓婂彉鍖栭噺锛屽苟鎴柇鍒板悎娉曞浘鍍忚寖鍥?
+        # 带残差连接：输入加上变化量，并限制在 [0, 1] 范围内
         out = torch.clamp(x + residual, min=0.0, max=1.0)
         return out
 
