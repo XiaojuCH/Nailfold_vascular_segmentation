@@ -1,0 +1,9 @@
+
+[Eval] E4a_no_enhancer_bn_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\no_enhancer_bn_pretrained_20260710\0706_2320\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_four_innovation_probes_20260710\no_enhancer_bn_pretrained_20260710\20260707_004949\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_four_innovation_probes_20260710\no_enhancer_bn_pretrained_20260710\20260707_004949\aggregate_results.xlsx
+E4a_no_enhancer_bn_pretrained: Dice=0.7573, IoU=0.6204, Recall=0.7884, Precision=0.7472, Spec=0.9678, Acc=0.9490, HD95=23.14, clDice=0.8469, BoundaryF1=0.6434

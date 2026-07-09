@@ -13,7 +13,17 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from datasets.dataset_vessel import VesselDataset
 from utils.metrics import METRIC_KEYS, average_metric_rows, per_image_metrics_from_logits
-from models.joint_framework import Enhancer, JointModel, JointModel_BoundaryRefine, JointModel_Gated, JointModel_V2, MultiScaleEnhancer
+from models.joint_framework import (
+    AnisotropicEnhancer,
+    Enhancer,
+    JointModel,
+    JointModel_BoundaryRefine,
+    JointModel_DecoderDistill,
+    JointModel_DualFusion,
+    JointModel_Gated,
+    JointModel_V2,
+    MultiScaleEnhancer,
+)
 from models.transunet_official import TransUNetOfficial
 from models.unet_baseline import UNet
 from models.unet_plus_plus import UNetPlusPlus
@@ -135,8 +145,9 @@ def get_args():
     parser.add_argument("--img_size", type=int, default=256)
     parser.add_argument("--threshold", type=float, default=0.5)
     parser.add_argument("--boundary_tolerance", type=int, default=2)
-    parser.add_argument("--enhancer", default="basic", choices=["basic", "multiscale"])
-    parser.add_argument("--joint_model", default="v1", choices=["v1", "v2", "gated", "boundary_refine"])
+    parser.add_argument("--enhancer", default="basic", choices=["basic", "multiscale", "anisotropic"])
+    parser.add_argument("--enhancer_norm", default="bn", choices=["bn", "none"])
+    parser.add_argument("--joint_model", default="v1", choices=["v1", "v2", "gated", "boundary_refine", "decoder_distill", "dual_fusion"])
     parser.add_argument("--attention_mode", default="normal", choices=["normal", "inverse"])
     parser.add_argument("--teacher_mode", default="")
     parser.add_argument("--loss_weighting", default="fixed")
@@ -147,6 +158,8 @@ def get_args():
     parser.add_argument("--boundary_weight", type=float, default=0.5)
     parser.add_argument("--cbdice_weight", type=float, default=0.5)
     parser.add_argument("--boundary_aux_weight", type=float, default=0.3)
+    parser.add_argument("--lambda_decoder_distill", type=float, default=1.0)
+    parser.add_argument("--decoder_distill_layers", default="2,3")
     parser.add_argument("--focal_alpha", type=float, default=0.3)
     parser.add_argument("--focal_beta", type=float, default=0.7)
     parser.add_argument("--focal_gamma", type=float, default=0.75)
@@ -171,6 +184,7 @@ def load_manifest(args):
                 "weight": args.weight,
                 "teacher_mode": args.teacher_mode,
                 "enhancer": args.enhancer,
+                "enhancer_norm": args.enhancer_norm,
                 "joint_model": args.joint_model,
                 "attention_mode": args.attention_mode,
                 "loss_weighting": args.loss_weighting,
@@ -181,6 +195,8 @@ def load_manifest(args):
                 "boundary_weight": args.boundary_weight,
                 "cbdice_weight": args.cbdice_weight,
                 "boundary_aux_weight": args.boundary_aux_weight,
+                "lambda_decoder_distill": args.lambda_decoder_distill,
+                "decoder_distill_layers": args.decoder_distill_layers,
                 "focal_alpha": args.focal_alpha,
                 "focal_beta": args.focal_beta,
                 "focal_gamma": args.focal_gamma,
@@ -192,6 +208,7 @@ def load_manifest(args):
         item = dict(exp)
         item.setdefault("name", item.get("model_type", "experiment"))
         item.setdefault("enhancer", args.enhancer)
+        item.setdefault("enhancer_norm", args.enhancer_norm)
         item.setdefault("joint_model", args.joint_model)
         item.setdefault("attention_mode", args.attention_mode)
         item.setdefault("teacher_mode", "")
@@ -203,6 +220,8 @@ def load_manifest(args):
         item.setdefault("boundary_weight", "")
         item.setdefault("cbdice_weight", "")
         item.setdefault("boundary_aux_weight", "")
+        item.setdefault("lambda_decoder_distill", "")
+        item.setdefault("decoder_distill_layers", "")
         item.setdefault("focal_alpha", "")
         item.setdefault("focal_beta", "")
         item.setdefault("focal_gamma", "")
@@ -220,10 +239,13 @@ def build_model(exp, img_size, device):
         model = TransUNetOfficial(n_channels=3, n_classes=1, img_size=img_size)
     elif model_type == "ours":
         segmentor = TransUNetOfficial(n_channels=3, n_classes=1, img_size=img_size)
+        enhancer_norm = exp.get("enhancer_norm", "bn") or "bn"
         if exp.get("enhancer", "basic") == "multiscale":
-            enhancer = MultiScaleEnhancer(in_channels=3, out_channels=3)
+            enhancer = MultiScaleEnhancer(in_channels=3, out_channels=3, norm_type=enhancer_norm)
+        elif exp.get("enhancer", "basic") == "anisotropic":
+            enhancer = AnisotropicEnhancer(in_channels=3, out_channels=3, norm_type=enhancer_norm)
         else:
-            enhancer = Enhancer(in_channels=3, out_channels=3)
+            enhancer = Enhancer(in_channels=3, out_channels=3, norm_type=enhancer_norm)
 
         if exp.get("joint_model", "v1") == "v2":
             model = JointModel_V2(enhancer, segmentor, attention_mode=exp.get("attention_mode", "normal"))
@@ -231,6 +253,10 @@ def build_model(exp, img_size, device):
             model = JointModel_Gated(enhancer, segmentor)
         elif exp.get("joint_model", "v1") == "boundary_refine":
             model = JointModel_BoundaryRefine(enhancer, segmentor)
+        elif exp.get("joint_model", "v1") == "decoder_distill":
+            model = JointModel_DecoderDistill(enhancer, segmentor)
+        elif exp.get("joint_model", "v1") == "dual_fusion":
+            model = JointModel_DualFusion(enhancer, segmentor, norm_type=enhancer_norm)
         else:
             model = JointModel(enhancer, segmentor)
     else:
@@ -341,6 +367,7 @@ def evaluate_one(exp, dataset, loader, args, device, run_dir):
         "img_size": args.img_size,
         "teacher_mode": exp.get("teacher_mode", ""),
         "enhancer": exp.get("enhancer", ""),
+        "enhancer_norm": exp.get("enhancer_norm", ""),
         "joint_model": exp.get("joint_model", ""),
         "attention_mode": exp.get("attention_mode", ""),
         "loss_weighting": exp.get("loss_weighting", ""),
@@ -351,6 +378,8 @@ def evaluate_one(exp, dataset, loader, args, device, run_dir):
         "boundary_weight": exp.get("boundary_weight", ""),
         "cbdice_weight": exp.get("cbdice_weight", ""),
         "boundary_aux_weight": exp.get("boundary_aux_weight", ""),
+        "lambda_decoder_distill": exp.get("lambda_decoder_distill", ""),
+        "decoder_distill_layers": exp.get("decoder_distill_layers", ""),
         "focal_alpha": exp.get("focal_alpha", ""),
         "focal_beta": exp.get("focal_beta", ""),
         "focal_gamma": exp.get("focal_gamma", ""),
@@ -423,6 +452,7 @@ def main():
         "img_size",
         "teacher_mode",
         "enhancer",
+        "enhancer_norm",
         "joint_model",
         "attention_mode",
         "loss_weighting",
@@ -433,6 +463,8 @@ def main():
         "boundary_weight",
         "cbdice_weight",
         "boundary_aux_weight",
+        "lambda_decoder_distill",
+        "decoder_distill_layers",
         "focal_alpha",
         "focal_beta",
         "focal_gamma",

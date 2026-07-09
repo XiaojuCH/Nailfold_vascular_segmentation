@@ -1,0 +1,9 @@
+[*] mode: OURS
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/anisotropic_no_intensity_cldice_boundary_scratch_20260710\0708_1905
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice_cldice_boundary
+[*] teacher_mode: green_only
+[*] teacher_dir: ./dataset_all_filtered\train\teacher_priors_green_only
+[*] 未加载预训练权重，从头训练

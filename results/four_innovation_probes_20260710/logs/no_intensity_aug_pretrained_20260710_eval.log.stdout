@@ -1,0 +1,9 @@
+
+[Eval] E4b_no_intensity_aug_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\no_intensity_aug_pretrained_20260710\0707_0050\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_four_innovation_probes_20260710\no_intensity_aug_pretrained_20260710\20260707_022559\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_four_innovation_probes_20260710\no_intensity_aug_pretrained_20260710\20260707_022559\aggregate_results.xlsx
+E4b_no_intensity_aug_pretrained: Dice=0.7581, IoU=0.6210, Recall=0.7992, Precision=0.7384, Spec=0.9657, Acc=0.9487, HD95=22.81, clDice=0.8488, BoundaryF1=0.6464

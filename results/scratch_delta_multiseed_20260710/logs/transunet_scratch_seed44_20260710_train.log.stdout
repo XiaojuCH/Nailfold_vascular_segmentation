@@ -1,0 +1,83 @@
+[*] mode: BASELINE
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/transunet_scratch_seed44_20260710\0709_0515
+[*] device: cuda
+[*] seed: 44
+[*] seg_loss: bce_dice
+[*] 未加载预训练权重，从头训练
+Ep 001 | Loss: 0.9116 | Dice: 0.7523 | HD95: 26.36
+[*] Update best model: Dice = 0.7523
+Ep 002 | Loss: 0.5987 | Dice: 0.7603 | HD95: 22.58
+[*] Update best model: Dice = 0.7603
+Ep 003 | Loss: 0.5289 | Dice: 0.7628 | HD95: 22.64
+[*] Update best model: Dice = 0.7628
+Ep 004 | Loss: 0.5016 | Dice: 0.7675 | HD95: 21.61
+[*] Update best model: Dice = 0.7675
+Ep 005 | Loss: 0.4879 | Dice: 0.7720 | HD95: 21.90
+[*] Update best model: Dice = 0.7720
+Ep 006 | Loss: 0.4756 | Dice: 0.7543 | HD95: 22.64
+Ep 007 | Loss: 0.4708 | Dice: 0.7781 | HD95: 20.40
+[*] Update best model: Dice = 0.7781
+Ep 008 | Loss: 0.4633 | Dice: 0.7766 | HD95: 20.99
+Ep 009 | Loss: 0.4603 | Dice: 0.7808 | HD95: 20.61
+[*] Update best model: Dice = 0.7808
+Ep 010 | Loss: 0.4518 | Dice: 0.7781 | HD95: 21.29
+Ep 011 | Loss: 0.4498 | Dice: 0.7779 | HD95: 22.46
+Ep 012 | Loss: 0.4418 | Dice: 0.7778 | HD95: 21.64
+Ep 013 | Loss: 0.4361 | Dice: 0.7846 | HD95: 19.75
+[*] Update best model: Dice = 0.7846
+Ep 014 | Loss: 0.4349 | Dice: 0.7825 | HD95: 20.23
+Ep 015 | Loss: 0.4296 | Dice: 0.7850 | HD95: 21.42
+[*] Update best model: Dice = 0.7850
+Ep 016 | Loss: 0.4260 | Dice: 0.7745 | HD95: 20.95
+Ep 017 | Loss: 0.4214 | Dice: 0.7814 | HD95: 20.79
+Ep 018 | Loss: 0.4171 | Dice: 0.7765 | HD95: 20.56
+Ep 019 | Loss: 0.4138 | Dice: 0.7802 | HD95: 20.89
+Ep 020 | Loss: 0.4080 | Dice: 0.7886 | HD95: 20.16
+[*] Update best model: Dice = 0.7886
+Ep 021 | Loss: 0.4044 | Dice: 0.7885 | HD95: 20.97
+Ep 022 | Loss: 0.3968 | Dice: 0.7867 | HD95: 19.77
+Ep 023 | Loss: 0.3965 | Dice: 0.7749 | HD95: 20.37
+Ep 024 | Loss: 0.3900 | Dice: 0.7747 | HD95: 21.27
+Ep 025 | Loss: 0.3868 | Dice: 0.7866 | HD95: 19.45
+Ep 026 | Loss: 0.3830 | Dice: 0.7862 | HD95: 20.33
+Ep 027 | Loss: 0.3798 | Dice: 0.7838 | HD95: 19.44
+Ep 028 | Loss: 0.3728 | Dice: 0.7897 | HD95: 19.02
+[*] Update best model: Dice = 0.7897
+Ep 029 | Loss: 0.3722 | Dice: 0.7836 | HD95: 19.29
+Ep 030 | Loss: 0.3650 | Dice: 0.7837 | HD95: 20.47
+Ep 031 | Loss: 0.3643 | Dice: 0.7798 | HD95: 20.26
+Ep 032 | Loss: 0.3578 | Dice: 0.7866 | HD95: 20.10
+Ep 033 | Loss: 0.3533 | Dice: 0.7877 | HD95: 20.17
+Ep 034 | Loss: 0.3527 | Dice: 0.7801 | HD95: 19.34
+Ep 035 | Loss: 0.3482 | Dice: 0.7854 | HD95: 19.25
+Ep 036 | Loss: 0.3437 | Dice: 0.7828 | HD95: 20.47
+Ep 037 | Loss: 0.3445 | Dice: 0.7847 | HD95: 20.28
+Ep 038 | Loss: 0.3367 | Dice: 0.7795 | HD95: 20.20
+Ep 039 | Loss: 0.3350 | Dice: 0.7850 | HD95: 20.98
+Ep 040 | Loss: 0.3337 | Dice: 0.7843 | HD95: 19.40
+Ep 041 | Loss: 0.3307 | Dice: 0.7860 | HD95: 19.65
+Ep 042 | Loss: 0.3277 | Dice: 0.7799 | HD95: 20.08
+Ep 043 | Loss: 0.3287 | Dice: 0.7859 | HD95: 19.30
+Ep 044 | Loss: 0.3262 | Dice: 0.7845 | HD95: 20.41
+Ep 045 | Loss: 0.3253 | Dice: 0.7839 | HD95: 19.07
+Ep 046 | Loss: 0.3258 | Dice: 0.7828 | HD95: 19.48
+Ep 047 | Loss: 0.3217 | Dice: 0.7824 | HD95: 19.17
+Ep 048 | Loss: 0.3216 | Dice: 0.7828 | HD95: 19.39
+[*] Early stopping after 20 epochs without improvement
+
+==================================================
+[*] Load best model for test evaluation...
+
+[FINAL TEST RESULTS] BASELINE
+--------------------------------------------------
+Dice:  0.7507
+IoU:   0.6117
+HD95:  23.56
+Sens:  0.7687
+Spec:  0.9699
+Acc:   0.9490
+Prec:  0.7529
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/transunet_scratch_seed44_20260710\0709_0515

@@ -33,6 +33,7 @@ class TransUNetOfficial(nn.Module):
 
         # 创建模型
         self.model = ViT_seg(config_vit, img_size=img_size, num_classes=n_classes)
+        self.decoder_out_channels = config_vit["decoder_channels"][-1]
 
         # 加载预训练权重
         if pretrained_path is not None and os.path.exists(pretrained_path):
@@ -41,6 +42,12 @@ class TransUNetOfficial(nn.Module):
         else:
             print("[*] 未加载预训练权重，从头训练")
 
-    def forward(self, x):
-        logits = self.model(x)
-        return logits
+    def forward(self, x, return_decoder_features=False, return_decoder_output=False):
+        return self.model(
+            x,
+            return_decoder_features=return_decoder_features,
+            return_decoder_output=return_decoder_output,
+        )
+
+    def segment_from_decoder_output(self, decoder_output):
+        return self.model.segmentation_head(decoder_output)

@@ -1,0 +1,9 @@
+
+[Eval] C2_no_bn_no_intensity_scratch
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\no_bn_no_intensity_scratch_20260710\0708_1539\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_morph_intensity_combo_20260710\no_bn_no_intensity_scratch_20260710\20260708_170925\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_morph_intensity_combo_20260710\no_bn_no_intensity_scratch_20260710\20260708_170925\aggregate_results.xlsx
+C2_no_bn_no_intensity_scratch: Dice=0.7573, IoU=0.6193, Recall=0.7720, Precision=0.7621, Spec=0.9713, Acc=0.9503, HD95=23.99, clDice=0.8449, BoundaryF1=0.6484

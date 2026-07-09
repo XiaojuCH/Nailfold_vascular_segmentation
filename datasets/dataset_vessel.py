@@ -5,12 +5,13 @@ import numpy as np
 from torch.utils.data import Dataset
 
 class VesselDataset(Dataset):
-    def __init__(self, image_dir, mask_dir, teacher_dir=None, img_size=256, augment=False):
+    def __init__(self, image_dir, mask_dir, teacher_dir=None, img_size=256, augment=False, intensity_aug=True):
         self.image_dir = image_dir
         self.mask_dir = mask_dir
         self.teacher_dir = teacher_dir
         self.img_size = img_size
         self.augment = augment
+        self.intensity_aug = intensity_aug
 
         self.filenames = sorted([f for f in os.listdir(image_dir) if f.lower().endswith(('.png', '.jpg', '.jpeg'))])
 
@@ -56,7 +57,7 @@ class VesselDataset(Dataset):
                     teacher = cv2.warpAffine(teacher, M, (self.img_size, self.img_size), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
 
             # 3. 亮度与对比度抖动 (仅对输入原图进行，绝不能改变 mask 和 teacher 物理先验)
-            if np.random.rand() > 0.5:
+            if self.intensity_aug and np.random.rand() > 0.5:
                 alpha = np.random.uniform(0.8, 1.2)  # 对比度控制 [0.8, 1.2]
                 beta = np.random.uniform(-15, 15)    # 亮度控制 [-15, 15]
                 image = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)

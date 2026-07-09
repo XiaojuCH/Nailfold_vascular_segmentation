@@ -1,0 +1,76 @@
+[*] mode: OURS
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/anisotropic_no_intensity_cldice_boundary_pretrained_20260710\0708_1230
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice_cldice_boundary
+[*] pretrained: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+[*] teacher_mode: green_only
+[*] teacher_dir: ./dataset_all_filtered\train\teacher_priors_green_only
+load_pretrained: grid-size from 14 to 16
+[*] 已加载预训练权重: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+Ep 001 | Loss(Tot:1.450 Seg:1.313 MSE:0.014 Grad:0.188 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7412 | HD95: 23.41
+[*] Update best model: Dice = 0.7412
+Ep 002 | Loss(Tot:0.953 Seg:0.920 MSE:0.003 Grad:0.029 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7655 | HD95: 22.46
+[*] Update best model: Dice = 0.7655
+Ep 003 | Loss(Tot:0.869 Seg:0.842 MSE:0.003 Grad:0.015 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7702 | HD95: 22.74
+[*] Update best model: Dice = 0.7702
+Ep 004 | Loss(Tot:0.833 Seg:0.809 MSE:0.002 Grad:0.010 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7740 | HD95: 22.17
+[*] Update best model: Dice = 0.7740
+Ep 005 | Loss(Tot:0.815 Seg:0.793 MSE:0.002 Grad:0.007 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7860 | HD95: 19.94
+[*] Update best model: Dice = 0.7860
+Ep 006 | Loss(Tot:0.795 Seg:0.775 MSE:0.002 Grad:0.006 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7601 | HD95: 21.96
+Ep 007 | Loss(Tot:0.782 Seg:0.762 MSE:0.002 Grad:0.005 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7855 | HD95: 20.16
+Ep 008 | Loss(Tot:0.772 Seg:0.752 MSE:0.002 Grad:0.004 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7728 | HD95: 20.07
+Ep 009 | Loss(Tot:0.764 Seg:0.745 MSE:0.002 Grad:0.004 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7867 | HD95: 19.57
+[*] Update best model: Dice = 0.7867
+Ep 010 | Loss(Tot:0.754 Seg:0.735 MSE:0.002 Grad:0.003 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7799 | HD95: 19.99
+Ep 011 | Loss(Tot:0.749 Seg:0.731 MSE:0.002 Grad:0.003 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7845 | HD95: 19.00
+Ep 012 | Loss(Tot:0.739 Seg:0.721 MSE:0.002 Grad:0.003 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7755 | HD95: 21.30
+Ep 013 | Loss(Tot:0.733 Seg:0.715 MSE:0.002 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7683 | HD95: 20.87
+Ep 014 | Loss(Tot:0.721 Seg:0.703 MSE:0.002 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7774 | HD95: 20.15
+Ep 015 | Loss(Tot:0.717 Seg:0.699 MSE:0.002 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7885 | HD95: 18.91
+[*] Update best model: Dice = 0.7885
+Ep 016 | Loss(Tot:0.711 Seg:0.694 MSE:0.002 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7829 | HD95: 18.52
+Ep 017 | Loss(Tot:0.704 Seg:0.686 MSE:0.002 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7810 | HD95: 19.32
+Ep 018 | Loss(Tot:0.697 Seg:0.680 MSE:0.002 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7861 | HD95: 19.69
+Ep 019 | Loss(Tot:0.688 Seg:0.670 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7919 | HD95: 19.10
+[*] Update best model: Dice = 0.7919
+Ep 020 | Loss(Tot:0.682 Seg:0.665 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7804 | HD95: 20.76
+Ep 021 | Loss(Tot:0.673 Seg:0.657 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7844 | HD95: 19.36
+Ep 022 | Loss(Tot:0.662 Seg:0.644 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7830 | HD95: 18.88
+Ep 023 | Loss(Tot:0.661 Seg:0.644 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7874 | HD95: 18.33
+Ep 024 | Loss(Tot:0.653 Seg:0.638 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7893 | HD95: 18.35
+Ep 025 | Loss(Tot:0.645 Seg:0.629 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7835 | HD95: 18.84
+Ep 026 | Loss(Tot:0.638 Seg:0.622 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7846 | HD95: 17.63
+Ep 027 | Loss(Tot:0.627 Seg:0.612 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7828 | HD95: 18.45
+Ep 028 | Loss(Tot:0.622 Seg:0.606 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7878 | HD95: 18.83
+Ep 029 | Loss(Tot:0.614 Seg:0.598 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7850 | HD95: 20.75
+Ep 030 | Loss(Tot:0.608 Seg:0.592 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7803 | HD95: 18.81
+Ep 031 | Loss(Tot:0.601 Seg:0.585 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7774 | HD95: 18.63
+Ep 032 | Loss(Tot:0.593 Seg:0.578 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7790 | HD95: 20.08
+Ep 033 | Loss(Tot:0.586 Seg:0.571 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7807 | HD95: 19.16
+Ep 034 | Loss(Tot:0.581 Seg:0.566 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7811 | HD95: 19.36
+Ep 035 | Loss(Tot:0.574 Seg:0.558 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7846 | HD95: 18.37
+Ep 036 | Loss(Tot:0.568 Seg:0.553 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7819 | HD95: 18.07
+Ep 037 | Loss(Tot:0.561 Seg:0.546 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7758 | HD95: 18.69
+Ep 038 | Loss(Tot:0.554 Seg:0.539 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7805 | HD95: 18.96
+Ep 039 | Loss(Tot:0.553 Seg:0.538 MSE:0.002 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7789 | HD95: 19.98
+[*] Early stopping after 20 epochs without improvement
+[FINAL DISTILL WEIGHTS] MSE: 10.0000, Grad: 0.0000
+
+==================================================
+[*] Load best model for test evaluation...
+
+[FINAL TEST RESULTS] OURS
+--------------------------------------------------
+Dice:  0.7559
+IoU:   0.6190
+HD95:  22.60
+Sens:  0.7991
+Spec:  0.9641
+Acc:   0.9475
+Prec:  0.7366
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/anisotropic_no_intensity_cldice_boundary_pretrained_20260710\0708_1230

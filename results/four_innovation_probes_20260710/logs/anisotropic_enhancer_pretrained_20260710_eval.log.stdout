@@ -1,0 +1,9 @@
+
+[Eval] E1_anisotropic_enhancer_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\anisotropic_enhancer_pretrained_20260710\0706_0803\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_four_innovation_probes_20260710\anisotropic_enhancer_pretrained_20260710\20260706_094358\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_four_innovation_probes_20260710\anisotropic_enhancer_pretrained_20260710\20260706_094358\aggregate_results.xlsx
+E1_anisotropic_enhancer_pretrained: Dice=0.7576, IoU=0.6208, Recall=0.7747, Precision=0.7601, Spec=0.9711, Acc=0.9507, HD95=23.13, clDice=0.8476, BoundaryF1=0.6514

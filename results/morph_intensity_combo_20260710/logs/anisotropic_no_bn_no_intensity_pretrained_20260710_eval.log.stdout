@@ -1,0 +1,9 @@
+
+[Eval] C3_anisotropic_no_bn_no_intensity_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\anisotropic_no_bn_no_intensity_pretrained_20260710\0708_1052\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_morph_intensity_combo_20260710\anisotropic_no_bn_no_intensity_pretrained_20260710\20260708_122942\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_morph_intensity_combo_20260710\anisotropic_no_bn_no_intensity_pretrained_20260710\20260708_122942\aggregate_results.xlsx
+C3_anisotropic_no_bn_no_intensity_pretrained: Dice=0.7606, IoU=0.6241, Recall=0.7872, Precision=0.7544, Spec=0.9681, Acc=0.9498, HD95=22.31, clDice=0.8494, BoundaryF1=0.6463

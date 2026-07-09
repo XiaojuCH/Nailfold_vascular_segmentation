@@ -1,0 +1,9 @@
+
+[Eval] E2_decoder_distill_scratch
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\decoder_distill_scratch_20260710\0707_0426\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_four_innovation_probes_20260710\decoder_distill_scratch_20260710\20260707_072014\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_four_innovation_probes_20260710\decoder_distill_scratch_20260710\20260707_072014\aggregate_results.xlsx
+E2_decoder_distill_scratch: Dice=0.7549, IoU=0.6163, Recall=0.7902, Precision=0.7424, Spec=0.9678, Acc=0.9490, HD95=22.62, clDice=0.8412, BoundaryF1=0.6361

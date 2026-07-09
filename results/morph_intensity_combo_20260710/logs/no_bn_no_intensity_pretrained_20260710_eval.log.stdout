@@ -1,0 +1,9 @@
+
+[Eval] C2_no_bn_no_intensity_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\no_bn_no_intensity_pretrained_20260710\0708_0939\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_morph_intensity_combo_20260710\no_bn_no_intensity_pretrained_20260710\20260708_105148\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_morph_intensity_combo_20260710\no_bn_no_intensity_pretrained_20260710\20260708_105148\aggregate_results.xlsx
+C2_no_bn_no_intensity_pretrained: Dice=0.7488, IoU=0.6114, Recall=0.8302, Precision=0.7003, Spec=0.9555, Acc=0.9434, HD95=24.70, clDice=0.8398, BoundaryF1=0.6190

@@ -1,0 +1,9 @@
+
+[Eval] E1_anisotropic_enhancer_scratch
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\anisotropic_enhancer_scratch_20260710\0707_0226\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_four_innovation_probes_20260710\anisotropic_enhancer_scratch_20260710\20260707_042547\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_four_innovation_probes_20260710\anisotropic_enhancer_scratch_20260710\20260707_042547\aggregate_results.xlsx
+E1_anisotropic_enhancer_scratch: Dice=0.7554, IoU=0.6179, Recall=0.7852, Precision=0.7465, Spec=0.9680, Acc=0.9494, HD95=23.31, clDice=0.8421, BoundaryF1=0.6454

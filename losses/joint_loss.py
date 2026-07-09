@@ -310,3 +310,53 @@ class JointDistillationBoundaryLoss(JointDistillationLoss):
         loss_boundary_aux = self.boundary_aux_loss(boundary_pred, boundary_target)
         total_loss = total_loss + self.boundary_aux_weight * loss_boundary_aux
         return total_loss, total_seg_loss, loss_mse, loss_grad, loss_boundary_aux
+
+
+class JointDecoderDistillationLoss(JointDistillationLoss):
+    """Image-level prior distillation plus decoder feature consistency."""
+
+    def __init__(self, lambda_decoder_distill=1.0, decoder_distill_layers="2,3", **kwargs):
+        super().__init__(**kwargs)
+        self.lambda_decoder_distill = lambda_decoder_distill
+        self.decoder_distill_layers = self._parse_layers(decoder_distill_layers)
+
+    @staticmethod
+    def _parse_layers(layers):
+        if isinstance(layers, (list, tuple)):
+            return [int(layer) for layer in layers]
+        parsed = []
+        for item in str(layers).split(","):
+            item = item.strip()
+            if item:
+                parsed.append(int(item))
+        return parsed
+
+    def _feature_distill_loss(self, feature_pair):
+        if feature_pair is None:
+            device = self.lambda_mse.device if torch.is_tensor(self.lambda_mse) else None
+            return torch.tensor(0.0, device=device)
+        student_features, teacher_features = feature_pair
+        if len(student_features) != len(teacher_features):
+            raise ValueError(
+                f"Decoder feature count mismatch: student={len(student_features)} teacher={len(teacher_features)}"
+            )
+        selected = self.decoder_distill_layers or list(range(len(student_features)))
+        losses = []
+        for layer_idx in selected:
+            if layer_idx < 0 or layer_idx >= len(student_features):
+                raise ValueError(f"decoder_distill layer {layer_idx} out of range 0..{len(student_features)-1}")
+            losses.append(F.mse_loss(student_features[layer_idx], teacher_features[layer_idx]))
+        if not losses:
+            return student_features[-1].new_tensor(0.0)
+        return torch.stack(losses).mean()
+
+    def forward(self, seg_pred, mask_target, enhanced_img, teacher_img, decoder_feature_pair):
+        total_loss, total_seg_loss, loss_mse, loss_grad = super().forward(
+            seg_pred,
+            mask_target,
+            enhanced_img,
+            teacher_img,
+        )
+        loss_decoder = self._feature_distill_loss(decoder_feature_pair)
+        total_loss = total_loss + self.lambda_decoder_distill * loss_decoder
+        return total_loss, total_seg_loss, loss_mse, loss_grad, loss_decoder

@@ -1,0 +1,9 @@
+
+[Eval] E2_decoder_distill_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\decoder_distill_pretrained_20260710\0706_0944\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_four_innovation_probes_20260710\decoder_distill_pretrained_20260710\20260706_120153\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_four_innovation_probes_20260710\decoder_distill_pretrained_20260710\20260706_120153\aggregate_results.xlsx
+E2_decoder_distill_pretrained: Dice=0.7502, IoU=0.6119, Recall=0.8164, Precision=0.7121, Spec=0.9606, Acc=0.9456, HD95=25.07, clDice=0.8399, BoundaryF1=0.6260

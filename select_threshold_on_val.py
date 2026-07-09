@@ -32,8 +32,9 @@ def get_args():
     parser.add_argument("--boundary_tolerance", type=int, default=2)
     parser.add_argument("--thresholds", default="0.30:0.70:0.02", help="start:end:step or comma-separated values.")
     parser.add_argument("--selection_metric", default="dice", choices=["dice", "iou", "cldice", "boundary_f1", "structure_combo"])
-    parser.add_argument("--enhancer", default="basic", choices=["basic", "multiscale"])
-    parser.add_argument("--joint_model", default="v1", choices=["v1", "v2", "gated"])
+    parser.add_argument("--enhancer", default="basic", choices=["basic", "multiscale", "anisotropic"])
+    parser.add_argument("--enhancer_norm", default="bn", choices=["bn", "none"])
+    parser.add_argument("--joint_model", default="v1", choices=["v1", "v2", "gated", "boundary_refine", "decoder_distill", "dual_fusion"])
     parser.add_argument("--attention_mode", default="normal", choices=["normal", "inverse"])
     parser.add_argument("--teacher_mode", default="")
     parser.add_argument("--loss_weighting", default="fixed")
@@ -112,6 +113,7 @@ def metadata_from_exp(exp, args, data_dir):
         "img_size": args.img_size,
         "teacher_mode": exp.get("teacher_mode", ""),
         "enhancer": exp.get("enhancer", ""),
+        "enhancer_norm": exp.get("enhancer_norm", ""),
         "joint_model": exp.get("joint_model", ""),
         "attention_mode": exp.get("attention_mode", ""),
         "loss_weighting": exp.get("loss_weighting", ""),
@@ -246,6 +248,7 @@ def main():
         "img_size",
         "teacher_mode",
         "enhancer",
+        "enhancer_norm",
         "joint_model",
         "attention_mode",
         "loss_weighting",

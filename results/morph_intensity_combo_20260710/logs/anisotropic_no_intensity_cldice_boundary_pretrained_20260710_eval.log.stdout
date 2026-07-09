@@ -1,0 +1,9 @@
+
+[Eval] C4_anisotropic_no_intensity_cldice_boundary_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\anisotropic_no_intensity_cldice_boundary_pretrained_20260710\0708_1230\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_morph_intensity_combo_20260710\anisotropic_no_intensity_cldice_boundary_pretrained_20260710\20260708_141110\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_morph_intensity_combo_20260710\anisotropic_no_intensity_cldice_boundary_pretrained_20260710\20260708_141110\aggregate_results.xlsx
+C4_anisotropic_no_intensity_cldice_boundary_pretrained: Dice=0.7559, IoU=0.6190, Recall=0.7991, Precision=0.7366, Spec=0.9641, Acc=0.9475, HD95=22.60, clDice=0.8542, BoundaryF1=0.6461

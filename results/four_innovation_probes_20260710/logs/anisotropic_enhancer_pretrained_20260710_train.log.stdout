@@ -1,0 +1,85 @@
+[*] mode: OURS
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/anisotropic_enhancer_pretrained_20260710\0706_0803
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice
+[*] pretrained: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+[*] teacher_mode: green_only
+[*] teacher_dir: ./dataset_all_filtered\train\teacher_priors_green_only
+load_pretrained: grid-size from 14 to 16
+[*] 已加载预训练权重: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+Ep 001 | Loss(Tot:1.094 Seg:0.949 MSE:0.014 Grad:0.158 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7392 | HD95: 22.88
+[*] Update best model: Dice = 0.7392
+Ep 002 | Loss(Tot:0.651 Seg:0.600 MSE:0.005 Grad:0.023 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7742 | HD95: 21.80
+[*] Update best model: Dice = 0.7742
+Ep 003 | Loss(Tot:0.565 Seg:0.520 MSE:0.005 Grad:0.012 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7658 | HD95: 22.30
+Ep 004 | Loss(Tot:0.536 Seg:0.495 MSE:0.004 Grad:0.009 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7788 | HD95: 19.43
+[*] Update best model: Dice = 0.7788
+Ep 005 | Loss(Tot:0.520 Seg:0.480 MSE:0.004 Grad:0.007 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7807 | HD95: 21.72
+[*] Update best model: Dice = 0.7807
+Ep 006 | Loss(Tot:0.506 Seg:0.467 MSE:0.004 Grad:0.006 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7688 | HD95: 25.62
+Ep 007 | Loss(Tot:0.493 Seg:0.454 MSE:0.004 Grad:0.005 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7834 | HD95: 19.54
+[*] Update best model: Dice = 0.7834
+Ep 008 | Loss(Tot:0.488 Seg:0.448 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7694 | HD95: 19.58
+Ep 009 | Loss(Tot:0.478 Seg:0.440 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7898 | HD95: 19.71
+[*] Update best model: Dice = 0.7898
+Ep 010 | Loss(Tot:0.469 Seg:0.433 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7870 | HD95: 19.28
+Ep 011 | Loss(Tot:0.463 Seg:0.426 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7865 | HD95: 19.64
+Ep 012 | Loss(Tot:0.456 Seg:0.420 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7854 | HD95: 19.22
+Ep 013 | Loss(Tot:0.446 Seg:0.409 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7525 | HD95: 20.18
+Ep 014 | Loss(Tot:0.441 Seg:0.406 MSE:0.004 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7801 | HD95: 20.32
+Ep 015 | Loss(Tot:0.439 Seg:0.405 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7898 | HD95: 18.45
+Ep 016 | Loss(Tot:0.430 Seg:0.395 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7852 | HD95: 18.71
+Ep 017 | Loss(Tot:0.430 Seg:0.394 MSE:0.004 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7843 | HD95: 19.12
+Ep 018 | Loss(Tot:0.422 Seg:0.387 MSE:0.004 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7877 | HD95: 18.34
+Ep 019 | Loss(Tot:0.413 Seg:0.378 MSE:0.004 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7866 | HD95: 19.59
+Ep 020 | Loss(Tot:0.410 Seg:0.374 MSE:0.004 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7707 | HD95: 19.02
+Ep 021 | Loss(Tot:0.407 Seg:0.372 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7881 | HD95: 19.15
+Ep 022 | Loss(Tot:0.398 Seg:0.363 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7869 | HD95: 19.10
+Ep 023 | Loss(Tot:0.394 Seg:0.359 MSE:0.004 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7891 | HD95: 19.13
+Ep 024 | Loss(Tot:0.385 Seg:0.351 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7879 | HD95: 18.39
+Ep 025 | Loss(Tot:0.380 Seg:0.346 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7876 | HD95: 18.24
+Ep 026 | Loss(Tot:0.379 Seg:0.344 MSE:0.004 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7894 | HD95: 17.47
+Ep 027 | Loss(Tot:0.370 Seg:0.336 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7865 | HD95: 18.39
+Ep 028 | Loss(Tot:0.364 Seg:0.329 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7894 | HD95: 18.24
+Ep 029 | Loss(Tot:0.359 Seg:0.325 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7923 | HD95: 18.24
+[*] Update best model: Dice = 0.7923
+Ep 030 | Loss(Tot:0.355 Seg:0.323 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7860 | HD95: 18.23
+Ep 031 | Loss(Tot:0.349 Seg:0.314 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7862 | HD95: 18.45
+Ep 032 | Loss(Tot:0.344 Seg:0.312 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7806 | HD95: 18.29
+Ep 033 | Loss(Tot:0.343 Seg:0.309 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7808 | HD95: 18.50
+Ep 034 | Loss(Tot:0.339 Seg:0.306 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7896 | HD95: 18.53
+Ep 035 | Loss(Tot:0.330 Seg:0.297 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7838 | HD95: 19.16
+Ep 036 | Loss(Tot:0.328 Seg:0.296 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7877 | HD95: 18.45
+Ep 037 | Loss(Tot:0.324 Seg:0.291 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7849 | HD95: 18.66
+Ep 038 | Loss(Tot:0.321 Seg:0.287 MSE:0.003 Grad:0.002 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7865 | HD95: 18.90
+Ep 039 | Loss(Tot:0.318 Seg:0.284 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7865 | HD95: 19.48
+Ep 040 | Loss(Tot:0.313 Seg:0.280 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7871 | HD95: 18.18
+Ep 041 | Loss(Tot:0.312 Seg:0.280 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7836 | HD95: 19.04
+Ep 042 | Loss(Tot:0.308 Seg:0.274 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7856 | HD95: 18.30
+Ep 043 | Loss(Tot:0.306 Seg:0.273 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7855 | HD95: 18.18
+Ep 044 | Loss(Tot:0.305 Seg:0.272 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7831 | HD95: 18.46
+Ep 045 | Loss(Tot:0.301 Seg:0.269 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7837 | HD95: 18.28
+Ep 046 | Loss(Tot:0.303 Seg:0.270 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7842 | HD95: 18.54
+Ep 047 | Loss(Tot:0.303 Seg:0.269 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7822 | HD95: 18.40
+Ep 048 | Loss(Tot:0.300 Seg:0.267 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7850 | HD95: 18.49
+Ep 049 | Loss(Tot:0.300 Seg:0.266 MSE:0.003 Grad:0.001 Bnd:0.000 Dec:0.000) | W(MSE:10.00 Grad:0.00) | Dice: 0.7822 | HD95: 18.48
+[*] Early stopping after 20 epochs without improvement
+[FINAL DISTILL WEIGHTS] MSE: 10.0000, Grad: 0.0000
+
+==================================================
+[*] Load best model for test evaluation...
+
+[FINAL TEST RESULTS] OURS
+--------------------------------------------------
+Dice:  0.7576
+IoU:   0.6208
+HD95:  23.13
+Sens:  0.7747
+Spec:  0.9711
+Acc:   0.9507
+Prec:  0.7601
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/anisotropic_enhancer_pretrained_20260710\0706_0803

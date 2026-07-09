@@ -1,0 +1,9 @@
+
+[Eval] C1_anisotropic_no_intensity_scratch
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\anisotropic_no_intensity_scratch_20260710\0708_1411\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_morph_intensity_combo_20260710\anisotropic_no_intensity_scratch_20260710\20260708_153929\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_morph_intensity_combo_20260710\anisotropic_no_intensity_scratch_20260710\20260708_153929\aggregate_results.xlsx
+C1_anisotropic_no_intensity_scratch: Dice=0.7561, IoU=0.6179, Recall=0.8003, Precision=0.7347, Spec=0.9651, Acc=0.9481, HD95=24.26, clDice=0.8435, BoundaryF1=0.6451

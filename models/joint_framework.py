@@ -1,22 +1,31 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
+
+
+def _norm_layer(channels, norm_type="bn"):
+    if norm_type == "bn":
+        return nn.BatchNorm2d(channels)
+    if norm_type == "none":
+        return nn.Identity()
+    raise ValueError(f"Unknown norm_type: {norm_type}")
+
+
+def _conv_block(in_channels, out_channels, kernel_size=3, padding=1, norm_type="bn"):
+    return nn.Sequential(
+        nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, padding=padding),
+        _norm_layer(out_channels, norm_type),
+        nn.LeakyReLU(0.2, inplace=True),
+    )
 
 class Enhancer(nn.Module):
     """
     图像增强网络(Student) - 带残差连接
     """
-    def __init__(self, in_channels=3, out_channels=3):
+    def __init__(self, in_channels=3, out_channels=3, norm_type="bn"):
         super(Enhancer, self).__init__()
-        self.conv1 = nn.Sequential(
-            nn.Conv2d(in_channels, 16, kernel_size=3, padding=1),
-            nn.BatchNorm2d(16),
-            nn.LeakyReLU(0.2, inplace=True)
-        )
-        self.conv2 = nn.Sequential(
-            nn.Conv2d(16, 16, kernel_size=3, padding=1),
-            nn.BatchNorm2d(16),
-            nn.LeakyReLU(0.2, inplace=True)
-        )
+        self.conv1 = _conv_block(in_channels, 16, kernel_size=3, padding=1, norm_type=norm_type)
+        self.conv2 = _conv_block(16, 16, kernel_size=3, padding=1, norm_type=norm_type)
         self.conv3 = nn.Conv2d(16, out_channels, kernel_size=3, padding=1)
 
     def forward(self, x):
@@ -33,8 +42,9 @@ class MultiScaleEnhancer(nn.Module):
     Lightweight student enhancer with parallel receptive fields for vessels
     at different widths and local shapes.
     """
-    def __init__(self, in_channels=3, out_channels=3, hidden_channels=16):
+    def __init__(self, in_channels=3, out_channels=3, hidden_channels=16, norm_type="bn"):
         super(MultiScaleEnhancer, self).__init__()
+        self.norm_type = norm_type
         self.stem = self._conv_block(in_channels, hidden_channels, kernel_size=3, padding=1)
         self.branch_3x3 = self._conv_block(hidden_channels, hidden_channels, kernel_size=3, padding=1)
         self.branch_5x5 = self._conv_block(hidden_channels, hidden_channels, kernel_size=5, padding=2)
@@ -47,16 +57,15 @@ class MultiScaleEnhancer(nn.Module):
         )
         self.fuse = nn.Sequential(
             nn.Conv2d(hidden_channels * 3, hidden_channels, kernel_size=1),
-            nn.BatchNorm2d(hidden_channels),
+            _norm_layer(hidden_channels, norm_type),
             nn.LeakyReLU(0.2, inplace=True),
             nn.Conv2d(hidden_channels, hidden_channels, kernel_size=3, padding=1),
-            nn.BatchNorm2d(hidden_channels),
+            _norm_layer(hidden_channels, norm_type),
             nn.LeakyReLU(0.2, inplace=True)
         )
         self.out_conv = nn.Conv2d(hidden_channels, out_channels, kernel_size=3, padding=1)
 
-    @staticmethod
-    def _conv_block(in_channels, out_channels, kernel_size, padding, dilation=1):
+    def _conv_block(self, in_channels, out_channels, kernel_size, padding, dilation=1):
         return nn.Sequential(
             nn.Conv2d(
                 in_channels,
@@ -65,7 +74,7 @@ class MultiScaleEnhancer(nn.Module):
                 padding=padding,
                 dilation=dilation
             ),
-            nn.BatchNorm2d(out_channels),
+            _norm_layer(out_channels, self.norm_type),
             nn.LeakyReLU(0.2, inplace=True)
         )
 
@@ -76,6 +85,46 @@ class MultiScaleEnhancer(nn.Module):
             dim=1
         )
         residual = self.out_conv(self.fuse(multi_scale_feat))
+        return torch.clamp(x + residual, min=0.0, max=1.0)
+
+
+class AnisotropicEnhancer(nn.Module):
+    """Residual enhancer with strip kernels for elongated capillary structures."""
+
+    def __init__(self, in_channels=3, out_channels=3, hidden_channels=16, norm_type="bn"):
+        super(AnisotropicEnhancer, self).__init__()
+        self.stem = _conv_block(in_channels, hidden_channels, kernel_size=3, padding=1, norm_type=norm_type)
+        self.local_branch = _conv_block(hidden_channels, hidden_channels, kernel_size=3, padding=1, norm_type=norm_type)
+        self.strip7 = nn.Sequential(
+            nn.Conv2d(hidden_channels, hidden_channels, kernel_size=(1, 7), padding=(0, 3), bias=False),
+            _norm_layer(hidden_channels, norm_type),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(hidden_channels, hidden_channels, kernel_size=(7, 1), padding=(3, 0), bias=False),
+            _norm_layer(hidden_channels, norm_type),
+            nn.LeakyReLU(0.2, inplace=True),
+        )
+        self.strip21 = nn.Sequential(
+            nn.Conv2d(hidden_channels, hidden_channels, kernel_size=(1, 21), padding=(0, 10), bias=False),
+            _norm_layer(hidden_channels, norm_type),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(hidden_channels, hidden_channels, kernel_size=(21, 1), padding=(10, 0), bias=False),
+            _norm_layer(hidden_channels, norm_type),
+            nn.LeakyReLU(0.2, inplace=True),
+        )
+        self.fuse = nn.Sequential(
+            nn.Conv2d(hidden_channels * 3, hidden_channels, kernel_size=1),
+            _norm_layer(hidden_channels, norm_type),
+            nn.LeakyReLU(0.2, inplace=True),
+            nn.Conv2d(hidden_channels, hidden_channels, kernel_size=3, padding=1),
+            _norm_layer(hidden_channels, norm_type),
+            nn.LeakyReLU(0.2, inplace=True),
+        )
+        self.out_conv = nn.Conv2d(hidden_channels, out_channels, kernel_size=3, padding=1)
+
+    def forward(self, x):
+        feat = self.stem(x)
+        fused = self.fuse(torch.cat([self.local_branch(feat), self.strip7(feat), self.strip21(feat)], dim=1))
+        residual = self.out_conv(fused)
         return torch.clamp(x + residual, min=0.0, max=1.0)
 
 
@@ -97,6 +146,69 @@ class JointModel(nn.Module):
         
         # 璁粌鏃舵垜浠渶瑕?enhanced_img 鏉ュ拰 Teacher 绠?Loss锛屾帹鐞嗘椂鍏跺疄鍙敤 seg_out
         return seg_out, enhanced_img
+
+
+class JointModel_DecoderDistill(nn.Module):
+    """Joint model that exposes student/teacher decoder features for distillation."""
+
+    def __init__(self, enhancer, segmentor):
+        super(JointModel_DecoderDistill, self).__init__()
+        self.enhancer = enhancer
+        self.segmentor = segmentor
+
+    def _teacher_features(self, teacher_img):
+        was_training = self.segmentor.training
+        try:
+            self.segmentor.eval()
+            with torch.no_grad():
+                _, teacher_features = self.segmentor(teacher_img, return_decoder_features=True)
+                teacher_features = [feat.detach() for feat in teacher_features]
+        finally:
+            if was_training:
+                self.segmentor.train()
+        return teacher_features
+
+    def forward(self, x, teacher_img=None):
+        enhanced_img = self.enhancer(x)
+        if teacher_img is None:
+            seg_out = self.segmentor(enhanced_img)
+            return seg_out, enhanced_img, None
+        seg_out, student_features = self.segmentor(enhanced_img, return_decoder_features=True)
+        feature_pair = None
+        feature_pair = (student_features, self._teacher_features(teacher_img))
+        return seg_out, enhanced_img, feature_pair
+
+
+class JointModel_DualFusion(nn.Module):
+    """Light CNN + TransUNet fusion probe inspired by parallel CNN/Transformer designs."""
+
+    def __init__(self, enhancer, segmentor, local_channels=32, norm_type="bn"):
+        super(JointModel_DualFusion, self).__init__()
+        self.enhancer = enhancer
+        self.segmentor = segmentor
+        decoder_channels = getattr(segmentor, "decoder_out_channels", 16)
+        self.local_branch = nn.Sequential(
+            _conv_block(3, 16, kernel_size=3, padding=1, norm_type=norm_type),
+            _conv_block(16, local_channels, kernel_size=3, padding=1, norm_type=norm_type),
+        )
+        self.fuse = nn.Sequential(
+            nn.Conv2d(decoder_channels + local_channels, decoder_channels, kernel_size=3, padding=1),
+            _norm_layer(decoder_channels, norm_type),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(decoder_channels, decoder_channels, kernel_size=3, padding=1),
+            _norm_layer(decoder_channels, norm_type),
+            nn.ReLU(inplace=True),
+        )
+
+    def forward(self, x):
+        enhanced_img = self.enhancer(x)
+        _, decoder_feat = self.segmentor(enhanced_img, return_decoder_output=True)
+        local_feat = self.local_branch(x)
+        if local_feat.shape[-2:] != decoder_feat.shape[-2:]:
+            local_feat = F.interpolate(local_feat, size=decoder_feat.shape[-2:], mode="bilinear", align_corners=False)
+        refined_feat = decoder_feat + self.fuse(torch.cat([decoder_feat, local_feat], dim=1))
+        seg_out = self.segmentor.segment_from_decoder_output(refined_feat)
+        return seg_out, enhanced_img, refined_feat
 
 
 class JointModel_V2(nn.Module):

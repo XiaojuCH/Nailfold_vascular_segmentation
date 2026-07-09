@@ -1,0 +1,9 @@
+
+[Eval] E3_dual_fusion_pretrained
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\dual_fusion_pretrained_20260710\0706_1202\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_four_innovation_probes_20260710\dual_fusion_pretrained_20260710\20260706_132220\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_four_innovation_probes_20260710\dual_fusion_pretrained_20260710\20260706_132220\aggregate_results.xlsx
+E3_dual_fusion_pretrained: Dice=0.7546, IoU=0.6167, Recall=0.8069, Precision=0.7274, Spec=0.9632, Acc=0.9471, HD95=23.38, clDice=0.8443, BoundaryF1=0.6418

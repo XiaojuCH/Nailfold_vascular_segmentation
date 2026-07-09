@@ -1,0 +1,9 @@
+
+[Eval] Ours_green_mse10_grad0_scratch_seed43
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_mse10_grad0_scratch_seed43_20260710\0709_0218\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\ours_green_mse10_grad0_scratch_seed43_20260710\20260709_034649\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\ours_green_mse10_grad0_scratch_seed43_20260710\20260709_034649\aggregate_results.xlsx
+Ours_green_mse10_grad0_scratch_seed43: Dice=0.7588, IoU=0.6210, Recall=0.7905, Precision=0.7478, Spec=0.9680, Acc=0.9495, HD95=23.44, clDice=0.8476, BoundaryF1=0.6504

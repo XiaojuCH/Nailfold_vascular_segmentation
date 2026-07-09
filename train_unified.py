@@ -26,9 +26,24 @@ def set_seed(seed=42):
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from datasets.dataset_vessel import VesselDataset
-from losses.joint_loss import JointDistillationBoundaryLoss, JointDistillationLoss, build_segmentation_loss
+from losses.joint_loss import (
+    JointDecoderDistillationLoss,
+    JointDistillationBoundaryLoss,
+    JointDistillationLoss,
+    build_segmentation_loss,
+)
 from utils.metrics import calculate_comprehensive_metrics
-from models.joint_framework import Enhancer, JointModel, JointModel_BoundaryRefine, JointModel_Gated, JointModel_V2, MultiScaleEnhancer
+from models.joint_framework import (
+    AnisotropicEnhancer,
+    Enhancer,
+    JointModel,
+    JointModel_BoundaryRefine,
+    JointModel_DecoderDistill,
+    JointModel_DualFusion,
+    JointModel_Gated,
+    JointModel_V2,
+    MultiScaleEnhancer,
+)
 from models.transunet_official import TransUNetOfficial
 
 
@@ -89,10 +104,14 @@ def get_args():
     parser.add_argument("--loss_weighting", type=str, default="fixed", choices=["fixed", "learnable"])
 
     parser.add_argument("--teacher_mode", type=str, default="green+clahe", choices=TEACHER_MODES)
-    parser.add_argument("--enhancer", type=str, default="basic", choices=["basic", "multiscale"])
-    parser.add_argument("--joint_model", type=str, default="v1", choices=["v1", "v2", "gated", "boundary_refine"])
+    parser.add_argument("--enhancer", type=str, default="basic", choices=["basic", "multiscale", "anisotropic"])
+    parser.add_argument("--enhancer_norm", type=str, default="bn", choices=["bn", "none"])
+    parser.add_argument("--joint_model", type=str, default="v1", choices=["v1", "v2", "gated", "boundary_refine", "decoder_distill", "dual_fusion"])
     parser.add_argument("--attention_mode", type=str, default="normal", choices=["normal", "inverse"])
     parser.add_argument("--boundary_aux_weight", type=float, default=0.3)
+    parser.add_argument("--lambda_decoder_distill", type=float, default=1.0)
+    parser.add_argument("--decoder_distill_layers", type=str, default="2,3")
+    parser.add_argument("--intensity_aug", type=str, default="on", choices=["on", "off"])
     parser.add_argument("--pretrained", type=str, default="")
     return parser.parse_args()
 
@@ -107,11 +126,19 @@ def get_teacher_dir(data_dir, teacher_mode):
 def forward_for_logits(model, images, mode, joint_model):
     if mode == "baseline":
         return model(images)
-    if joint_model in ["v2", "gated", "boundary_refine"]:
+    if joint_model in ["v2", "gated", "boundary_refine", "decoder_distill", "dual_fusion"]:
         outputs, _, _ = model(images)
     else:
         outputs, _ = model(images)
     return outputs
+
+
+def build_enhancer(args):
+    if args.enhancer == "multiscale":
+        return MultiScaleEnhancer(in_channels=3, out_channels=3, norm_type=args.enhancer_norm)
+    if args.enhancer == "anisotropic":
+        return AnisotropicEnhancer(in_channels=3, out_channels=3, norm_type=args.enhancer_norm)
+    return Enhancer(in_channels=3, out_channels=3, norm_type=args.enhancer_norm)
 
 
 def main():
@@ -153,6 +180,7 @@ def main():
         teacher_dir=teacher_dir,
         img_size=256,
         augment=True,
+        intensity_aug=args.intensity_aug == "on",
     )
     val_dataset = VesselDataset(
         image_dir=os.path.join(args.data_dir, "val/images"),
@@ -188,17 +216,31 @@ def main():
             focal_gamma=args.focal_gamma,
         ).to(device)
     else:
-        enhancer = MultiScaleEnhancer(in_channels=3, out_channels=3) if args.enhancer == "multiscale" else Enhancer(in_channels=3, out_channels=3)
+        enhancer = build_enhancer(args)
         if args.joint_model == "v2":
             model = JointModel_V2(enhancer, segmentor, attention_mode=args.attention_mode).to(device)
         elif args.joint_model == "gated":
             model = JointModel_Gated(enhancer, segmentor).to(device)
         elif args.joint_model == "boundary_refine":
             model = JointModel_BoundaryRefine(enhancer, segmentor).to(device)
+        elif args.joint_model == "decoder_distill":
+            model = JointModel_DecoderDistill(enhancer, segmentor).to(device)
+        elif args.joint_model == "dual_fusion":
+            model = JointModel_DualFusion(enhancer, segmentor, norm_type=args.enhancer_norm).to(device)
         else:
             model = JointModel(enhancer, segmentor).to(device)
-        criterion_class = JointDistillationBoundaryLoss if args.joint_model == "boundary_refine" else JointDistillationLoss
-        criterion_kwargs = {"boundary_aux_weight": args.boundary_aux_weight} if args.joint_model == "boundary_refine" else {}
+        if args.joint_model == "boundary_refine":
+            criterion_class = JointDistillationBoundaryLoss
+            criterion_kwargs = {"boundary_aux_weight": args.boundary_aux_weight}
+        elif args.joint_model == "decoder_distill":
+            criterion_class = JointDecoderDistillationLoss
+            criterion_kwargs = {
+                "lambda_decoder_distill": args.lambda_decoder_distill,
+                "decoder_distill_layers": args.decoder_distill_layers,
+            }
+        else:
+            criterion_class = JointDistillationLoss
+            criterion_kwargs = {}
         criterion = criterion_class(
             lambda_mse=args.lambda_mse,
             lambda_grad=args.lambda_grad,
@@ -235,8 +277,12 @@ def main():
             log_file.write(f"Lambda MSE: {args.lambda_mse}, Lambda Grad: {args.lambda_grad}\n")
             log_file.write(f"Loss Weighting: {args.loss_weighting}\n")
             log_file.write(f"Enhancer: {args.enhancer}\n")
+            log_file.write(f"Enhancer Norm: {args.enhancer_norm}\n")
             log_file.write(f"Joint Model: {args.joint_model}\n")
             log_file.write(f"Attention Mode: {args.attention_mode}\n")
+            log_file.write(f"Lambda Decoder Distill: {args.lambda_decoder_distill}\n")
+            log_file.write(f"Decoder Distill Layers: {args.decoder_distill_layers}\n")
+            log_file.write(f"Intensity Aug: {args.intensity_aug}\n")
         if args.pretrained:
             log_file.write(f"Pretrained: {args.pretrained}\n")
         log_file.write("\n")
@@ -251,6 +297,7 @@ def main():
             train_mse = 0.0
             train_grad = 0.0
             train_boundary = 0.0
+            train_decoder = 0.0
 
             for batch in tqdm(train_loader, desc=f"Epoch {epoch + 1}/{args.epochs} [Train]", leave=False):
                 images = batch["image"].to(device)
@@ -266,7 +313,14 @@ def main():
                         seg_preds, enhanced_imgs, boundary_logits = model(images)
                         loss, l_seg, l_mse, l_grad, l_boundary = criterion(seg_preds, masks, enhanced_imgs, teachers, boundary_logits)
                         train_boundary += l_boundary.item()
+                    elif args.joint_model == "decoder_distill":
+                        seg_preds, enhanced_imgs, decoder_feature_pair = model(images, teachers)
+                        loss, l_seg, l_mse, l_grad, l_decoder = criterion(seg_preds, masks, enhanced_imgs, teachers, decoder_feature_pair)
+                        train_decoder += l_decoder.item()
                     elif args.joint_model in ["v2", "gated"]:
+                        seg_preds, enhanced_imgs, _ = model(images)
+                        loss, l_seg, l_mse, l_grad = criterion(seg_preds, masks, enhanced_imgs, teachers)
+                    elif args.joint_model == "dual_fusion":
                         seg_preds, enhanced_imgs, _ = model(images)
                         loss, l_seg, l_mse, l_grad = criterion(seg_preds, masks, enhanced_imgs, teachers)
                     else:
@@ -302,7 +356,8 @@ def main():
                 weights = criterion.get_distill_weights()
                 log_str = (
                     f"Ep {epoch + 1:03d} | Loss(Tot:{avg_loss:.3f} Seg:{train_seg / n_batches:.3f} "
-                    f"MSE:{train_mse / n_batches:.3f} Grad:{train_grad / n_batches:.3f} Bnd:{train_boundary / n_batches:.3f}) | "
+                    f"MSE:{train_mse / n_batches:.3f} Grad:{train_grad / n_batches:.3f} "
+                    f"Bnd:{train_boundary / n_batches:.3f} Dec:{train_decoder / n_batches:.3f}) | "
                     f"W(MSE:{weights['mse']:.2f} Grad:{weights['grad']:.2f}) | "
                     f"Dice: {avg_metrics['dice']:.4f} | HD95: {avg_metrics['hd95']:.2f}"
                 )

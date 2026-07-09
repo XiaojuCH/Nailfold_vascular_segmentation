@@ -1,0 +1,9 @@
+
+[Eval] TransUNet_scratch_seed44
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\transunet_scratch_seed44_20260710\0709_0515\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\transunet_scratch_seed44_20260710\20260709_063448\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\transunet_scratch_seed44_20260710\20260709_063448\aggregate_results.xlsx
+TransUNet_scratch_seed44: Dice=0.7507, IoU=0.6117, Recall=0.7687, Precision=0.7529, Spec=0.9699, Acc=0.9490, HD95=23.56, clDice=0.8399, BoundaryF1=0.6376

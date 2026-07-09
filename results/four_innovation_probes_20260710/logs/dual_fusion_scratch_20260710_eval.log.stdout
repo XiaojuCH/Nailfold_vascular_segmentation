@@ -1,0 +1,9 @@
+
+[Eval] E3_dual_fusion_scratch
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\dual_fusion_scratch_20260710\0707_0720\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_four_innovation_probes_20260710\dual_fusion_scratch_20260710\20260707_091438\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_four_innovation_probes_20260710\dual_fusion_scratch_20260710\20260707_091438\aggregate_results.xlsx
+E3_dual_fusion_scratch: Dice=0.7546, IoU=0.6166, Recall=0.7630, Precision=0.7651, Spec=0.9717, Acc=0.9505, HD95=22.76, clDice=0.8428, BoundaryF1=0.6477
