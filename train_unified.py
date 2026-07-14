@@ -39,6 +39,7 @@ from models.joint_framework import (
     JointModel,
     JointModel_BoundaryRefine,
     JointModel_DecoderDistill,
+    JointModel_DecoderDistillV2,
     JointModel_DualFusion,
     JointModel_Gated,
     JointModel_V2,
@@ -106,11 +107,14 @@ def get_args():
     parser.add_argument("--teacher_mode", type=str, default="green+clahe", choices=TEACHER_MODES)
     parser.add_argument("--enhancer", type=str, default="basic", choices=["basic", "multiscale", "anisotropic"])
     parser.add_argument("--enhancer_norm", type=str, default="bn", choices=["bn", "none"])
-    parser.add_argument("--joint_model", type=str, default="v1", choices=["v1", "v2", "gated", "boundary_refine", "decoder_distill", "dual_fusion"])
+    parser.add_argument("--joint_model", type=str, default="v1", choices=["v1", "v2", "gated", "boundary_refine", "decoder_distill", "decoder_distill_v2", "dual_fusion"])
     parser.add_argument("--attention_mode", type=str, default="normal", choices=["normal", "inverse"])
     parser.add_argument("--boundary_aux_weight", type=float, default=0.3)
     parser.add_argument("--lambda_decoder_distill", type=float, default=1.0)
     parser.add_argument("--decoder_distill_layers", type=str, default="2,3")
+    parser.add_argument("--decoder_distill_mode", type=str, default="mse", choices=["mse", "normalized_mse", "cosine", "cosine_mse"])
+    parser.add_argument("--decoder_teacher_weight", type=str, default="")
+    parser.add_argument("--decoder_teacher_pretrained", type=str, default="")
     parser.add_argument("--intensity_aug", type=str, default="on", choices=["on", "off"])
     parser.add_argument("--pretrained", type=str, default="")
     return parser.parse_args()
@@ -126,11 +130,20 @@ def get_teacher_dir(data_dir, teacher_mode):
 def forward_for_logits(model, images, mode, joint_model):
     if mode == "baseline":
         return model(images)
-    if joint_model in ["v2", "gated", "boundary_refine", "decoder_distill", "dual_fusion"]:
+    if joint_model in ["v2", "gated", "boundary_refine", "decoder_distill", "decoder_distill_v2", "dual_fusion"]:
         outputs, _, _ = model(images)
     else:
         outputs, _ = model(images)
     return outputs
+
+
+def load_torch_state_dict(model, weight_path, device, label):
+    try:
+        state_dict = torch.load(weight_path, map_location=device, weights_only=True)
+    except TypeError:
+        state_dict = torch.load(weight_path, map_location=device)
+    model.load_state_dict(state_dict)
+    print(f"[*] loaded {label}: {weight_path}")
 
 
 def build_enhancer(args):
@@ -225,6 +238,23 @@ def main():
             model = JointModel_BoundaryRefine(enhancer, segmentor).to(device)
         elif args.joint_model == "decoder_distill":
             model = JointModel_DecoderDistill(enhancer, segmentor).to(device)
+        elif args.joint_model == "decoder_distill_v2":
+            if not args.decoder_teacher_weight:
+                raise ValueError("--decoder_teacher_weight is required for decoder_distill_v2")
+            teacher_pretrained = args.decoder_teacher_pretrained or pretrained_path
+            teacher_segmentor = TransUNetOfficial(
+                n_channels=3,
+                n_classes=1,
+                img_size=256,
+                pretrained_path=teacher_pretrained,
+            )
+            load_torch_state_dict(
+                teacher_segmentor,
+                args.decoder_teacher_weight,
+                device,
+                "decoder teacher weight",
+            )
+            model = JointModel_DecoderDistillV2(enhancer, segmentor, teacher_segmentor).to(device)
         elif args.joint_model == "dual_fusion":
             model = JointModel_DualFusion(enhancer, segmentor, norm_type=args.enhancer_norm).to(device)
         else:
@@ -232,11 +262,12 @@ def main():
         if args.joint_model == "boundary_refine":
             criterion_class = JointDistillationBoundaryLoss
             criterion_kwargs = {"boundary_aux_weight": args.boundary_aux_weight}
-        elif args.joint_model == "decoder_distill":
+        elif args.joint_model in ["decoder_distill", "decoder_distill_v2"]:
             criterion_class = JointDecoderDistillationLoss
             criterion_kwargs = {
                 "lambda_decoder_distill": args.lambda_decoder_distill,
                 "decoder_distill_layers": args.decoder_distill_layers,
+                "decoder_distill_mode": args.decoder_distill_mode,
             }
         else:
             criterion_class = JointDistillationLoss
@@ -255,7 +286,7 @@ def main():
             **criterion_kwargs,
         ).to(device)
 
-    optim_params = list(model.parameters())
+    optim_params = [param for param in model.parameters() if param.requires_grad]
     if args.mode == "ours" and args.loss_weighting == "learnable":
         optim_params += list(criterion.parameters())
     optimizer = optim.AdamW(optim_params, lr=args.lr, weight_decay=1e-4)
@@ -282,6 +313,8 @@ def main():
             log_file.write(f"Attention Mode: {args.attention_mode}\n")
             log_file.write(f"Lambda Decoder Distill: {args.lambda_decoder_distill}\n")
             log_file.write(f"Decoder Distill Layers: {args.decoder_distill_layers}\n")
+            log_file.write(f"Decoder Distill Mode: {args.decoder_distill_mode}\n")
+            log_file.write(f"Decoder Teacher Weight: {args.decoder_teacher_weight}\n")
             log_file.write(f"Intensity Aug: {args.intensity_aug}\n")
         if args.pretrained:
             log_file.write(f"Pretrained: {args.pretrained}\n")
@@ -313,7 +346,7 @@ def main():
                         seg_preds, enhanced_imgs, boundary_logits = model(images)
                         loss, l_seg, l_mse, l_grad, l_boundary = criterion(seg_preds, masks, enhanced_imgs, teachers, boundary_logits)
                         train_boundary += l_boundary.item()
-                    elif args.joint_model == "decoder_distill":
+                    elif args.joint_model in ["decoder_distill", "decoder_distill_v2"]:
                         seg_preds, enhanced_imgs, decoder_feature_pair = model(images, teachers)
                         loss, l_seg, l_mse, l_grad, l_decoder = criterion(seg_preds, masks, enhanced_imgs, teachers, decoder_feature_pair)
                         train_decoder += l_decoder.item()

@@ -19,6 +19,7 @@ from models.joint_framework import (
     JointModel,
     JointModel_BoundaryRefine,
     JointModel_DecoderDistill,
+    JointModel_DecoderDistillV2,
     JointModel_DualFusion,
     JointModel_Gated,
     JointModel_V2,
@@ -147,7 +148,7 @@ def get_args():
     parser.add_argument("--boundary_tolerance", type=int, default=2)
     parser.add_argument("--enhancer", default="basic", choices=["basic", "multiscale", "anisotropic"])
     parser.add_argument("--enhancer_norm", default="bn", choices=["bn", "none"])
-    parser.add_argument("--joint_model", default="v1", choices=["v1", "v2", "gated", "boundary_refine", "decoder_distill", "dual_fusion"])
+    parser.add_argument("--joint_model", default="v1", choices=["v1", "v2", "gated", "boundary_refine", "decoder_distill", "decoder_distill_v2", "dual_fusion"])
     parser.add_argument("--attention_mode", default="normal", choices=["normal", "inverse"])
     parser.add_argument("--teacher_mode", default="")
     parser.add_argument("--loss_weighting", default="fixed")
@@ -160,6 +161,8 @@ def get_args():
     parser.add_argument("--boundary_aux_weight", type=float, default=0.3)
     parser.add_argument("--lambda_decoder_distill", type=float, default=1.0)
     parser.add_argument("--decoder_distill_layers", default="2,3")
+    parser.add_argument("--decoder_distill_mode", default="mse")
+    parser.add_argument("--decoder_teacher_weight", default="")
     parser.add_argument("--focal_alpha", type=float, default=0.3)
     parser.add_argument("--focal_beta", type=float, default=0.7)
     parser.add_argument("--focal_gamma", type=float, default=0.75)
@@ -197,6 +200,8 @@ def load_manifest(args):
                 "boundary_aux_weight": args.boundary_aux_weight,
                 "lambda_decoder_distill": args.lambda_decoder_distill,
                 "decoder_distill_layers": args.decoder_distill_layers,
+                "decoder_distill_mode": args.decoder_distill_mode,
+                "decoder_teacher_weight": args.decoder_teacher_weight,
                 "focal_alpha": args.focal_alpha,
                 "focal_beta": args.focal_beta,
                 "focal_gamma": args.focal_gamma,
@@ -222,6 +227,8 @@ def load_manifest(args):
         item.setdefault("boundary_aux_weight", "")
         item.setdefault("lambda_decoder_distill", "")
         item.setdefault("decoder_distill_layers", "")
+        item.setdefault("decoder_distill_mode", "")
+        item.setdefault("decoder_teacher_weight", "")
         item.setdefault("focal_alpha", "")
         item.setdefault("focal_beta", "")
         item.setdefault("focal_gamma", "")
@@ -255,6 +262,9 @@ def build_model(exp, img_size, device):
             model = JointModel_BoundaryRefine(enhancer, segmentor)
         elif exp.get("joint_model", "v1") == "decoder_distill":
             model = JointModel_DecoderDistill(enhancer, segmentor)
+        elif exp.get("joint_model", "v1") == "decoder_distill_v2":
+            teacher_segmentor = TransUNetOfficial(n_channels=3, n_classes=1, img_size=img_size)
+            model = JointModel_DecoderDistillV2(enhancer, segmentor, teacher_segmentor)
         elif exp.get("joint_model", "v1") == "dual_fusion":
             model = JointModel_DualFusion(enhancer, segmentor, norm_type=enhancer_norm)
         else:
@@ -380,6 +390,8 @@ def evaluate_one(exp, dataset, loader, args, device, run_dir):
         "boundary_aux_weight": exp.get("boundary_aux_weight", ""),
         "lambda_decoder_distill": exp.get("lambda_decoder_distill", ""),
         "decoder_distill_layers": exp.get("decoder_distill_layers", ""),
+        "decoder_distill_mode": exp.get("decoder_distill_mode", ""),
+        "decoder_teacher_weight": exp.get("decoder_teacher_weight", ""),
         "focal_alpha": exp.get("focal_alpha", ""),
         "focal_beta": exp.get("focal_beta", ""),
         "focal_gamma": exp.get("focal_gamma", ""),
@@ -465,6 +477,8 @@ def main():
         "boundary_aux_weight",
         "lambda_decoder_distill",
         "decoder_distill_layers",
+        "decoder_distill_mode",
+        "decoder_teacher_weight",
         "focal_alpha",
         "focal_beta",
         "focal_gamma",

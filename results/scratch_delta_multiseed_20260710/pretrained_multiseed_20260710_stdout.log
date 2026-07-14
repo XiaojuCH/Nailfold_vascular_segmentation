@@ -1,0 +1,212 @@
+
+============================================================
+[START] Train TransUNet_pretrained_seed43
+[LOG]   results\scratch_delta_multiseed_20260710\logs\transunet_pretrained_seed43_20260710_train.log
+============================================================
+[DONE] Train TransUNet_pretrained_seed43
+[FINAL TEST RESULTS] BASELINE
+--------------------------------------------------
+Dice:  0.7583
+IoU:   0.6211
+HD95:  23.14
+Sens:  0.8177
+Spec:  0.9627
+Acc:   0.9476
+Prec:  0.7246
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/transunet_pretrained_seed43_20260710\0710_0018
+[WEIGHT] D:\Projects_\JiaBi_new\results\experiments\all_filtered\transunet_pretrained_seed43_20260710\0710_0018\best_model.pth
+
+============================================================
+[START] Evaluate TransUNet_pretrained_seed43
+[LOG]   results\scratch_delta_multiseed_20260710\logs\transunet_pretrained_seed43_20260710_eval.log
+============================================================
+[DONE] Evaluate TransUNet_pretrained_seed43
+
+[Eval] TransUNet_pretrained_seed43
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\transunet_pretrained_seed43_20260710\0710_0018\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\transunet_pretrained_seed43_20260710\20260710_011309\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\transunet_pretrained_seed43_20260710\20260710_011309\aggregate_results.xlsx
+TransUNet_pretrained_seed43: Dice=0.7583, IoU=0.6211, Recall=0.8177, Precision=0.7246, Spec=0.9627, Acc=0.9476, HD95=23.14, clDice=0.8501, BoundaryF1=0.6395
+
+============================================================
+[START] Train Ours_green_mse10_grad0_pretrained_seed43
+[LOG]   results\scratch_delta_multiseed_20260710\logs\ours_green_mse10_grad0_pretrained_seed43_20260710_train.log
+============================================================
+[DONE] Train Ours_green_mse10_grad0_pretrained_seed43
+[FINAL TEST RESULTS] OURS
+--------------------------------------------------
+Dice:  0.7549
+IoU:   0.6172
+HD95:  22.47
+Sens:  0.7969
+Spec:  0.9654
+Acc:   0.9479
+Prec:  0.7358
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/ours_green_mse10_grad0_pretrained_seed43_20260710\0710_0113
+[WEIGHT] D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_mse10_grad0_pretrained_seed43_20260710\0710_0113\best_model.pth
+
+============================================================
+[START] Evaluate Ours_green_mse10_grad0_pretrained_seed43
+[LOG]   results\scratch_delta_multiseed_20260710\logs\ours_green_mse10_grad0_pretrained_seed43_20260710_eval.log
+============================================================
+[DONE] Evaluate Ours_green_mse10_grad0_pretrained_seed43
+
+[Eval] Ours_green_mse10_grad0_pretrained_seed43
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_mse10_grad0_pretrained_seed43_20260710\0710_0113\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\ours_green_mse10_grad0_pretrained_seed43_20260710\20260710_022741\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\ours_green_mse10_grad0_pretrained_seed43_20260710\20260710_022741\aggregate_results.xlsx
+Ours_green_mse10_grad0_pretrained_seed43: Dice=0.7549, IoU=0.6172, Recall=0.7969, Precision=0.7358, Spec=0.9654, Acc=0.9479, HD95=22.47, clDice=0.8450, BoundaryF1=0.6308
+
+============================================================
+[START] Train C3_anisotropic_no_bn_no_intensity_pretrained_seed43
+[LOG]   results\scratch_delta_multiseed_20260710\logs\c3_anisotropic_no_bn_no_intensity_pretrained_seed43_20260710_train.log
+============================================================
+[DONE] Train C3_anisotropic_no_bn_no_intensity_pretrained_seed43
+[FINAL TEST RESULTS] OURS
+--------------------------------------------------
+Dice:  0.7603
+IoU:   0.6244
+HD95:  22.59
+Sens:  0.7930
+Spec:  0.9686
+Acc:   0.9503
+Prec:  0.7486
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/c3_anisotropic_no_bn_no_intensity_pretrained_seed43_20260710\0710_0227
+[WEIGHT] D:\Projects_\JiaBi_new\results\experiments\all_filtered\c3_anisotropic_no_bn_no_intensity_pretrained_seed43_20260710\0710_0227\best_model.pth
+
+============================================================
+[START] Evaluate C3_anisotropic_no_bn_no_intensity_pretrained_seed43
+[LOG]   results\scratch_delta_multiseed_20260710\logs\c3_anisotropic_no_bn_no_intensity_pretrained_seed43_20260710_eval.log
+============================================================
+[DONE] Evaluate C3_anisotropic_no_bn_no_intensity_pretrained_seed43
+
+[Eval] C3_anisotropic_no_bn_no_intensity_pretrained_seed43
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\c3_anisotropic_no_bn_no_intensity_pretrained_seed43_20260710\0710_0227\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\c3_anisotropic_no_bn_no_intensity_pretrained_seed43_20260710\20260710_034031\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\c3_anisotropic_no_bn_no_intensity_pretrained_seed43_20260710\20260710_034031\aggregate_results.xlsx
+C3_anisotropic_no_bn_no_intensity_pretrained_seed43: Dice=0.7603, IoU=0.6244, Recall=0.7930, Precision=0.7486, Spec=0.9686, Acc=0.9503, HD95=22.59, clDice=0.8533, BoundaryF1=0.6529
+
+============================================================
+[START] Train TransUNet_pretrained_seed44
+[LOG]   results\scratch_delta_multiseed_20260710\logs\transunet_pretrained_seed44_20260710_train.log
+============================================================
+[DONE] Train TransUNet_pretrained_seed44
+[FINAL TEST RESULTS] BASELINE
+--------------------------------------------------
+Dice:  0.7559
+IoU:   0.6190
+HD95:  23.03
+Sens:  0.7990
+Spec:  0.9656
+Acc:   0.9482
+Prec:  0.7367
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/transunet_pretrained_seed44_20260710\0710_0340
+[WEIGHT] D:\Projects_\JiaBi_new\results\experiments\all_filtered\transunet_pretrained_seed44_20260710\0710_0340\best_model.pth
+
+============================================================
+[START] Evaluate TransUNet_pretrained_seed44
+[LOG]   results\scratch_delta_multiseed_20260710\logs\transunet_pretrained_seed44_20260710_eval.log
+============================================================
+[DONE] Evaluate TransUNet_pretrained_seed44
+
+[Eval] TransUNet_pretrained_seed44
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\transunet_pretrained_seed44_20260710\0710_0340\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\transunet_pretrained_seed44_20260710\20260710_044840\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\transunet_pretrained_seed44_20260710\20260710_044840\aggregate_results.xlsx
+TransUNet_pretrained_seed44: Dice=0.7559, IoU=0.6190, Recall=0.7990, Precision=0.7367, Spec=0.9656, Acc=0.9482, HD95=23.03, clDice=0.8492, BoundaryF1=0.6375
+
+============================================================
+[START] Train Ours_green_mse10_grad0_pretrained_seed44
+[LOG]   results\scratch_delta_multiseed_20260710\logs\ours_green_mse10_grad0_pretrained_seed44_20260710_train.log
+============================================================
+[DONE] Train Ours_green_mse10_grad0_pretrained_seed44
+[FINAL TEST RESULTS] OURS
+--------------------------------------------------
+Dice:  0.7602
+IoU:   0.6239
+HD95:  21.60
+Sens:  0.8093
+Spec:  0.9642
+Acc:   0.9484
+Prec:  0.7335
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/ours_green_mse10_grad0_pretrained_seed44_20260710\0710_0448
+[WEIGHT] D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_mse10_grad0_pretrained_seed44_20260710\0710_0448\best_model.pth
+
+============================================================
+[START] Evaluate Ours_green_mse10_grad0_pretrained_seed44
+[LOG]   results\scratch_delta_multiseed_20260710\logs\ours_green_mse10_grad0_pretrained_seed44_20260710_eval.log
+============================================================
+[DONE] Evaluate Ours_green_mse10_grad0_pretrained_seed44
+
+[Eval] Ours_green_mse10_grad0_pretrained_seed44
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\ours_green_mse10_grad0_pretrained_seed44_20260710\0710_0448\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\ours_green_mse10_grad0_pretrained_seed44_20260710\20260710_060302\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\ours_green_mse10_grad0_pretrained_seed44_20260710\20260710_060302\aggregate_results.xlsx
+Ours_green_mse10_grad0_pretrained_seed44: Dice=0.7602, IoU=0.6239, Recall=0.8093, Precision=0.7335, Spec=0.9642, Acc=0.9484, HD95=21.60, clDice=0.8529, BoundaryF1=0.6388
+
+============================================================
+[START] Train C3_anisotropic_no_bn_no_intensity_pretrained_seed44
+[LOG]   results\scratch_delta_multiseed_20260710\logs\c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710_train.log
+============================================================
+[DONE] Train C3_anisotropic_no_bn_no_intensity_pretrained_seed44
+[FINAL TEST RESULTS] OURS
+--------------------------------------------------
+Dice:  0.7566
+IoU:   0.6198
+HD95:  22.45
+Sens:  0.7912
+Spec:  0.9671
+Acc:   0.9491
+Prec:  0.7432
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710\0710_0603
+[WEIGHT] D:\Projects_\JiaBi_new\results\experiments\all_filtered\c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710\0710_0603\best_model.pth
+
+============================================================
+[START] Evaluate C3_anisotropic_no_bn_no_intensity_pretrained_seed44
+[LOG]   results\scratch_delta_multiseed_20260710\logs\c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710_eval.log
+============================================================
+[DONE] Evaluate C3_anisotropic_no_bn_no_intensity_pretrained_seed44
+
+[Eval] C3_anisotropic_no_bn_no_intensity_pretrained_seed44
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710\0710_0603\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710\20260710_072934\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710\20260710_072934\aggregate_results.xlsx
+C3_anisotropic_no_bn_no_intensity_pretrained_seed44: Dice=0.7566, IoU=0.6198, Recall=0.7912, Precision=0.7432, Spec=0.9671, Acc=0.9491, HD95=22.45, clDice=0.8470, BoundaryF1=0.6374
+
+============================================================
+[ALL DONE]
+Summary: results\scratch_delta_multiseed_20260710\run_summary.csv
+Metrics: results\scratch_delta_multiseed_20260710\metrics_summary.csv
+Logs:    results\scratch_delta_multiseed_20260710\logs
+Eval:    results\unified_eval_scratch_delta_multiseed_20260710
+============================================================

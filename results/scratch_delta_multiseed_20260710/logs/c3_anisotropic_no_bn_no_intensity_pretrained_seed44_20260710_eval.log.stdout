@@ -1,0 +1,9 @@
+
+[Eval] C3_anisotropic_no_bn_no_intensity_pretrained_seed44
+       model=ours weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710\0710_0603\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710\20260710_072934\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\c3_anisotropic_no_bn_no_intensity_pretrained_seed44_20260710\20260710_072934\aggregate_results.xlsx
+C3_anisotropic_no_bn_no_intensity_pretrained_seed44: Dice=0.7566, IoU=0.6198, Recall=0.7912, Precision=0.7432, Spec=0.9671, Acc=0.9491, HD95=22.45, clDice=0.8470, BoundaryF1=0.6374

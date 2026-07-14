@@ -315,10 +315,17 @@ class JointDistillationBoundaryLoss(JointDistillationLoss):
 class JointDecoderDistillationLoss(JointDistillationLoss):
     """Image-level prior distillation plus decoder feature consistency."""
 
-    def __init__(self, lambda_decoder_distill=1.0, decoder_distill_layers="2,3", **kwargs):
+    def __init__(
+        self,
+        lambda_decoder_distill=1.0,
+        decoder_distill_layers="2,3",
+        decoder_distill_mode="mse",
+        **kwargs,
+    ):
         super().__init__(**kwargs)
         self.lambda_decoder_distill = lambda_decoder_distill
         self.decoder_distill_layers = self._parse_layers(decoder_distill_layers)
+        self.decoder_distill_mode = decoder_distill_mode
 
     @staticmethod
     def _parse_layers(layers):
@@ -331,11 +338,45 @@ class JointDecoderDistillationLoss(JointDistillationLoss):
                 parsed.append(int(item))
         return parsed
 
+    def _single_feature_loss(self, student_feature, teacher_feature):
+        if student_feature.shape[-2:] != teacher_feature.shape[-2:]:
+            teacher_feature = F.interpolate(
+                teacher_feature,
+                size=student_feature.shape[-2:],
+                mode="bilinear",
+                align_corners=False,
+            )
+        if student_feature.shape[1] != teacher_feature.shape[1]:
+            raise ValueError(
+                f"Decoder feature channel mismatch: student={student_feature.shape[1]} "
+                f"teacher={teacher_feature.shape[1]}"
+            )
+
+        if self.decoder_distill_mode == "mse":
+            return F.mse_loss(student_feature, teacher_feature)
+
+        student_norm = F.normalize(student_feature, dim=1)
+        teacher_norm = F.normalize(teacher_feature, dim=1)
+        normalized_mse = F.mse_loss(student_norm, teacher_norm)
+        cosine_loss = 1.0 - F.cosine_similarity(student_norm, teacher_norm, dim=1).mean()
+
+        if self.decoder_distill_mode == "normalized_mse":
+            return normalized_mse
+        if self.decoder_distill_mode == "cosine":
+            return cosine_loss
+        if self.decoder_distill_mode == "cosine_mse":
+            return 0.5 * normalized_mse + 0.5 * cosine_loss
+        raise ValueError(f"Unknown decoder_distill_mode: {self.decoder_distill_mode}")
+
     def _feature_distill_loss(self, feature_pair):
         if feature_pair is None:
             device = self.lambda_mse.device if torch.is_tensor(self.lambda_mse) else None
             return torch.tensor(0.0, device=device)
-        student_features, teacher_features = feature_pair
+        if isinstance(feature_pair, dict):
+            student_features = feature_pair["student_features"]
+            teacher_features = feature_pair["teacher_features"]
+        else:
+            student_features, teacher_features = feature_pair
         if len(student_features) != len(teacher_features):
             raise ValueError(
                 f"Decoder feature count mismatch: student={len(student_features)} teacher={len(teacher_features)}"
@@ -345,7 +386,7 @@ class JointDecoderDistillationLoss(JointDistillationLoss):
         for layer_idx in selected:
             if layer_idx < 0 or layer_idx >= len(student_features):
                 raise ValueError(f"decoder_distill layer {layer_idx} out of range 0..{len(student_features)-1}")
-            losses.append(F.mse_loss(student_features[layer_idx], teacher_features[layer_idx]))
+            losses.append(self._single_feature_loss(student_features[layer_idx], teacher_features[layer_idx]))
         if not losses:
             return student_features[-1].new_tensor(0.0)
         return torch.stack(losses).mean()

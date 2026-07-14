@@ -1,0 +1,92 @@
+[*] mode: OURS
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/decoder_distill_v2_direct_green_teacher_pretrained_seed42_20260710\0710_0812
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice
+[*] pretrained: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+[*] teacher_mode: green_only
+[*] teacher_dir: ./dataset_all_filtered\train\teacher_priors_green_only
+load_pretrained: grid-size from 14 to 16
+[*] 已加载预训练权重: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+load_pretrained: grid-size from 14 to 16
+[*] 已加载预训练权重: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+[*] loaded decoder teacher weight: results\experiments\all_filtered\direct_green_baseline_20260620\0620_0119\best_model.pth
+Ep 001 | Loss(Tot:1.112 Seg:0.925 MSE:0.014 Grad:0.157 Bnd:0.000 Dec:0.471) | W(MSE:10.00 Grad:0.00) | Dice: 0.7627 | HD95: 22.84
+[*] Update best model: Dice = 0.7627
+Ep 002 | Loss(Tot:0.668 Seg:0.597 MSE:0.005 Grad:0.035 Bnd:0.000 Dec:0.202) | W(MSE:10.00 Grad:0.00) | Dice: 0.7701 | HD95: 20.73
+[*] Update best model: Dice = 0.7701
+Ep 003 | Loss(Tot:0.569 Seg:0.514 MSE:0.005 Grad:0.016 Bnd:0.000 Dec:0.102) | W(MSE:10.00 Grad:0.00) | Dice: 0.7418 | HD95: 21.41
+Ep 004 | Loss(Tot:0.539 Seg:0.490 MSE:0.004 Grad:0.011 Bnd:0.000 Dec:0.081) | W(MSE:10.00 Grad:0.00) | Dice: 0.7743 | HD95: 21.49
+[*] Update best model: Dice = 0.7743
+Ep 005 | Loss(Tot:0.522 Seg:0.475 MSE:0.004 Grad:0.009 Bnd:0.000 Dec:0.072) | W(MSE:10.00 Grad:0.00) | Dice: 0.7649 | HD95: 21.13
+Ep 006 | Loss(Tot:0.507 Seg:0.461 MSE:0.004 Grad:0.008 Bnd:0.000 Dec:0.067) | W(MSE:10.00 Grad:0.00) | Dice: 0.7710 | HD95: 21.62
+Ep 007 | Loss(Tot:0.499 Seg:0.453 MSE:0.004 Grad:0.008 Bnd:0.000 Dec:0.064) | W(MSE:10.00 Grad:0.00) | Dice: 0.7813 | HD95: 20.13
+[*] Update best model: Dice = 0.7813
+Ep 008 | Loss(Tot:0.487 Seg:0.441 MSE:0.004 Grad:0.007 Bnd:0.000 Dec:0.060) | W(MSE:10.00 Grad:0.00) | Dice: 0.7833 | HD95: 20.37
+[*] Update best model: Dice = 0.7833
+Ep 009 | Loss(Tot:0.482 Seg:0.438 MSE:0.004 Grad:0.006 Bnd:0.000 Dec:0.060) | W(MSE:10.00 Grad:0.00) | Dice: 0.7755 | HD95: 20.29
+Ep 010 | Loss(Tot:0.473 Seg:0.431 MSE:0.004 Grad:0.006 Bnd:0.000 Dec:0.058) | W(MSE:10.00 Grad:0.00) | Dice: 0.7866 | HD95: 20.03
+[*] Update best model: Dice = 0.7866
+Ep 011 | Loss(Tot:0.467 Seg:0.423 MSE:0.004 Grad:0.005 Bnd:0.000 Dec:0.056) | W(MSE:10.00 Grad:0.00) | Dice: 0.7874 | HD95: 20.03
+[*] Update best model: Dice = 0.7874
+Ep 012 | Loss(Tot:0.458 Seg:0.417 MSE:0.004 Grad:0.005 Bnd:0.000 Dec:0.055) | W(MSE:10.00 Grad:0.00) | Dice: 0.7851 | HD95: 18.10
+Ep 013 | Loss(Tot:0.455 Seg:0.411 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.054) | W(MSE:10.00 Grad:0.00) | Dice: 0.7914 | HD95: 20.74
+[*] Update best model: Dice = 0.7914
+Ep 014 | Loss(Tot:0.447 Seg:0.405 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.053) | W(MSE:10.00 Grad:0.00) | Dice: 0.7892 | HD95: 17.86
+Ep 015 | Loss(Tot:0.442 Seg:0.402 MSE:0.003 Grad:0.004 Bnd:0.000 Dec:0.052) | W(MSE:10.00 Grad:0.00) | Dice: 0.7917 | HD95: 18.96
+[*] Update best model: Dice = 0.7917
+Ep 016 | Loss(Tot:0.436 Seg:0.394 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.052) | W(MSE:10.00 Grad:0.00) | Dice: 0.7878 | HD95: 19.68
+Ep 017 | Loss(Tot:0.430 Seg:0.389 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.051) | W(MSE:10.00 Grad:0.00) | Dice: 0.7809 | HD95: 20.54
+Ep 018 | Loss(Tot:0.423 Seg:0.381 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.050) | W(MSE:10.00 Grad:0.00) | Dice: 0.7928 | HD95: 18.22
+[*] Update best model: Dice = 0.7928
+Ep 019 | Loss(Tot:0.414 Seg:0.374 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.050) | W(MSE:10.00 Grad:0.00) | Dice: 0.7883 | HD95: 20.84
+Ep 020 | Loss(Tot:0.412 Seg:0.371 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.049) | W(MSE:10.00 Grad:0.00) | Dice: 0.7827 | HD95: 18.93
+Ep 021 | Loss(Tot:0.403 Seg:0.363 MSE:0.004 Grad:0.004 Bnd:0.000 Dec:0.049) | W(MSE:10.00 Grad:0.00) | Dice: 0.7860 | HD95: 19.28
+Ep 022 | Loss(Tot:0.401 Seg:0.361 MSE:0.003 Grad:0.004 Bnd:0.000 Dec:0.049) | W(MSE:10.00 Grad:0.00) | Dice: 0.7919 | HD95: 18.64
+Ep 023 | Loss(Tot:0.394 Seg:0.353 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.049) | W(MSE:10.00 Grad:0.00) | Dice: 0.7919 | HD95: 19.57
+Ep 024 | Loss(Tot:0.387 Seg:0.346 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.049) | W(MSE:10.00 Grad:0.00) | Dice: 0.7921 | HD95: 18.06
+Ep 025 | Loss(Tot:0.384 Seg:0.343 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.048) | W(MSE:10.00 Grad:0.00) | Dice: 0.7927 | HD95: 19.59
+Ep 026 | Loss(Tot:0.377 Seg:0.337 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.048) | W(MSE:10.00 Grad:0.00) | Dice: 0.7899 | HD95: 19.45
+Ep 027 | Loss(Tot:0.371 Seg:0.331 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.048) | W(MSE:10.00 Grad:0.00) | Dice: 0.7871 | HD95: 19.49
+Ep 028 | Loss(Tot:0.367 Seg:0.327 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.048) | W(MSE:10.00 Grad:0.00) | Dice: 0.7770 | HD95: 18.89
+Ep 029 | Loss(Tot:0.359 Seg:0.320 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7932 | HD95: 19.52
+[*] Update best model: Dice = 0.7932
+Ep 030 | Loss(Tot:0.357 Seg:0.317 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7922 | HD95: 19.00
+Ep 031 | Loss(Tot:0.347 Seg:0.308 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7780 | HD95: 19.50
+Ep 032 | Loss(Tot:0.344 Seg:0.306 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7882 | HD95: 18.75
+Ep 033 | Loss(Tot:0.341 Seg:0.302 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7860 | HD95: 18.64
+Ep 034 | Loss(Tot:0.336 Seg:0.297 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7842 | HD95: 19.41
+Ep 035 | Loss(Tot:0.328 Seg:0.289 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7856 | HD95: 19.68
+Ep 036 | Loss(Tot:0.324 Seg:0.285 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7858 | HD95: 19.21
+Ep 037 | Loss(Tot:0.321 Seg:0.283 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7830 | HD95: 18.73
+Ep 038 | Loss(Tot:0.317 Seg:0.278 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7873 | HD95: 19.34
+Ep 039 | Loss(Tot:0.314 Seg:0.276 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7826 | HD95: 19.90
+Ep 040 | Loss(Tot:0.310 Seg:0.273 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7817 | HD95: 19.79
+Ep 041 | Loss(Tot:0.310 Seg:0.270 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7848 | HD95: 19.57
+Ep 042 | Loss(Tot:0.304 Seg:0.266 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7819 | HD95: 19.85
+Ep 043 | Loss(Tot:0.302 Seg:0.263 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7842 | HD95: 19.48
+Ep 044 | Loss(Tot:0.300 Seg:0.263 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7815 | HD95: 19.31
+Ep 045 | Loss(Tot:0.297 Seg:0.260 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.048) | W(MSE:10.00 Grad:0.00) | Dice: 0.7814 | HD95: 19.40
+Ep 046 | Loss(Tot:0.300 Seg:0.260 MSE:0.004 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7824 | HD95: 19.24
+Ep 047 | Loss(Tot:0.298 Seg:0.259 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7812 | HD95: 19.38
+Ep 048 | Loss(Tot:0.295 Seg:0.257 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.047) | W(MSE:10.00 Grad:0.00) | Dice: 0.7825 | HD95: 19.26
+Ep 049 | Loss(Tot:0.295 Seg:0.256 MSE:0.003 Grad:0.003 Bnd:0.000 Dec:0.048) | W(MSE:10.00 Grad:0.00) | Dice: 0.7818 | HD95: 18.91
+[*] Early stopping after 20 epochs without improvement
+[FINAL DISTILL WEIGHTS] MSE: 10.0000, Grad: 0.0000
+
+==================================================
+[*] Load best model for test evaluation...
+
+[FINAL TEST RESULTS] OURS
+--------------------------------------------------
+Dice:  0.7543
+IoU:   0.6162
+HD95:  23.44
+Sens:  0.8122
+Spec:  0.9619
+Acc:   0.9465
+Prec:  0.7220
+--------------------------------------------------
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/decoder_distill_v2_direct_green_teacher_pretrained_seed42_20260710\0710_0812

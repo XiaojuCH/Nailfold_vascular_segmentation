@@ -1,0 +1,9 @@
+
+[Eval] TransUNet_pretrained_seed43
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\transunet_pretrained_seed43_20260710\0710_0018\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_scratch_delta_multiseed_20260710\transunet_pretrained_seed43_20260710\20260710_011309\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_scratch_delta_multiseed_20260710\transunet_pretrained_seed43_20260710\20260710_011309\aggregate_results.xlsx
+TransUNet_pretrained_seed43: Dice=0.7583, IoU=0.6211, Recall=0.8177, Precision=0.7246, Spec=0.9627, Acc=0.9476, HD95=23.14, clDice=0.8501, BoundaryF1=0.6395

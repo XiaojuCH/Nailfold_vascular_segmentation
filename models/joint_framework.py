@@ -179,6 +179,61 @@ class JointModel_DecoderDistill(nn.Module):
         return seg_out, enhanced_img, feature_pair
 
 
+class JointModel_DecoderDistillV2(nn.Module):
+    """Frozen green-prior teacher with projected decoder feature distillation."""
+
+    def __init__(self, enhancer, segmentor, teacher_segmentor):
+        super(JointModel_DecoderDistillV2, self).__init__()
+        self.enhancer = enhancer
+        self.segmentor = segmentor
+        self.teacher_segmentor = teacher_segmentor
+
+        for param in self.teacher_segmentor.parameters():
+            param.requires_grad = False
+        self.teacher_segmentor.eval()
+
+        decoder_channels = self._decoder_channels(segmentor)
+        self.feature_projs = nn.ModuleList(
+            [nn.Conv2d(channels, channels, kernel_size=1) for channels in decoder_channels]
+        )
+
+    @staticmethod
+    def _decoder_channels(segmentor):
+        config = getattr(getattr(segmentor, "model", None), "config", None)
+        channels = getattr(config, "decoder_channels", None)
+        if channels is None and isinstance(config, dict):
+            channels = config.get("decoder_channels")
+        return list(channels) if channels is not None else [256, 128, 64, 16]
+
+    def _teacher_outputs(self, teacher_img):
+        self.teacher_segmentor.eval()
+        with torch.no_grad():
+            teacher_logits, teacher_features = self.teacher_segmentor(
+                teacher_img,
+                return_decoder_features=True,
+            )
+        return teacher_logits.detach(), [feat.detach() for feat in teacher_features]
+
+    def forward(self, x, teacher_img=None):
+        enhanced_img = self.enhancer(x)
+        if teacher_img is None:
+            seg_out = self.segmentor(enhanced_img)
+            return seg_out, enhanced_img, None
+
+        seg_out, student_features = self.segmentor(enhanced_img, return_decoder_features=True)
+        projected_features = [
+            proj(feature) for proj, feature in zip(self.feature_projs, student_features)
+        ]
+        teacher_logits, teacher_features = self._teacher_outputs(teacher_img)
+        feature_payload = {
+            "student_features": projected_features,
+            "teacher_features": teacher_features,
+            "student_logits": seg_out,
+            "teacher_logits": teacher_logits,
+        }
+        return seg_out, enhanced_img, feature_payload
+
+
 class JointModel_DualFusion(nn.Module):
     """Light CNN + TransUNet fusion probe inspired by parallel CNN/Transformer designs."""
 
