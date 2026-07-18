@@ -1,0 +1,14 @@
+
+[Eval] F0_transunet_corrected_pretrained_seed42
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\f0_transunet_corrected_pretrained_seed42_20260715\0715_1907\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] F3_directional_green_multiscale_pretrained_seed42
+       model=prior_fusion weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\f3_directional_green_multiscale_pretrained_seed42_20260715\0715_2024\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_pretrained_f0_f3_pair_20260715\20260715_214314\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_pretrained_f0_f3_pair_20260715\20260715_214314\aggregate_results.xlsx
+F0_transunet_corrected_pretrained_seed42: Dice=0.7571, IoU=0.6199, Recall=0.8099, Precision=0.7293, Spec=0.9628, Acc=0.9475, HD95=21.72, clDice=0.8468, BoundaryF1=0.6346
+F3_directional_green_multiscale_pretrained_seed42: Dice=0.7542, IoU=0.6156, Recall=0.8211, Precision=0.7156, Spec=0.9601, Acc=0.9461, HD95=22.32, clDice=0.8463, BoundaryF1=0.6234

@@ -1,0 +1,18 @@
+{
+  "control_name": "K0_finetune_control_seed42",
+  "best_candidate": "K2_uniform_lambda1p0_seed42",
+  "best_candidate_dice": 0.7608530027392162,
+  "best_candidate_delta_vs_control_dice": 0.004735585522644636,
+  "strong_positive": false,
+  "continue_multiseed": false,
+  "next_phase": "fallback_k3_k4",
+  "criteria": {
+    "continue_dice": 0.7615,
+    "min_delta_vs_control": 0.001,
+    "strong_dice": 0.763
+  },
+  "source": {
+    "aggregate_csv": "D:\\Projects_\\JiaBi_new\\results\\unified_eval_dual_teacher_kd_20260717\\20260717_024516\\aggregate_results.csv",
+    "teacher_metrics_csv": "D:\\Projects_\\JiaBi_new\\results\\dual_teacher_kd_20260717\\soft_targets\\teacher_ensemble_metrics.csv"
+  }
+}

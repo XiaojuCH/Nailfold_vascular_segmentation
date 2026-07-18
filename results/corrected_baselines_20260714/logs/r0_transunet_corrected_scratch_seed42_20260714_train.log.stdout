@@ -1,0 +1,58 @@
+[*] mode: BASELINE
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/r0_transunet_corrected_scratch_seed42_20260714\0714_2331
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice
+[*] 未加载预训练权重，从头训练
+Ep 001 | Loss: 0.9299 | Dice: 0.7563 | HD95: 28.12
+[*] Update best model: Dice = 0.7563
+Ep 002 | Loss: 0.6081 | Dice: 0.7688 | HD95: 23.68
+[*] Update best model: Dice = 0.7688
+Ep 003 | Loss: 0.5265 | Dice: 0.7689 | HD95: 21.83
+[*] Update best model: Dice = 0.7689
+Ep 004 | Loss: 0.5023 | Dice: 0.7677 | HD95: 21.11
+Ep 005 | Loss: 0.4876 | Dice: 0.7742 | HD95: 25.58
+[*] Update best model: Dice = 0.7742
+Ep 006 | Loss: 0.4799 | Dice: 0.7760 | HD95: 23.08
+[*] Update best model: Dice = 0.7760
+Ep 007 | Loss: 0.4707 | Dice: 0.7819 | HD95: 20.99
+[*] Update best model: Dice = 0.7819
+Ep 008 | Loss: 0.4629 | Dice: 0.7788 | HD95: 22.01
+Ep 009 | Loss: 0.4589 | Dice: 0.7818 | HD95: 20.46
+Ep 010 | Loss: 0.4515 | Dice: 0.7674 | HD95: 21.39
+Ep 011 | Loss: 0.4483 | Dice: 0.7858 | HD95: 20.70
+[*] Update best model: Dice = 0.7858
+Ep 012 | Loss: 0.4423 | Dice: 0.7799 | HD95: 20.64
+Ep 013 | Loss: 0.4372 | Dice: 0.7837 | HD95: 19.09
+Ep 014 | Loss: 0.4338 | Dice: 0.7851 | HD95: 20.49
+Ep 015 | Loss: 0.4298 | Dice: 0.7812 | HD95: 19.91
+Ep 016 | Loss: 0.4255 | Dice: 0.7813 | HD95: 20.24
+Ep 017 | Loss: 0.4196 | Dice: 0.7784 | HD95: 20.06
+Ep 018 | Loss: 0.4145 | Dice: 0.7853 | HD95: 20.22
+Ep 019 | Loss: 0.4122 | Dice: 0.7800 | HD95: 20.36
+Ep 020 | Loss: 0.4096 | Dice: 0.7897 | HD95: 19.98
+[*] Update best model: Dice = 0.7897
+Ep 021 | Loss: 0.4043 | Dice: 0.7832 | HD95: 21.81
+Ep 022 | Loss: 0.4037 | Dice: 0.7860 | HD95: 20.40
+Ep 023 | Loss: 0.3938 | Dice: 0.7850 | HD95: 20.33
+Ep 024 | Loss: 0.3901 | Dice: 0.7837 | HD95: 19.98
+Ep 025 | Loss: 0.3877 | Dice: 0.7821 | HD95: 19.18
+Ep 026 | Loss: 0.3837 | Dice: 0.7808 | HD95: 19.14
+Ep 027 | Loss: 0.3782 | Dice: 0.7860 | HD95: 19.19
+Ep 028 | Loss: 0.3725 | Dice: 0.7821 | HD95: 19.95
+Ep 029 | Loss: 0.3696 | Dice: 0.7788 | HD95: 20.24
+Ep 030 | Loss: 0.3645 | Dice: 0.7839 | HD95: 19.14
+Ep 031 | Loss: 0.3574 | Dice: 0.7808 | HD95: 19.11
+Ep 032 | Loss: 0.3559 | Dice: 0.7860 | HD95: 19.96
+Ep 033 | Loss: 0.3526 | Dice: 0.7845 | HD95: 19.38
+Ep 034 | Loss: 0.3503 | Dice: 0.7835 | HD95: 19.84
+Ep 035 | Loss: 0.3460 | Dice: 0.7829 | HD95: 20.04
+Ep 036 | Loss: 0.3418 | Dice: 0.7855 | HD95: 19.36
+Ep 037 | Loss: 0.3413 | Dice: 0.7853 | HD95: 19.81
+Ep 038 | Loss: 0.3363 | Dice: 0.7847 | HD95: 19.32
+Ep 039 | Loss: 0.3330 | Dice: 0.7800 | HD95: 19.91
+Ep 040 | Loss: 0.3324 | Dice: 0.7824 | HD95: 19.41
+[*] Early stopping after 20 epochs without improvement
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/r0_transunet_corrected_scratch_seed42_20260714\0714_2331

@@ -41,6 +41,44 @@ class BCEDiceLoss(nn.Module):
         return loss_bce + dice_loss
 
 
+class OutputDistillationLoss(nn.Module):
+    """Ground-truth segmentation loss plus soft output-level distillation."""
+
+    def __init__(self, segmentation_loss, lambda_kd=0.3, weight_mode="uniform", min_weight=0.25):
+        super().__init__()
+        if lambda_kd < 0:
+            raise ValueError(f"lambda_kd must be non-negative, got {lambda_kd}")
+        if weight_mode not in ("uniform", "agreement"):
+            raise ValueError(f"Unknown KD weight mode: {weight_mode}")
+        self.segmentation_loss = segmentation_loss
+        self.lambda_kd = float(lambda_kd)
+        self.weight_mode = weight_mode
+        self.min_weight = float(min_weight)
+
+    def forward(self, logits, mask_target, soft_target, disagreement=None):
+        if logits.shape != soft_target.shape:
+            raise ValueError(
+                f"Student/soft-target shape mismatch: {tuple(logits.shape)} != {tuple(soft_target.shape)}"
+            )
+        loss_seg = self.segmentation_loss(logits, mask_target)
+        pixel_kd = F.binary_cross_entropy_with_logits(logits, soft_target, reduction="none")
+
+        if self.weight_mode == "agreement":
+            if disagreement is None:
+                raise ValueError("Agreement-weighted KD requires a disagreement map")
+            if disagreement.shape != logits.shape:
+                raise ValueError(
+                    f"Student/disagreement shape mismatch: {tuple(logits.shape)} != {tuple(disagreement.shape)}"
+                )
+            weights = (1.0 - disagreement).clamp(self.min_weight, 1.0)
+            loss_kd = (weights * pixel_kd).sum() / weights.sum().clamp_min(1e-6)
+        else:
+            loss_kd = pixel_kd.mean()
+
+        total_loss = loss_seg + self.lambda_kd * loss_kd
+        return total_loss, loss_seg, loss_kd
+
+
 class FocalTverskyLoss(nn.Module):
     def __init__(self, alpha=0.3, beta=0.7, gamma=0.75, smooth=1e-6):
         super().__init__()

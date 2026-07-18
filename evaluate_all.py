@@ -26,6 +26,7 @@ from models.joint_framework import (
     MultiScaleEnhancer,
 )
 from models.transunet_official import TransUNetOfficial
+from models.green_prior_fusion import GreenPriorFusionModel, PRIOR_FUSION_VARIANTS
 from models.unet_baseline import UNet
 from models.unet_plus_plus import UNetPlusPlus
 
@@ -137,7 +138,11 @@ def get_args():
     parser.add_argument("--manifest", default="", help="JSON manifest list or {'experiments': [...]} file.")
     parser.add_argument("--use_default_manifest", action="store_true", help="Evaluate built-in all_filtered manifest.")
     parser.add_argument("--name", default="", help="Single-run experiment name.")
-    parser.add_argument("--model_type", choices=["unet", "unet++", "transunet", "ours"], default="")
+    parser.add_argument(
+        "--model_type",
+        choices=["unet", "unet++", "transunet", "ours", "prior_fusion"],
+        default="",
+    )
     parser.add_argument("--weight", default="", help="Single-run best_model.pth path.")
     parser.add_argument("--dataset", default="all_filtered", choices=list(DATASETS.keys()))
     parser.add_argument("--data_dir", default="", help="Custom dataset root.")
@@ -166,13 +171,15 @@ def get_args():
     parser.add_argument("--focal_alpha", type=float, default=0.3)
     parser.add_argument("--focal_beta", type=float, default=0.7)
     parser.add_argument("--focal_gamma", type=float, default=0.75)
+    parser.add_argument("--prior_fusion_variant", default="plain_single", choices=PRIOR_FUSION_VARIANTS)
     parser.add_argument("--out_dir", default="results/unified_eval")
     return parser.parse_args()
 
 
 def load_manifest(args):
     if args.manifest:
-        with open(args.manifest, "r", encoding="utf-8") as f:
+        # PowerShell 5.1 writes UTF-8 JSON with a BOM by default.
+        with open(args.manifest, "r", encoding="utf-8-sig") as f:
             data = json.load(f)
         experiments = data.get("experiments", data) if isinstance(data, dict) else data
     elif args.use_default_manifest:
@@ -205,6 +212,7 @@ def load_manifest(args):
                 "focal_alpha": args.focal_alpha,
                 "focal_beta": args.focal_beta,
                 "focal_gamma": args.focal_gamma,
+                "prior_fusion_variant": args.prior_fusion_variant,
             }
         ]
 
@@ -232,6 +240,10 @@ def load_manifest(args):
         item.setdefault("focal_alpha", "")
         item.setdefault("focal_beta", "")
         item.setdefault("focal_gamma", "")
+        item.setdefault(
+            "prior_fusion_variant",
+            args.prior_fusion_variant if item.get("model_type") == "prior_fusion" else "",
+        )
         normalized.append(item)
     return normalized
 
@@ -244,6 +256,12 @@ def build_model(exp, img_size, device):
         model = UNetPlusPlus(n_channels=3, n_classes=1)
     elif model_type == "transunet":
         model = TransUNetOfficial(n_channels=3, n_classes=1, img_size=img_size)
+    elif model_type == "prior_fusion":
+        segmentor = TransUNetOfficial(n_channels=3, n_classes=1, img_size=img_size)
+        model = GreenPriorFusionModel(
+            segmentor,
+            variant=exp.get("prior_fusion_variant", "plain_single"),
+        )
     elif model_type == "ours":
         segmentor = TransUNetOfficial(n_channels=3, n_classes=1, img_size=img_size)
         enhancer_norm = exp.get("enhancer_norm", "bn") or "bn"
@@ -395,6 +413,7 @@ def evaluate_one(exp, dataset, loader, args, device, run_dir):
         "focal_alpha": exp.get("focal_alpha", ""),
         "focal_beta": exp.get("focal_beta", ""),
         "focal_gamma": exp.get("focal_gamma", ""),
+        "prior_fusion_variant": exp.get("prior_fusion_variant", ""),
         "n_images": len(rows),
         **avg,
         "per_image_csv": per_image_path,
@@ -482,6 +501,7 @@ def main():
         "focal_alpha",
         "focal_beta",
         "focal_gamma",
+        "prior_fusion_variant",
         "n_images",
         *METRIC_KEYS,
         "per_image_csv",

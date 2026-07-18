@@ -1,0 +1,7 @@
+[*] 未加载预训练权重，从头训练
+[*] 未加载预训练权重，从头训练
+[Dual-teacher targets complete]
+Output: results\dual_teacher_kd_20260717\soft_targets
+train: 1838 images
+val: 449 images
+test: 436 images

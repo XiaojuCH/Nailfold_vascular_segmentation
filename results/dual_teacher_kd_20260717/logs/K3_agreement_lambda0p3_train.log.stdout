@@ -1,0 +1,32 @@
+[*] mode: SOFT_KD
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/K3_agreement_lambda0p3_20260717\0718_0034
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice
+[*] pretrained: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+[*] init_weight: results\experiments\all_filtered\f0_transunet_corrected_pretrained_seed42_20260715\0715_1907\best_model.pth
+[*] soft_target_dir: results\dual_teacher_kd_20260717\soft_targets\train\ensemble_probabilities
+[*] kd: mode=agreement, lambda=0.3
+load_pretrained: grid-size from 14 to 16
+[*] 已加载预训练权重: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+[*] loaded student initialization weight: results\experiments\all_filtered\f0_transunet_corrected_pretrained_seed42_20260715\0715_1907\best_model.pth
+Ep 001 | Loss(Tot:0.369 Seg:0.346 KD:0.077) | W(KD:0.30) | Dice: 0.7899 | HD95: 18.18
+[*] Update best model: Dice = 0.7899
+Ep 002 | Loss(Tot:0.361 Seg:0.338 KD:0.077) | W(KD:0.30) | Dice: 0.7856 | HD95: 19.37
+Ep 003 | Loss(Tot:0.356 Seg:0.332 KD:0.078) | W(KD:0.30) | Dice: 0.7892 | HD95: 18.90
+Ep 004 | Loss(Tot:0.350 Seg:0.327 KD:0.078) | W(KD:0.30) | Dice: 0.7940 | HD95: 17.89
+[*] Update best model: Dice = 0.7940
+Ep 005 | Loss(Tot:0.348 Seg:0.325 KD:0.079) | W(KD:0.30) | Dice: 0.7927 | HD95: 18.94
+Ep 006 | Loss(Tot:0.343 Seg:0.319 KD:0.080) | W(KD:0.30) | Dice: 0.7915 | HD95: 18.96
+Ep 007 | Loss(Tot:0.338 Seg:0.314 KD:0.081) | W(KD:0.30) | Dice: 0.7910 | HD95: 18.26
+Ep 008 | Loss(Tot:0.336 Seg:0.312 KD:0.082) | W(KD:0.30) | Dice: 0.7939 | HD95: 18.29
+Ep 009 | Loss(Tot:0.330 Seg:0.305 KD:0.083) | W(KD:0.30) | Dice: 0.7903 | HD95: 18.29
+Ep 010 | Loss(Tot:0.326 Seg:0.301 KD:0.083) | W(KD:0.30) | Dice: 0.7910 | HD95: 18.51
+Ep 011 | Loss(Tot:0.322 Seg:0.297 KD:0.084) | W(KD:0.30) | Dice: 0.7849 | HD95: 18.83
+Ep 012 | Loss(Tot:0.317 Seg:0.291 KD:0.086) | W(KD:0.30) | Dice: 0.7905 | HD95: 18.55
+Ep 013 | Loss(Tot:0.314 Seg:0.289 KD:0.086) | W(KD:0.30) | Dice: 0.7881 | HD95: 18.31
+Ep 014 | Loss(Tot:0.312 Seg:0.286 KD:0.087) | W(KD:0.30) | Dice: 0.7900 | HD95: 18.08
+[*] Early stopping after 10 epochs without improvement
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/K3_agreement_lambda0p3_20260717\0718_0034

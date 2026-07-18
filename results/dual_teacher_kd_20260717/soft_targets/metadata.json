@@ -1,0 +1,34 @@
+{
+  "created_at": "2026-07-17T01:01:55",
+  "device": "cuda",
+  "data_dir": "D:\\Projects_\\JiaBi_new\\dataset_all_filtered",
+  "f0_weight": "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\f0_transunet_corrected_pretrained_seed42_20260715\\0715_1907\\best_model.pth",
+  "f3_weight": "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\f3_directional_green_multiscale_scratch_seed42_20260715\\0715_1556\\best_model.pth",
+  "f3_variant": "directional_multiscale",
+  "ensemble": "0.5 * sigmoid(F0) + 0.5 * sigmoid(F3)",
+  "dtype": "float16 .npy",
+  "img_size": 256,
+  "splits": [
+    {
+      "split": "train",
+      "images": 1838,
+      "f0_cache_dir": "results\\dual_teacher_kd_20260717\\soft_targets\\train\\_f0_probabilities",
+      "probability_dir": "results\\dual_teacher_kd_20260717\\soft_targets\\train\\ensemble_probabilities",
+      "disagreement_dir": "results\\dual_teacher_kd_20260717\\soft_targets\\train\\disagreement"
+    },
+    {
+      "split": "val",
+      "images": 449,
+      "f0_cache_dir": "results\\dual_teacher_kd_20260717\\soft_targets\\val\\_f0_probabilities",
+      "probability_dir": "results\\dual_teacher_kd_20260717\\soft_targets\\val\\ensemble_probabilities",
+      "disagreement_dir": "results\\dual_teacher_kd_20260717\\soft_targets\\val\\disagreement"
+    },
+    {
+      "split": "test",
+      "images": 436,
+      "f0_cache_dir": "results\\dual_teacher_kd_20260717\\soft_targets\\test\\_f0_probabilities",
+      "probability_dir": "results\\dual_teacher_kd_20260717\\soft_targets\\test\\ensemble_probabilities",
+      "disagreement_dir": "results\\dual_teacher_kd_20260717\\soft_targets\\test\\disagreement"
+    }
+  ]
+}

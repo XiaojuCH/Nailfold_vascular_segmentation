@@ -1,0 +1,17 @@
+{
+    "experiments":  [
+                        {
+                            "seg_loss":  "bce_dice",
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\f0_transunet_corrected_pretrained_seed42_20260715\\0715_1907\\best_model.pth",
+                            "name":  "F0_transunet_corrected_pretrained_seed42",
+                            "model_type":  "transunet"
+                        },
+                        {
+                            "seg_loss":  "bce_dice",
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\f3_directional_green_multiscale_pretrained_seed42_20260715\\0715_2024\\best_model.pth",
+                            "name":  "F3_directional_green_multiscale_pretrained_seed42",
+                            "prior_fusion_variant":  "directional_multiscale",
+                            "model_type":  "prior_fusion"
+                        }
+                    ]
+}

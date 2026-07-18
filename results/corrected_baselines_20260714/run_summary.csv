@@ -1,0 +1,3 @@
+﻿experiment,seed,mode,teacher_mode,intensity_aug,seg_loss,epochs,patience,batch_size,lr,experiment_root,external_log
+"r0_transunet_corrected_scratch_seed42_20260714",42,"baseline","","on","bce_dice",50,20,4,0.0001,"D:\Projects_\JiaBi_new\results\experiments\all_filtered\r0_transunet_corrected_scratch_seed42_20260714\0714_2331","results\corrected_baselines_20260714\logs\r0_transunet_corrected_scratch_seed42_20260714_train.log"
+"r1_green_mse_corrected_scratch_seed42_20260714",42,"ours","green_only","on","bce_dice",50,20,4,0.0001,"D:\Projects_\JiaBi_new\results\experiments\all_filtered\r1_green_mse_corrected_scratch_seed42_20260714\0715_0044","results\corrected_baselines_20260714\logs\r1_green_mse_corrected_scratch_seed42_20260714_train.log"

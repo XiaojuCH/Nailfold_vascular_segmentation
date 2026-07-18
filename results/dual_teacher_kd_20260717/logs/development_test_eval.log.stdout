@@ -1,0 +1,19 @@
+
+[Eval] K0_finetune_control_seed42
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\K0_finetune_control_20260717\0717_0108\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] K3_agreement_lambda0p3_seed42
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\K3_agreement_lambda0p3_20260717\0718_0034\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] K4_uniform_lambda0p1_seed42
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\K4_uniform_lambda0p1_20260717\0718_0059\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_dual_teacher_kd_20260717\20260718_012624\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_dual_teacher_kd_20260717\20260718_012624\aggregate_results.xlsx
+K0_finetune_control_seed42: Dice=0.7561, IoU=0.6193, Recall=0.7781, Precision=0.7541, Spec=0.9694, Acc=0.9499, HD95=21.90, clDice=0.8490, BoundaryF1=0.6451
+K3_agreement_lambda0p3_seed42: Dice=0.7575, IoU=0.6203, Recall=0.7933, Precision=0.7430, Spec=0.9659, Acc=0.9484, HD95=22.61, clDice=0.8481, BoundaryF1=0.6465
+K4_uniform_lambda0p1_seed42: Dice=0.7558, IoU=0.6185, Recall=0.8159, Precision=0.7240, Spec=0.9604, Acc=0.9460, HD95=22.47, clDice=0.8498, BoundaryF1=0.6436

@@ -1,0 +1,22 @@
+{
+    "experiments":  [
+                        {
+                            "seg_loss":  "bce_dice",
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\K0_finetune_control_20260717\\0717_0108\\best_model.pth",
+                            "name":  "K0_finetune_control_seed42",
+                            "model_type":  "transunet"
+                        },
+                        {
+                            "seg_loss":  "bce_dice",
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\K1_uniform_lambda0p3_20260717\\0717_0141\\best_model.pth",
+                            "name":  "K1_uniform_lambda0p3_seed42",
+                            "model_type":  "transunet"
+                        },
+                        {
+                            "seg_loss":  "bce_dice",
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\K2_uniform_lambda1p0_20260717\\0717_0206\\best_model.pth",
+                            "name":  "K2_uniform_lambda1p0_seed42",
+                            "model_type":  "transunet"
+                        }
+                    ]
+}

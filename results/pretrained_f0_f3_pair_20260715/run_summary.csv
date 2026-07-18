@@ -1,0 +1,3 @@
+﻿"experiment","experiment_name","variant","pretrain_mode","seed","best_val_epoch","best_val_dice","hd95_at_best_val_dice","weight"
+"F0_transunet_corrected_pretrained_seed42","all_filtered/f0_transunet_corrected_pretrained_seed42_20260715","none","imagenet21k","42","17","0.7932","18.81","D:\Projects_\JiaBi_new\results\experiments\all_filtered\f0_transunet_corrected_pretrained_seed42_20260715\0715_1907\best_model.pth"
+"F3_directional_green_multiscale_pretrained_seed42","all_filtered/f3_directional_green_multiscale_pretrained_seed42_20260715","directional_multiscale","imagenet21k","42","13","0.792","19.14","D:\Projects_\JiaBi_new\results\experiments\all_filtered\f3_directional_green_multiscale_pretrained_seed42_20260715\0715_2024\best_model.pth"

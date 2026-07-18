@@ -1,0 +1,60 @@
+[*] mode: PRIOR_FUSION
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/f1_plain_green_single_scratch_seed42_20260715\0715_1113
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice
+[*] prior_fusion_variant: plain_single
+[*] 未加载预训练权重，从头训练
+Ep 001 | Loss: 0.8351 | Dice: 0.7412 | HD95: 23.43 | Prior(fusion_3_alpha:0.063 fusion_3_gate_mean:0.978)
+[*] Update best model: Dice = 0.7412
+Ep 002 | Loss: 0.5306 | Dice: 0.7459 | HD95: 24.10 | Prior(fusion_3_alpha:0.065 fusion_3_gate_mean:0.982)
+[*] Update best model: Dice = 0.7459
+Ep 003 | Loss: 0.5085 | Dice: 0.7675 | HD95: 21.80 | Prior(fusion_3_alpha:0.067 fusion_3_gate_mean:0.986)
+[*] Update best model: Dice = 0.7675
+Ep 004 | Loss: 0.4959 | Dice: 0.7649 | HD95: 20.75 | Prior(fusion_3_alpha:0.067 fusion_3_gate_mean:0.987)
+Ep 005 | Loss: 0.4831 | Dice: 0.7695 | HD95: 20.89 | Prior(fusion_3_alpha:0.068 fusion_3_gate_mean:0.987)
+[*] Update best model: Dice = 0.7695
+Ep 006 | Loss: 0.4725 | Dice: 0.7710 | HD95: 25.17 | Prior(fusion_3_alpha:0.068 fusion_3_gate_mean:0.986)
+[*] Update best model: Dice = 0.7710
+Ep 007 | Loss: 0.4664 | Dice: 0.7746 | HD95: 19.57 | Prior(fusion_3_alpha:0.069 fusion_3_gate_mean:0.987)
+[*] Update best model: Dice = 0.7746
+Ep 008 | Loss: 0.4605 | Dice: 0.7775 | HD95: 20.06 | Prior(fusion_3_alpha:0.070 fusion_3_gate_mean:0.987)
+[*] Update best model: Dice = 0.7775
+Ep 009 | Loss: 0.4584 | Dice: 0.7753 | HD95: 20.64 | Prior(fusion_3_alpha:0.070 fusion_3_gate_mean:0.987)
+Ep 010 | Loss: 0.4541 | Dice: 0.7692 | HD95: 20.35 | Prior(fusion_3_alpha:0.071 fusion_3_gate_mean:0.987)
+Ep 011 | Loss: 0.4492 | Dice: 0.7768 | HD95: 21.27 | Prior(fusion_3_alpha:0.071 fusion_3_gate_mean:0.986)
+Ep 012 | Loss: 0.4418 | Dice: 0.7779 | HD95: 19.55 | Prior(fusion_3_alpha:0.072 fusion_3_gate_mean:0.986)
+[*] Update best model: Dice = 0.7779
+Ep 013 | Loss: 0.4399 | Dice: 0.7748 | HD95: 19.70 | Prior(fusion_3_alpha:0.072 fusion_3_gate_mean:0.986)
+Ep 014 | Loss: 0.4331 | Dice: 0.7854 | HD95: 21.58 | Prior(fusion_3_alpha:0.072 fusion_3_gate_mean:0.986)
+[*] Update best model: Dice = 0.7854
+Ep 015 | Loss: 0.4269 | Dice: 0.7866 | HD95: 21.24 | Prior(fusion_3_alpha:0.072 fusion_3_gate_mean:0.985)
+[*] Update best model: Dice = 0.7866
+Ep 016 | Loss: 0.4255 | Dice: 0.7848 | HD95: 21.07 | Prior(fusion_3_alpha:0.073 fusion_3_gate_mean:0.985)
+Ep 017 | Loss: 0.4181 | Dice: 0.7858 | HD95: 21.88 | Prior(fusion_3_alpha:0.073 fusion_3_gate_mean:0.985)
+Ep 018 | Loss: 0.4129 | Dice: 0.7897 | HD95: 18.52 | Prior(fusion_3_alpha:0.074 fusion_3_gate_mean:0.986)
+[*] Update best model: Dice = 0.7897
+Ep 019 | Loss: 0.4133 | Dice: 0.7770 | HD95: 19.61 | Prior(fusion_3_alpha:0.074 fusion_3_gate_mean:0.985)
+Ep 020 | Loss: 0.4061 | Dice: 0.7830 | HD95: 19.57 | Prior(fusion_3_alpha:0.074 fusion_3_gate_mean:0.986)
+Ep 021 | Loss: 0.4043 | Dice: 0.7826 | HD95: 19.68 | Prior(fusion_3_alpha:0.074 fusion_3_gate_mean:0.986)
+Ep 022 | Loss: 0.3977 | Dice: 0.7731 | HD95: 19.01 | Prior(fusion_3_alpha:0.075 fusion_3_gate_mean:0.985)
+Ep 023 | Loss: 0.3934 | Dice: 0.7806 | HD95: 19.24 | Prior(fusion_3_alpha:0.075 fusion_3_gate_mean:0.986)
+Ep 024 | Loss: 0.3867 | Dice: 0.7836 | HD95: 19.15 | Prior(fusion_3_alpha:0.075 fusion_3_gate_mean:0.985)
+Ep 025 | Loss: 0.3841 | Dice: 0.7857 | HD95: 19.11 | Prior(fusion_3_alpha:0.075 fusion_3_gate_mean:0.985)
+Ep 026 | Loss: 0.3796 | Dice: 0.7740 | HD95: 20.40 | Prior(fusion_3_alpha:0.076 fusion_3_gate_mean:0.986)
+Ep 027 | Loss: 0.3745 | Dice: 0.7862 | HD95: 19.09 | Prior(fusion_3_alpha:0.076 fusion_3_gate_mean:0.985)
+Ep 028 | Loss: 0.3720 | Dice: 0.7794 | HD95: 20.07 | Prior(fusion_3_alpha:0.076 fusion_3_gate_mean:0.985)
+Ep 029 | Loss: 0.3649 | Dice: 0.7876 | HD95: 19.73 | Prior(fusion_3_alpha:0.076 fusion_3_gate_mean:0.985)
+Ep 030 | Loss: 0.3617 | Dice: 0.7862 | HD95: 19.57 | Prior(fusion_3_alpha:0.076 fusion_3_gate_mean:0.985)
+Ep 031 | Loss: 0.3561 | Dice: 0.7781 | HD95: 20.76 | Prior(fusion_3_alpha:0.077 fusion_3_gate_mean:0.986)
+Ep 032 | Loss: 0.3537 | Dice: 0.7833 | HD95: 20.22 | Prior(fusion_3_alpha:0.077 fusion_3_gate_mean:0.985)
+Ep 033 | Loss: 0.3495 | Dice: 0.7797 | HD95: 19.85 | Prior(fusion_3_alpha:0.077 fusion_3_gate_mean:0.986)
+Ep 034 | Loss: 0.3489 | Dice: 0.7828 | HD95: 18.75 | Prior(fusion_3_alpha:0.077 fusion_3_gate_mean:0.986)
+Ep 035 | Loss: 0.3401 | Dice: 0.7852 | HD95: 19.37 | Prior(fusion_3_alpha:0.077 fusion_3_gate_mean:0.986)
+Ep 036 | Loss: 0.3389 | Dice: 0.7834 | HD95: 19.24 | Prior(fusion_3_alpha:0.077 fusion_3_gate_mean:0.985)
+Ep 037 | Loss: 0.3393 | Dice: 0.7819 | HD95: 19.34 | Prior(fusion_3_alpha:0.078 fusion_3_gate_mean:0.986)
+Ep 038 | Loss: 0.3320 | Dice: 0.7828 | HD95: 19.09 | Prior(fusion_3_alpha:0.078 fusion_3_gate_mean:0.986)
+[*] Early stopping after 20 epochs without improvement
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/f1_plain_green_single_scratch_seed42_20260715\0715_1113

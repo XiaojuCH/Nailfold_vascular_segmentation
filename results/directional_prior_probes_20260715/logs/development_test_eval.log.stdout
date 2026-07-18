@@ -1,0 +1,24 @@
+
+[Eval] F0_transunet_corrected_scratch_seed42
+       model=transunet weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\r0_transunet_corrected_scratch_seed42_20260714\0714_2331\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] F1_plain_green_single_scratch_seed42
+       model=prior_fusion weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\f1_plain_green_single_scratch_seed42_20260715\0715_1113\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] F2_directional_green_single_scratch_seed42
+       model=prior_fusion weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\f2_directional_green_single_scratch_seed42_20260715\0715_1440\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] F3_directional_green_multiscale_scratch_seed42
+       model=prior_fusion weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\f3_directional_green_multiscale_scratch_seed42_20260715\0715_1556\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_directional_prior_probes_20260715\20260715_180224\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_directional_prior_probes_20260715\20260715_180224\aggregate_results.xlsx
+F0_transunet_corrected_scratch_seed42: Dice=0.7535, IoU=0.6150, Recall=0.8143, Precision=0.7199, Spec=0.9613, Acc=0.9463, HD95=24.16, clDice=0.8404, BoundaryF1=0.6294
+F1_plain_green_single_scratch_seed42: Dice=0.7463, IoU=0.6080, Recall=0.7765, Precision=0.7432, Spec=0.9685, Acc=0.9484, HD95=25.50, clDice=0.8354, BoundaryF1=0.6322
+F2_directional_green_single_scratch_seed42: Dice=0.7517, IoU=0.6132, Recall=0.7940, Precision=0.7333, Spec=0.9658, Acc=0.9477, HD95=24.21, clDice=0.8393, BoundaryF1=0.6340
+F3_directional_green_multiscale_scratch_seed42: Dice=0.7536, IoU=0.6156, Recall=0.8013, Precision=0.7290, Spec=0.9643, Acc=0.9476, HD95=23.70, clDice=0.8429, BoundaryF1=0.6384

@@ -1,0 +1,55 @@
+[*] mode: PRIOR_FUSION
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/f2_directional_green_single_scratch_seed42_20260715\0715_1440
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice
+[*] prior_fusion_variant: directional_single
+[*] 未加载预训练权重，从头训练
+Ep 001 | Loss: 0.8675 | Dice: 0.7423 | HD95: 31.03 | Prior(direction_weight_horizontal21:0.435 direction_weight_horizontal7:0.126 direction_weight_local3:0.032 direction_weight_vertical21:0.284 direction_weight_vertical7:0.124 fusion_3_alpha:0.070 fusion_3_gate_mean:0.852)
+[*] Update best model: Dice = 0.7423
+Ep 002 | Loss: 0.5369 | Dice: 0.7616 | HD95: 22.13 | Prior(direction_weight_horizontal21:0.429 direction_weight_horizontal7:0.128 direction_weight_local3:0.028 direction_weight_vertical21:0.294 direction_weight_vertical7:0.120 fusion_3_alpha:0.075 fusion_3_gate_mean:0.866)
+[*] Update best model: Dice = 0.7616
+Ep 003 | Loss: 0.5100 | Dice: 0.7725 | HD95: 23.04 | Prior(direction_weight_horizontal21:0.423 direction_weight_horizontal7:0.136 direction_weight_local3:0.028 direction_weight_vertical21:0.289 direction_weight_vertical7:0.124 fusion_3_alpha:0.076 fusion_3_gate_mean:0.866)
+[*] Update best model: Dice = 0.7725
+Ep 004 | Loss: 0.4943 | Dice: 0.7760 | HD95: 23.60 | Prior(direction_weight_horizontal21:0.421 direction_weight_horizontal7:0.142 direction_weight_local3:0.029 direction_weight_vertical21:0.282 direction_weight_vertical7:0.126 fusion_3_alpha:0.077 fusion_3_gate_mean:0.863)
+[*] Update best model: Dice = 0.7760
+Ep 005 | Loss: 0.4845 | Dice: 0.7726 | HD95: 20.59 | Prior(direction_weight_horizontal21:0.425 direction_weight_horizontal7:0.145 direction_weight_local3:0.029 direction_weight_vertical21:0.277 direction_weight_vertical7:0.125 fusion_3_alpha:0.079 fusion_3_gate_mean:0.867)
+Ep 006 | Loss: 0.4766 | Dice: 0.7739 | HD95: 20.47 | Prior(direction_weight_horizontal21:0.425 direction_weight_horizontal7:0.149 direction_weight_local3:0.029 direction_weight_vertical21:0.270 direction_weight_vertical7:0.126 fusion_3_alpha:0.079 fusion_3_gate_mean:0.867)
+Ep 007 | Loss: 0.4693 | Dice: 0.7756 | HD95: 20.00 | Prior(direction_weight_horizontal21:0.427 direction_weight_horizontal7:0.152 direction_weight_local3:0.030 direction_weight_vertical21:0.264 direction_weight_vertical7:0.126 fusion_3_alpha:0.079 fusion_3_gate_mean:0.866)
+Ep 008 | Loss: 0.4638 | Dice: 0.7816 | HD95: 21.82 | Prior(direction_weight_horizontal21:0.431 direction_weight_horizontal7:0.153 direction_weight_local3:0.031 direction_weight_vertical21:0.259 direction_weight_vertical7:0.126 fusion_3_alpha:0.080 fusion_3_gate_mean:0.864)
+[*] Update best model: Dice = 0.7816
+Ep 009 | Loss: 0.4582 | Dice: 0.7833 | HD95: 21.18 | Prior(direction_weight_horizontal21:0.436 direction_weight_horizontal7:0.153 direction_weight_local3:0.031 direction_weight_vertical21:0.256 direction_weight_vertical7:0.124 fusion_3_alpha:0.080 fusion_3_gate_mean:0.863)
+[*] Update best model: Dice = 0.7833
+Ep 010 | Loss: 0.4516 | Dice: 0.7685 | HD95: 21.54 | Prior(direction_weight_horizontal21:0.440 direction_weight_horizontal7:0.152 direction_weight_local3:0.031 direction_weight_vertical21:0.253 direction_weight_vertical7:0.123 fusion_3_alpha:0.081 fusion_3_gate_mean:0.866)
+Ep 011 | Loss: 0.4494 | Dice: 0.7721 | HD95: 20.87 | Prior(direction_weight_horizontal21:0.442 direction_weight_horizontal7:0.153 direction_weight_local3:0.032 direction_weight_vertical21:0.251 direction_weight_vertical7:0.123 fusion_3_alpha:0.081 fusion_3_gate_mean:0.865)
+Ep 012 | Loss: 0.4442 | Dice: 0.7803 | HD95: 19.50 | Prior(direction_weight_horizontal21:0.445 direction_weight_horizontal7:0.152 direction_weight_local3:0.032 direction_weight_vertical21:0.248 direction_weight_vertical7:0.122 fusion_3_alpha:0.081 fusion_3_gate_mean:0.864)
+Ep 013 | Loss: 0.4403 | Dice: 0.7788 | HD95: 20.07 | Prior(direction_weight_horizontal21:0.450 direction_weight_horizontal7:0.151 direction_weight_local3:0.032 direction_weight_vertical21:0.246 direction_weight_vertical7:0.121 fusion_3_alpha:0.082 fusion_3_gate_mean:0.863)
+Ep 014 | Loss: 0.4330 | Dice: 0.7799 | HD95: 19.38 | Prior(direction_weight_horizontal21:0.454 direction_weight_horizontal7:0.150 direction_weight_local3:0.032 direction_weight_vertical21:0.244 direction_weight_vertical7:0.120 fusion_3_alpha:0.082 fusion_3_gate_mean:0.862)
+Ep 015 | Loss: 0.4292 | Dice: 0.7814 | HD95: 20.94 | Prior(direction_weight_horizontal21:0.459 direction_weight_horizontal7:0.148 direction_weight_local3:0.032 direction_weight_vertical21:0.243 direction_weight_vertical7:0.118 fusion_3_alpha:0.082 fusion_3_gate_mean:0.861)
+Ep 016 | Loss: 0.4267 | Dice: 0.7707 | HD95: 20.12 | Prior(direction_weight_horizontal21:0.464 direction_weight_horizontal7:0.146 direction_weight_local3:0.032 direction_weight_vertical21:0.241 direction_weight_vertical7:0.116 fusion_3_alpha:0.083 fusion_3_gate_mean:0.856)
+Ep 017 | Loss: 0.4221 | Dice: 0.7896 | HD95: 20.10 | Prior(direction_weight_horizontal21:0.471 direction_weight_horizontal7:0.144 direction_weight_local3:0.032 direction_weight_vertical21:0.239 direction_weight_vertical7:0.114 fusion_3_alpha:0.083 fusion_3_gate_mean:0.855)
+[*] Update best model: Dice = 0.7896
+Ep 018 | Loss: 0.4158 | Dice: 0.7872 | HD95: 22.68 | Prior(direction_weight_horizontal21:0.474 direction_weight_horizontal7:0.142 direction_weight_local3:0.032 direction_weight_vertical21:0.238 direction_weight_vertical7:0.113 fusion_3_alpha:0.083 fusion_3_gate_mean:0.847)
+Ep 019 | Loss: 0.4101 | Dice: 0.7867 | HD95: 20.22 | Prior(direction_weight_horizontal21:0.481 direction_weight_horizontal7:0.139 direction_weight_local3:0.032 direction_weight_vertical21:0.237 direction_weight_vertical7:0.110 fusion_3_alpha:0.083 fusion_3_gate_mean:0.854)
+Ep 020 | Loss: 0.4085 | Dice: 0.7806 | HD95: 20.72 | Prior(direction_weight_horizontal21:0.485 direction_weight_horizontal7:0.138 direction_weight_local3:0.032 direction_weight_vertical21:0.236 direction_weight_vertical7:0.109 fusion_3_alpha:0.083 fusion_3_gate_mean:0.859)
+Ep 021 | Loss: 0.4028 | Dice: 0.7879 | HD95: 19.29 | Prior(direction_weight_horizontal21:0.493 direction_weight_horizontal7:0.134 direction_weight_local3:0.032 direction_weight_vertical21:0.235 direction_weight_vertical7:0.106 fusion_3_alpha:0.084 fusion_3_gate_mean:0.855)
+Ep 022 | Loss: 0.3999 | Dice: 0.7861 | HD95: 19.59 | Prior(direction_weight_horizontal21:0.495 direction_weight_horizontal7:0.133 direction_weight_local3:0.032 direction_weight_vertical21:0.233 direction_weight_vertical7:0.106 fusion_3_alpha:0.084 fusion_3_gate_mean:0.858)
+Ep 023 | Loss: 0.3997 | Dice: 0.7839 | HD95: 19.60 | Prior(direction_weight_horizontal21:0.500 direction_weight_horizontal7:0.131 direction_weight_local3:0.032 direction_weight_vertical21:0.232 direction_weight_vertical7:0.104 fusion_3_alpha:0.084 fusion_3_gate_mean:0.857)
+Ep 024 | Loss: 0.3901 | Dice: 0.7796 | HD95: 20.77 | Prior(direction_weight_horizontal21:0.504 direction_weight_horizontal7:0.130 direction_weight_local3:0.032 direction_weight_vertical21:0.231 direction_weight_vertical7:0.103 fusion_3_alpha:0.084 fusion_3_gate_mean:0.857)
+Ep 025 | Loss: 0.3838 | Dice: 0.7816 | HD95: 20.93 | Prior(direction_weight_horizontal21:0.507 direction_weight_horizontal7:0.128 direction_weight_local3:0.032 direction_weight_vertical21:0.231 direction_weight_vertical7:0.102 fusion_3_alpha:0.085 fusion_3_gate_mean:0.865)
+Ep 026 | Loss: 0.3838 | Dice: 0.7885 | HD95: 19.60 | Prior(direction_weight_horizontal21:0.508 direction_weight_horizontal7:0.128 direction_weight_local3:0.032 direction_weight_vertical21:0.229 direction_weight_vertical7:0.103 fusion_3_alpha:0.085 fusion_3_gate_mean:0.857)
+Ep 027 | Loss: 0.3776 | Dice: 0.7852 | HD95: 20.76 | Prior(direction_weight_horizontal21:0.508 direction_weight_horizontal7:0.128 direction_weight_local3:0.032 direction_weight_vertical21:0.228 direction_weight_vertical7:0.103 fusion_3_alpha:0.085 fusion_3_gate_mean:0.852)
+Ep 028 | Loss: 0.3723 | Dice: 0.7791 | HD95: 20.81 | Prior(direction_weight_horizontal21:0.513 direction_weight_horizontal7:0.126 direction_weight_local3:0.032 direction_weight_vertical21:0.227 direction_weight_vertical7:0.102 fusion_3_alpha:0.085 fusion_3_gate_mean:0.856)
+Ep 029 | Loss: 0.3685 | Dice: 0.7866 | HD95: 19.65 | Prior(direction_weight_horizontal21:0.514 direction_weight_horizontal7:0.126 direction_weight_local3:0.032 direction_weight_vertical21:0.226 direction_weight_vertical7:0.102 fusion_3_alpha:0.085 fusion_3_gate_mean:0.857)
+Ep 030 | Loss: 0.3621 | Dice: 0.7869 | HD95: 20.36 | Prior(direction_weight_horizontal21:0.514 direction_weight_horizontal7:0.126 direction_weight_local3:0.032 direction_weight_vertical21:0.226 direction_weight_vertical7:0.102 fusion_3_alpha:0.086 fusion_3_gate_mean:0.869)
+Ep 031 | Loss: 0.3591 | Dice: 0.7829 | HD95: 20.42 | Prior(direction_weight_horizontal21:0.515 direction_weight_horizontal7:0.126 direction_weight_local3:0.032 direction_weight_vertical21:0.225 direction_weight_vertical7:0.102 fusion_3_alpha:0.086 fusion_3_gate_mean:0.861)
+Ep 032 | Loss: 0.3544 | Dice: 0.7841 | HD95: 19.64 | Prior(direction_weight_horizontal21:0.517 direction_weight_horizontal7:0.125 direction_weight_local3:0.032 direction_weight_vertical21:0.225 direction_weight_vertical7:0.101 fusion_3_alpha:0.086 fusion_3_gate_mean:0.861)
+Ep 033 | Loss: 0.3538 | Dice: 0.7822 | HD95: 20.18 | Prior(direction_weight_horizontal21:0.518 direction_weight_horizontal7:0.124 direction_weight_local3:0.032 direction_weight_vertical21:0.225 direction_weight_vertical7:0.101 fusion_3_alpha:0.086 fusion_3_gate_mean:0.865)
+Ep 034 | Loss: 0.3499 | Dice: 0.7824 | HD95: 19.92 | Prior(direction_weight_horizontal21:0.520 direction_weight_horizontal7:0.123 direction_weight_local3:0.032 direction_weight_vertical21:0.224 direction_weight_vertical7:0.100 fusion_3_alpha:0.086 fusion_3_gate_mean:0.859)
+Ep 035 | Loss: 0.3421 | Dice: 0.7816 | HD95: 19.94 | Prior(direction_weight_horizontal21:0.521 direction_weight_horizontal7:0.123 direction_weight_local3:0.032 direction_weight_vertical21:0.224 direction_weight_vertical7:0.100 fusion_3_alpha:0.087 fusion_3_gate_mean:0.861)
+Ep 036 | Loss: 0.3402 | Dice: 0.7811 | HD95: 19.98 | Prior(direction_weight_horizontal21:0.521 direction_weight_horizontal7:0.123 direction_weight_local3:0.032 direction_weight_vertical21:0.224 direction_weight_vertical7:0.100 fusion_3_alpha:0.087 fusion_3_gate_mean:0.864)
+Ep 037 | Loss: 0.3392 | Dice: 0.7848 | HD95: 20.55 | Prior(direction_weight_horizontal21:0.522 direction_weight_horizontal7:0.122 direction_weight_local3:0.032 direction_weight_vertical21:0.224 direction_weight_vertical7:0.099 fusion_3_alpha:0.087 fusion_3_gate_mean:0.861)
+[*] Early stopping after 20 epochs without improvement
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/f2_directional_green_single_scratch_seed42_20260715\0715_1440

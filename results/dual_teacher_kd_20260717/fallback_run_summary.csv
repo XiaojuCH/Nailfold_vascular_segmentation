@@ -1,0 +1,4 @@
+﻿"experiment","experiment_name","kd_weight_mode","lambda_kd","seed","best_val_epoch","best_val_dice","hd95_at_best_val_dice","weight"
+"K0_finetune_control_seed42","all_filtered/K0_finetune_control_20260717","uniform","0","42","8","0.7924","17.87","D:\Projects_\JiaBi_new\results\experiments\all_filtered\K0_finetune_control_20260717\0717_0108\best_model.pth"
+"K3_agreement_lambda0p3_seed42","all_filtered/K3_agreement_lambda0p3_20260717","agreement","0.3","42","4","0.794","17.89","D:\Projects_\JiaBi_new\results\experiments\all_filtered\K3_agreement_lambda0p3_20260717\0718_0034\best_model.pth"
+"K4_uniform_lambda0p1_seed42","all_filtered/K4_uniform_lambda0p1_20260717","uniform","0.1","42","5","0.7927","18.92","D:\Projects_\JiaBi_new\results\experiments\all_filtered\K4_uniform_lambda0p1_20260717\0718_0059\best_model.pth"

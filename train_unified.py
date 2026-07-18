@@ -2,6 +2,7 @@
 Unified training script for baseline TransUNet and green-prior joint models.
 """
 import argparse
+import json
 import os
 import random
 import sys
@@ -30,9 +31,10 @@ from losses.joint_loss import (
     JointDecoderDistillationLoss,
     JointDistillationBoundaryLoss,
     JointDistillationLoss,
+    OutputDistillationLoss,
     build_segmentation_loss,
 )
-from utils.metrics import calculate_comprehensive_metrics
+from utils.metrics import average_metric_rows, per_image_metrics_from_logits
 from models.joint_framework import (
     AnisotropicEnhancer,
     Enhancer,
@@ -46,6 +48,7 @@ from models.joint_framework import (
     MultiScaleEnhancer,
 )
 from models.transunet_official import TransUNetOfficial
+from models.green_prior_fusion import GreenPriorFusionModel, PRIOR_FUSION_VARIANTS
 
 
 DATASETS = {
@@ -79,7 +82,12 @@ TEACHER_MODES = [
 
 def get_args():
     parser = argparse.ArgumentParser(description="Unified training script")
-    parser.add_argument("--mode", type=str, default="baseline", choices=["baseline", "ours"])
+    parser.add_argument(
+        "--mode",
+        type=str,
+        default="baseline",
+        choices=["baseline", "ours", "prior_fusion", "soft_kd"],
+    )
     parser.add_argument("--exp_name", type=str, default="")
 
     parser.add_argument("--dataset", type=str, default="jiabi", choices=list(DATASETS.keys()))
@@ -117,6 +125,22 @@ def get_args():
     parser.add_argument("--decoder_teacher_pretrained", type=str, default="")
     parser.add_argument("--intensity_aug", type=str, default="on", choices=["on", "off"])
     parser.add_argument("--pretrained", type=str, default="")
+    parser.add_argument("--init_weight", type=str, default="")
+    parser.add_argument("--soft_target_dir", type=str, default="")
+    parser.add_argument("--disagreement_dir", type=str, default="")
+    parser.add_argument("--lambda_kd", type=float, default=0.3)
+    parser.add_argument("--kd_weight_mode", type=str, default="uniform", choices=["uniform", "agreement"])
+    parser.add_argument(
+        "--prior_fusion_variant",
+        type=str,
+        default="plain_single",
+        choices=PRIOR_FUSION_VARIANTS,
+    )
+    parser.add_argument(
+        "--evaluate_test_after_training",
+        action="store_true",
+        help="Evaluate test after training. Keep disabled during model selection to avoid test exposure.",
+    )
     return parser.parse_args()
 
 
@@ -128,7 +152,7 @@ def get_teacher_dir(data_dir, teacher_mode):
 
 
 def forward_for_logits(model, images, mode, joint_model):
-    if mode == "baseline":
+    if mode in ["baseline", "prior_fusion", "soft_kd"]:
         return model(images)
     if joint_model in ["v2", "gated", "boundary_refine", "decoder_distill", "decoder_distill_v2", "dual_fusion"]:
         outputs, _, _ = model(images)
@@ -154,6 +178,18 @@ def build_enhancer(args):
     return Enhancer(in_channels=3, out_channels=3, norm_type=args.enhancer_norm)
 
 
+def evaluate_per_image(model, loader, mode, joint_model):
+    """Average metrics over images so the final partial batch has the correct weight."""
+    rows = []
+    with torch.no_grad():
+        for batch in loader:
+            images = batch["image"].to(next(model.parameters()).device)
+            masks = batch["mask"].to(images.device)
+            outputs = forward_for_logits(model, images, mode, joint_model)
+            rows.extend(per_image_metrics_from_logits(outputs, masks))
+    return average_metric_rows(rows)
+
+
 def main():
     args = get_args()
     set_seed(args.seed)
@@ -165,6 +201,10 @@ def main():
     timestamp = datetime.now().strftime("%m%d_%H%M")
     if args.exp_name:
         exp_name = args.exp_name
+    elif args.mode == "prior_fusion":
+        exp_name = f"{args.dataset}/prior_fusion_{args.prior_fusion_variant}"
+    elif args.mode == "soft_kd":
+        exp_name = f"{args.dataset}/soft_kd_{args.kd_weight_mode}_lambda{args.lambda_kd:g}"
     else:
         suffix = args.teacher_mode.replace("+", "_")
         exp_name = f"{args.dataset}/{args.mode}" if args.teacher_mode == "green+clahe" else f"{args.dataset}/{args.mode}_{suffix}"
@@ -179,6 +219,24 @@ def main():
     print(f"[*] seg_loss: {args.seg_loss}")
     if args.pretrained:
         print(f"[*] pretrained: {args.pretrained}")
+    if args.mode == "prior_fusion":
+        print(f"[*] prior_fusion_variant: {args.prior_fusion_variant}")
+    if args.mode == "soft_kd":
+        print(f"[*] init_weight: {args.init_weight}")
+        print(f"[*] soft_target_dir: {args.soft_target_dir}")
+        print(f"[*] kd: mode={args.kd_weight_mode}, lambda={args.lambda_kd}")
+
+    soft_target_dir = args.soft_target_dir or None
+    disagreement_dir = args.disagreement_dir or None
+    if args.mode == "soft_kd":
+        if not args.init_weight:
+            raise ValueError("--init_weight is required for soft_kd")
+        if not os.path.isfile(args.init_weight):
+            raise FileNotFoundError(f"Missing student initialization weight: {args.init_weight}")
+        if soft_target_dir is None:
+            raise ValueError("--soft_target_dir is required for soft_kd")
+        if args.kd_weight_mode == "agreement" and disagreement_dir is None:
+            raise ValueError("--disagreement_dir is required for agreement-weighted soft_kd")
 
     teacher_dir = get_teacher_dir(args.data_dir, args.teacher_mode) if args.mode == "ours" else None
     if args.mode == "ours":
@@ -191,6 +249,8 @@ def main():
         image_dir=os.path.join(args.data_dir, "train/images"),
         mask_dir=os.path.join(args.data_dir, "train/masks"),
         teacher_dir=teacher_dir,
+        soft_target_dir=soft_target_dir if args.mode == "soft_kd" else None,
+        disagreement_dir=disagreement_dir if args.mode == "soft_kd" else None,
         img_size=256,
         augment=True,
         intensity_aug=args.intensity_aug == "on",
@@ -202,24 +262,31 @@ def main():
         img_size=256,
         augment=False,
     )
-    test_dataset = VesselDataset(
-        image_dir=os.path.join(args.data_dir, "test/images"),
-        mask_dir=os.path.join(args.data_dir, "test/masks"),
-        teacher_dir=None,
-        img_size=256,
-        augment=False,
-    )
-
     train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, num_workers=0)
     val_loader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0)
-    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0)
+    test_loader = None
+    if args.evaluate_test_after_training:
+        test_dataset = VesselDataset(
+            image_dir=os.path.join(args.data_dir, "test/images"),
+            mask_dir=os.path.join(args.data_dir, "test/masks"),
+            teacher_dir=None,
+            img_size=256,
+            augment=False,
+        )
+        test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=0)
 
     pretrained_path = args.pretrained if args.pretrained else None
     segmentor = TransUNetOfficial(n_channels=3, n_classes=1, img_size=256, pretrained_path=pretrained_path)
 
-    if args.mode == "baseline":
-        model = segmentor.to(device)
-        criterion = build_segmentation_loss(
+    if args.mode in ["baseline", "prior_fusion", "soft_kd"]:
+        if args.mode == "prior_fusion":
+            model = GreenPriorFusionModel(
+                segmentor,
+                variant=args.prior_fusion_variant,
+            ).to(device)
+        else:
+            model = segmentor.to(device)
+        segmentation_criterion = build_segmentation_loss(
             seg_loss=args.seg_loss,
             cldice_weight=args.cldice_weight,
             boundary_weight=args.boundary_weight,
@@ -228,6 +295,15 @@ def main():
             focal_beta=args.focal_beta,
             focal_gamma=args.focal_gamma,
         ).to(device)
+        if args.mode == "soft_kd":
+            load_torch_state_dict(model, args.init_weight, device, "student initialization weight")
+            criterion = OutputDistillationLoss(
+                segmentation_criterion,
+                lambda_kd=args.lambda_kd,
+                weight_mode=args.kd_weight_mode,
+            ).to(device)
+        else:
+            criterion = segmentation_criterion
     else:
         enhancer = build_enhancer(args)
         if args.joint_model == "v2":
@@ -292,6 +368,11 @@ def main():
     optimizer = optim.AdamW(optim_params, lr=args.lr, weight_decay=1e-4)
     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.epochs, eta_min=args.lr * 0.01)
 
+    config = vars(args).copy()
+    config["device"] = device
+    with open(os.path.join(save_path, "config.json"), "w", encoding="utf-8") as config_file:
+        json.dump(config, config_file, ensure_ascii=False, indent=2)
+
     log_path = os.path.join(save_path, "training_log.txt")
     with open(log_path, "w", encoding="utf-8") as log_file:
         log_file.write(f"=== {exp_name} ===\n")
@@ -316,6 +397,16 @@ def main():
             log_file.write(f"Decoder Distill Mode: {args.decoder_distill_mode}\n")
             log_file.write(f"Decoder Teacher Weight: {args.decoder_teacher_weight}\n")
             log_file.write(f"Intensity Aug: {args.intensity_aug}\n")
+        elif args.mode == "prior_fusion":
+            log_file.write(f"Prior Fusion Variant: {args.prior_fusion_variant}\n")
+            log_file.write(f"Intensity Aug: {args.intensity_aug}\n")
+        elif args.mode == "soft_kd":
+            log_file.write(f"Student Init Weight: {args.init_weight}\n")
+            log_file.write(f"Soft Target Dir: {args.soft_target_dir}\n")
+            log_file.write(f"Disagreement Dir: {args.disagreement_dir}\n")
+            log_file.write(f"KD Weight Mode: {args.kd_weight_mode}\n")
+            log_file.write(f"Lambda KD: {args.lambda_kd}\n")
+            log_file.write(f"Intensity Aug: {args.intensity_aug}\n")
         if args.pretrained:
             log_file.write(f"Pretrained: {args.pretrained}\n")
         log_file.write("\n")
@@ -331,15 +422,25 @@ def main():
             train_grad = 0.0
             train_boundary = 0.0
             train_decoder = 0.0
+            train_kd = 0.0
 
             for batch in tqdm(train_loader, desc=f"Epoch {epoch + 1}/{args.epochs} [Train]", leave=False):
                 images = batch["image"].to(device)
                 masks = batch["mask"].to(device)
                 optimizer.zero_grad()
 
-                if args.mode == "baseline":
+                if args.mode in ["baseline", "prior_fusion"]:
                     outputs = model(images)
                     loss = criterion(outputs, masks)
+                elif args.mode == "soft_kd":
+                    outputs = model(images)
+                    soft_targets = batch["soft_target"].to(device)
+                    disagreements = batch.get("disagreement")
+                    if disagreements is not None:
+                        disagreements = disagreements.to(device)
+                    loss, l_seg, l_kd = criterion(outputs, masks, soft_targets, disagreements)
+                    train_seg += l_seg.item()
+                    train_kd += l_kd.item()
                 else:
                     teachers = batch["teacher"].to(device)
                     if args.joint_model == "boundary_refine":
@@ -371,19 +472,23 @@ def main():
             scheduler.step()
 
             model.eval()
-            metrics_sum = {"dice": 0.0, "iou": 0.0, "hd95": 0.0}
-            with torch.no_grad():
-                for batch in tqdm(val_loader, desc=f"Epoch {epoch + 1}/{args.epochs} [Val]", leave=False):
-                    images = batch["image"].to(device)
-                    masks = batch["mask"].to(device)
-                    outputs = forward_for_logits(model, images, args.mode, args.joint_model)
-                    batch_metrics = calculate_comprehensive_metrics(outputs, masks)
-                    for key in metrics_sum:
-                        metrics_sum[key] += batch_metrics[key]
-
-            avg_metrics = {key: value / len(val_loader) for key, value in metrics_sum.items()}
-            if args.mode == "baseline":
+            avg_metrics = evaluate_per_image(model, val_loader, args.mode, args.joint_model)
+            if args.mode in ["baseline", "prior_fusion"]:
                 log_str = f"Ep {epoch + 1:03d} | Loss: {avg_loss:.4f} | Dice: {avg_metrics['dice']:.4f} | HD95: {avg_metrics['hd95']:.2f}"
+                if args.mode == "prior_fusion":
+                    diagnostics = model.fusion_diagnostics()
+                    diagnostic_text = " ".join(
+                        f"{name}:{value:.3f}" for name, value in sorted(diagnostics.items())
+                    )
+                    log_str += f" | Prior({diagnostic_text})"
+            elif args.mode == "soft_kd":
+                n_batches = len(train_loader)
+                log_str = (
+                    f"Ep {epoch + 1:03d} | Loss(Tot:{avg_loss:.3f} "
+                    f"Seg:{train_seg / n_batches:.3f} KD:{train_kd / n_batches:.3f}) | "
+                    f"W(KD:{args.lambda_kd:.2f}) | Dice: {avg_metrics['dice']:.4f} | "
+                    f"HD95: {avg_metrics['hd95']:.2f}"
+                )
             else:
                 n_batches = len(train_loader)
                 weights = criterion.get_distill_weights()
@@ -415,45 +520,27 @@ def main():
             print(final_weight_str)
             log_file.write(final_weight_str + "\n")
 
-    print("\n" + "=" * 50)
-    print("[*] Load best model for test evaluation...")
-    model.load_state_dict(torch.load(os.path.join(save_path, "best_model.pth"), map_location=device, weights_only=True))
-    model.eval()
-
-    test_metrics_sum = {
-        "dice": 0.0,
-        "iou": 0.0,
-        "accuracy": 0.0,
-        "precision": 0.0,
-        "sensitivity": 0.0,
-        "specificity": 0.0,
-        "hd95": 0.0,
-    }
-    with torch.no_grad():
-        for batch in tqdm(test_loader, desc="[*] Test"):
-            images = batch["image"].to(device)
-            masks = batch["mask"].to(device)
-            outputs = forward_for_logits(model, images, args.mode, args.joint_model)
-            batch_metrics = calculate_comprehensive_metrics(outputs, masks)
-            for key in test_metrics_sum:
-                test_metrics_sum[key] += batch_metrics[key]
-
-    avg_test_metrics = {key: value / len(test_loader) for key, value in test_metrics_sum.items()}
-    test_result_str = (
-        f"\n[FINAL TEST RESULTS] {args.mode.upper()}\n"
-        f"--------------------------------------------------\n"
-        f"Dice:  {avg_test_metrics['dice']:.4f}\n"
-        f"IoU:   {avg_test_metrics['iou']:.4f}\n"
-        f"HD95:  {avg_test_metrics['hd95']:.2f}\n"
-        f"Sens:  {avg_test_metrics['sensitivity']:.4f}\n"
-        f"Spec:  {avg_test_metrics['specificity']:.4f}\n"
-        f"Acc:   {avg_test_metrics['accuracy']:.4f}\n"
-        f"Prec:  {avg_test_metrics['precision']:.4f}\n"
-        f"--------------------------------------------------"
-    )
-    print(test_result_str)
-    with open(log_path, "a", encoding="utf-8") as log_file:
-        log_file.write(test_result_str + "\n")
+    if args.evaluate_test_after_training:
+        print("\n" + "=" * 50)
+        print("[*] Load best model for requested test evaluation...")
+        model.load_state_dict(torch.load(os.path.join(save_path, "best_model.pth"), map_location=device, weights_only=True))
+        model.eval()
+        avg_test_metrics = evaluate_per_image(model, test_loader, args.mode, args.joint_model)
+        test_result_str = (
+            f"\n[FINAL TEST RESULTS] {args.mode.upper()}\n"
+            f"--------------------------------------------------\n"
+            f"Dice:  {avg_test_metrics['dice']:.4f}\n"
+            f"IoU:   {avg_test_metrics['iou']:.4f}\n"
+            f"HD95:  {avg_test_metrics['hd95']:.2f}\n"
+            f"Sens:  {avg_test_metrics['sensitivity']:.4f}\n"
+            f"Spec:  {avg_test_metrics['specificity']:.4f}\n"
+            f"Acc:   {avg_test_metrics['accuracy']:.4f}\n"
+            f"Prec:  {avg_test_metrics['precision']:.4f}\n"
+            f"--------------------------------------------------"
+        )
+        print(test_result_str)
+        with open(log_path, "a", encoding="utf-8") as log_file:
+            log_file.write(test_result_str + "\n")
 
     print(f"\n[*] Training complete. Results saved to: {save_path}")
 

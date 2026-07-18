@@ -1,0 +1,38 @@
+[*] mode: SOFT_KD
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/K2_uniform_lambda1p0_20260717\0717_0206
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice
+[*] pretrained: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+[*] init_weight: results\experiments\all_filtered\f0_transunet_corrected_pretrained_seed42_20260715\0715_1907\best_model.pth
+[*] soft_target_dir: results\dual_teacher_kd_20260717\soft_targets\train\ensemble_probabilities
+[*] kd: mode=uniform, lambda=1.0
+load_pretrained: grid-size from 14 to 16
+[*] 已加载预训练权重: model\vit_checkpoint\imagenet21k\R50+ViT-B_16.npz
+[*] loaded student initialization weight: results\experiments\all_filtered\f0_transunet_corrected_pretrained_seed42_20260715\0715_1907\best_model.pth
+Ep 001 | Loss(Tot:0.438 Seg:0.348 KD:0.090) | W(KD:1.00) | Dice: 0.7932 | HD95: 17.90
+[*] Update best model: Dice = 0.7932
+Ep 002 | Loss(Tot:0.430 Seg:0.341 KD:0.089) | W(KD:1.00) | Dice: 0.7905 | HD95: 19.00
+Ep 003 | Loss(Tot:0.425 Seg:0.336 KD:0.090) | W(KD:1.00) | Dice: 0.7943 | HD95: 18.51
+[*] Update best model: Dice = 0.7943
+Ep 004 | Loss(Tot:0.421 Seg:0.331 KD:0.090) | W(KD:1.00) | Dice: 0.7966 | HD95: 17.93
+[*] Update best model: Dice = 0.7966
+Ep 005 | Loss(Tot:0.419 Seg:0.329 KD:0.090) | W(KD:1.00) | Dice: 0.7955 | HD95: 18.57
+Ep 006 | Loss(Tot:0.415 Seg:0.324 KD:0.090) | W(KD:1.00) | Dice: 0.7944 | HD95: 18.85
+Ep 007 | Loss(Tot:0.410 Seg:0.320 KD:0.090) | W(KD:1.00) | Dice: 0.7942 | HD95: 18.33
+Ep 008 | Loss(Tot:0.408 Seg:0.318 KD:0.091) | W(KD:1.00) | Dice: 0.7977 | HD95: 18.30
+[*] Update best model: Dice = 0.7977
+Ep 009 | Loss(Tot:0.403 Seg:0.312 KD:0.091) | W(KD:1.00) | Dice: 0.7964 | HD95: 18.20
+Ep 010 | Loss(Tot:0.399 Seg:0.309 KD:0.091) | W(KD:1.00) | Dice: 0.7940 | HD95: 18.88
+Ep 011 | Loss(Tot:0.397 Seg:0.305 KD:0.091) | W(KD:1.00) | Dice: 0.7915 | HD95: 18.38
+Ep 012 | Loss(Tot:0.392 Seg:0.300 KD:0.092) | W(KD:1.00) | Dice: 0.7937 | HD95: 17.99
+Ep 013 | Loss(Tot:0.390 Seg:0.298 KD:0.093) | W(KD:1.00) | Dice: 0.7933 | HD95: 18.14
+Ep 014 | Loss(Tot:0.389 Seg:0.296 KD:0.093) | W(KD:1.00) | Dice: 0.7941 | HD95: 18.08
+Ep 015 | Loss(Tot:0.385 Seg:0.292 KD:0.093) | W(KD:1.00) | Dice: 0.7945 | HD95: 18.15
+Ep 016 | Loss(Tot:0.382 Seg:0.288 KD:0.094) | W(KD:1.00) | Dice: 0.7932 | HD95: 17.88
+Ep 017 | Loss(Tot:0.379 Seg:0.285 KD:0.094) | W(KD:1.00) | Dice: 0.7915 | HD95: 18.62
+Ep 018 | Loss(Tot:0.385 Seg:0.291 KD:0.094) | W(KD:1.00) | Dice: 0.7929 | HD95: 18.76
+[*] Early stopping after 10 epochs without improvement
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/K2_uniform_lambda1p0_20260717\0717_0206

@@ -1,0 +1,31 @@
+{
+    "experiments":  [
+                        {
+                            "seg_loss":  "bce_dice",
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\r0_transunet_corrected_scratch_seed42_20260714\\0714_2331\\best_model.pth",
+                            "name":  "F0_transunet_corrected_scratch_seed42",
+                            "model_type":  "transunet"
+                        },
+                        {
+                            "seg_loss":  "bce_dice",
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\f1_plain_green_single_scratch_seed42_20260715\\0715_1113\\best_model.pth",
+                            "name":  "F1_plain_green_single_scratch_seed42",
+                            "prior_fusion_variant":  "plain_single",
+                            "model_type":  "prior_fusion"
+                        },
+                        {
+                            "seg_loss":  "bce_dice",
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\f2_directional_green_single_scratch_seed42_20260715\\0715_1440\\best_model.pth",
+                            "name":  "F2_directional_green_single_scratch_seed42",
+                            "prior_fusion_variant":  "directional_single",
+                            "model_type":  "prior_fusion"
+                        },
+                        {
+                            "seg_loss":  "bce_dice",
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\f3_directional_green_multiscale_scratch_seed42_20260715\\0715_1556\\best_model.pth",
+                            "name":  "F3_directional_green_multiscale_scratch_seed42",
+                            "prior_fusion_variant":  "directional_multiscale",
+                            "model_type":  "prior_fusion"
+                        }
+                    ]
+}

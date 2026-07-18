@@ -1,0 +1,6 @@
+﻿===== STDOUT =====
+[KD summary complete]
+Best candidate: K3_agreement_lambda0p3_seed42
+Dice: 0.7575; delta vs K0: +0.0014
+Next phase: fallback_k3_k4
+===== STDERR =====
