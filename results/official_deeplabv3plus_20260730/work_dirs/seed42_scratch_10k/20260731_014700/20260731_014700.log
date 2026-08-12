@@ -1,0 +1,1310 @@
+2026/07/31 01:47:03 - mmengine - INFO - 
+------------------------------------------------------------
+System environment:
+    sys.platform: win32
+    Python: 3.10.20 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:13:20) [MSC v.1942 64 bit (AMD64)]
+    CUDA available: True
+    MUSA available: False
+    numpy_random_seed: 42
+    GPU 0: NVIDIA GeForce RTX 4060
+    CUDA_HOME: C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8
+    NVCC: Cuda compilation tools, release 11.8, V11.8.89
+    MSVC: 用于 x64 的 Microsoft (R) C/C++ 优化编译器 19.41.34123 版
+    GCC: n/a
+    PyTorch: 2.1.2+cu118
+    PyTorch compiling details: PyTorch built with:
+  - C++ Version: 199711
+  - MSVC 192930151
+  - Intel(R) Math Kernel Library Version 2020.0.2 Product Build 20200624 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v3.1.1 (Git Hash 64f6bcbcbab628e96f33a62c3e975f8535a7bde4)
+  - OpenMP 2019
+  - LAPACK is enabled (usually provided by MKL)
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.8
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_61,code=sm_61;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86;-gencode;arch=compute_90,code=sm_90;-gencode;arch=compute_37,code=compute_37
+  - CuDNN 8.7
+  - Magma 2.5.4
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.8, CUDNN_VERSION=8.7.0, CXX_COMPILER=C:/actions-runner/_work/pytorch/pytorch/builder/windows/tmp_bin/sccache-cl.exe, CXX_FLAGS=/DWIN32 /D_WINDOWS /GR /EHsc /bigobj /FS -DUSE_PTHREADPOOL -DNDEBUG -DUSE_KINETO -DLIBKINETO_NOCUPTI -DLIBKINETO_NOROCTRACER -DUSE_FBGEMM -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE /utf-8 /wd4624 /wd4068 /wd4067 /wd4267 /wd4661 /wd4717 /wd4244 /wd4804 /wd4273, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_DISABLE_GPU_ASSERTS=OFF, TORCH_VERSION=2.1.2, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=OFF, USE_NNPACK=OFF, USE_OPENMP=ON, USE_ROCM=OFF, 
+
+    TorchVision: 0.16.2+cu118
+    OpenCV: 4.11.0
+    MMEngine: 0.10.7
+
+Runtime environment:
+    cudnn_benchmark: False
+    mp_cfg: {'mp_start_method': 'fork', 'opencv_num_threads': 0}
+    dist_cfg: {'backend': 'nccl'}
+    seed: 42
+    deterministic: False
+    Distributed launcher: none
+    Distributed training: False
+    GPU number: 1
+------------------------------------------------------------
+
+2026/07/31 01:47:03 - mmengine - INFO - Config:
+crop_size = (
+    256,
+    256,
+)
+data_preprocessor = dict(
+    bgr_to_rgb=True,
+    mean=[
+        123.675,
+        116.28,
+        103.53,
+    ],
+    pad_val=0,
+    seg_pad_val=255,
+    size=(
+        256,
+        256,
+    ),
+    size_divisor=None,
+    std=[
+        58.395,
+        57.12,
+        57.375,
+    ],
+    type='SegDataPreProcessor')
+data_root = 'D:\\Projects_\\JiaBi_new\\dataset_all_filtered_mmseg'
+dataset_common = dict(
+    data_root='D:\\Projects_\\JiaBi_new\\dataset_all_filtered_mmseg',
+    img_suffix='.png',
+    metainfo=dict(
+        classes=(
+            'background',
+            'vessel',
+        ),
+        palette=[
+            [
+                0,
+                0,
+                0,
+            ],
+            [
+                255,
+                255,
+                255,
+            ],
+        ]),
+    seg_map_suffix='.png',
+    type='BaseSegDataset')
+dataset_meta = dict(
+    classes=(
+        'background',
+        'vessel',
+    ),
+    palette=[
+        [
+            0,
+            0,
+            0,
+        ],
+        [
+            255,
+            255,
+            255,
+        ],
+    ])
+default_hooks = dict(
+    checkpoint=dict(
+        by_epoch=False,
+        interval=1000,
+        max_keep_ckpts=2,
+        rule='greater',
+        save_best='mDice',
+        type='CheckpointHook'),
+    logger=dict(interval=100, type='LoggerHook'),
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+    timer=dict(type='IterTimerHook'),
+    visualization=dict(draw=False, type='SegVisualizationHook'))
+default_scope = 'mmseg'
+env_cfg = dict(
+    cudnn_benchmark=False,
+    dist_cfg=dict(backend='nccl'),
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0))
+launcher = 'none'
+load_from = None
+log_level = 'INFO'
+log_processor = dict(by_epoch=False)
+max_iters = 10000
+model = dict(
+    auxiliary_head=None,
+    backbone=dict(
+        dilations=(
+            1,
+            1,
+            1,
+            2,
+            2,
+            4,
+            4,
+        ),
+        norm_cfg=dict(requires_grad=True, type='BN'),
+        out_indices=(
+            1,
+            4,
+            6,
+        ),
+        strides=(
+            1,
+            2,
+            2,
+            1,
+            1,
+            1,
+            1,
+        ),
+        type='MobileNetV2',
+        widen_factor=1.0),
+    data_preprocessor=dict(
+        bgr_to_rgb=True,
+        mean=[
+            123.675,
+            116.28,
+            103.53,
+        ],
+        pad_val=0,
+        seg_pad_val=255,
+        size=(
+            256,
+            256,
+        ),
+        size_divisor=None,
+        std=[
+            58.395,
+            57.12,
+            57.375,
+        ],
+        type='SegDataPreProcessor'),
+    decode_head=dict(
+        align_corners=False,
+        c1_channels=12,
+        c1_in_channels=24,
+        channels=512,
+        dilations=(
+            1,
+            12,
+            24,
+            36,
+        ),
+        in_channels=320,
+        in_index=2,
+        loss_decode=[
+            dict(
+                avg_non_ignore=True,
+                loss_weight=1.0,
+                type='CrossEntropyLoss',
+                use_sigmoid=False),
+            dict(ignore_index=255, loss_weight=2.0, type='DiceLoss'),
+        ],
+        norm_cfg=dict(requires_grad=True, type='BN'),
+        num_classes=2,
+        type='DepthwiseSeparableASPPHead'),
+    pretrained=None,
+    test_cfg=dict(mode='whole'),
+    train_cfg=dict(),
+    type='EncoderDecoder')
+optim_wrapper = dict(
+    optimizer=dict(lr=0.001, type='AdamW', weight_decay=0.0001),
+    type='OptimWrapper')
+param_scheduler = [
+    dict(
+        T_max=10000,
+        begin=0,
+        by_epoch=False,
+        end=10000,
+        eta_min=1e-05,
+        type='CosineAnnealingLR'),
+]
+randomness = dict(deterministic=False, seed=42)
+resume = True
+test_cfg = dict(type='TestLoop')
+test_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        data_prefix=dict(img_path='test/images', seg_map_path='test/masks'),
+        data_root='D:\\Projects_\\JiaBi_new\\dataset_all_filtered_mmseg',
+        img_suffix='.png',
+        metainfo=dict(
+            classes=(
+                'background',
+                'vessel',
+            ),
+            palette=[
+                [
+                    0,
+                    0,
+                    0,
+                ],
+                [
+                    255,
+                    255,
+                    255,
+                ],
+            ]),
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(keep_ratio=False, scale=(
+                256,
+                256,
+            ), type='Resize'),
+            dict(type='LoadAnnotations'),
+            dict(type='PackSegInputs'),
+        ],
+        seg_map_suffix='.png',
+        type='BaseSegDataset'),
+    num_workers=0,
+    persistent_workers=False,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+test_evaluator = dict(
+    iou_metrics=[
+        'mIoU',
+        'mDice',
+    ], type='IoUMetric')
+test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(keep_ratio=False, scale=(
+        256,
+        256,
+    ), type='Resize'),
+    dict(type='LoadAnnotations'),
+    dict(type='PackSegInputs'),
+]
+train_cfg = dict(max_iters=10000, type='IterBasedTrainLoop', val_interval=1000)
+train_dataloader = dict(
+    batch_size=4,
+    dataset=dict(
+        data_prefix=dict(img_path='train/images', seg_map_path='train/masks'),
+        data_root='D:\\Projects_\\JiaBi_new\\dataset_all_filtered_mmseg',
+        img_suffix='.png',
+        metainfo=dict(
+            classes=(
+                'background',
+                'vessel',
+            ),
+            palette=[
+                [
+                    0,
+                    0,
+                    0,
+                ],
+                [
+                    255,
+                    255,
+                    255,
+                ],
+            ]),
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(type='LoadAnnotations'),
+            dict(keep_ratio=False, scale=(
+                256,
+                256,
+            ), type='Resize'),
+            dict(direction='horizontal', prob=0.5, type='RandomFlip'),
+            dict(direction='vertical', prob=0.5, type='RandomFlip'),
+            dict(
+                degree=(
+                    -45,
+                    45,
+                ),
+                pad_val=0,
+                prob=0.5,
+                seg_pad_val=255,
+                type='RandomRotate'),
+            dict(type='PhotoMetricDistortion'),
+            dict(type='PackSegInputs'),
+        ],
+        seg_map_suffix='.png',
+        type='BaseSegDataset'),
+    num_workers=0,
+    persistent_workers=False,
+    sampler=dict(shuffle=True, type='InfiniteSampler'))
+train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations'),
+    dict(keep_ratio=False, scale=(
+        256,
+        256,
+    ), type='Resize'),
+    dict(direction='horizontal', prob=0.5, type='RandomFlip'),
+    dict(direction='vertical', prob=0.5, type='RandomFlip'),
+    dict(
+        degree=(
+            -45,
+            45,
+        ),
+        pad_val=0,
+        prob=0.5,
+        seg_pad_val=255,
+        type='RandomRotate'),
+    dict(type='PhotoMetricDistortion'),
+    dict(type='PackSegInputs'),
+]
+val_cfg = dict(type='ValLoop')
+val_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        data_prefix=dict(img_path='val/images', seg_map_path='val/masks'),
+        data_root='D:\\Projects_\\JiaBi_new\\dataset_all_filtered_mmseg',
+        img_suffix='.png',
+        metainfo=dict(
+            classes=(
+                'background',
+                'vessel',
+            ),
+            palette=[
+                [
+                    0,
+                    0,
+                    0,
+                ],
+                [
+                    255,
+                    255,
+                    255,
+                ],
+            ]),
+        pipeline=[
+            dict(type='LoadImageFromFile'),
+            dict(keep_ratio=False, scale=(
+                256,
+                256,
+            ), type='Resize'),
+            dict(type='LoadAnnotations'),
+            dict(type='PackSegInputs'),
+        ],
+        seg_map_suffix='.png',
+        type='BaseSegDataset'),
+    num_workers=0,
+    persistent_workers=False,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+val_evaluator = dict(
+    iou_metrics=[
+        'mIoU',
+        'mDice',
+    ], type='IoUMetric')
+val_interval = 1000
+work_dir = 'D:\\Projects_\\JiaBi_new\\results\\official_deeplabv3plus_20260730\\work_dirs\\seed42_scratch_10k'
+
+2026/07/31 01:47:05 - mmengine - INFO - Distributed training is not used, all SyncBatchNorm (SyncBN) layers in the model will be automatically reverted to BatchNormXd layers if they are used.
+2026/07/31 01:47:05 - mmengine - INFO - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+before_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DistSamplerSeedHook                
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) IterTimerHook                      
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_val_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) SegVisualizationHook               
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_val_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_test_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_test_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_test_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) SegVisualizationHook               
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_run:
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+2026/07/31 01:47:06 - mmengine - WARNING - The prefix is not set in metric class IoUMetric.
+Name of parameter - Initialization information
+
+backbone.conv1.conv.weight - torch.Size([32, 3, 3, 3]): 
+Initialized by user-defined `init_weights` in ConvModule  
+
+backbone.conv1.bn.weight - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.conv1.bn.bias - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer1.0.conv.0.conv.weight - torch.Size([32, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer1.0.conv.0.bn.weight - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer1.0.conv.0.bn.bias - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer1.0.conv.1.conv.weight - torch.Size([16, 32, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer1.0.conv.1.bn.weight - torch.Size([16]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer1.0.conv.1.bn.bias - torch.Size([16]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.0.conv.0.conv.weight - torch.Size([96, 16, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.0.conv.0.bn.weight - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.0.conv.0.bn.bias - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.0.conv.1.conv.weight - torch.Size([96, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.0.conv.1.bn.weight - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.0.conv.1.bn.bias - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.0.conv.2.conv.weight - torch.Size([24, 96, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.0.conv.2.bn.weight - torch.Size([24]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.0.conv.2.bn.bias - torch.Size([24]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.1.conv.0.conv.weight - torch.Size([144, 24, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.1.conv.0.bn.weight - torch.Size([144]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.1.conv.0.bn.bias - torch.Size([144]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.1.conv.1.conv.weight - torch.Size([144, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.1.conv.1.bn.weight - torch.Size([144]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.1.conv.1.bn.bias - torch.Size([144]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.1.conv.2.conv.weight - torch.Size([24, 144, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer2.1.conv.2.bn.weight - torch.Size([24]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer2.1.conv.2.bn.bias - torch.Size([24]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.0.conv.0.conv.weight - torch.Size([144, 24, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.0.conv.0.bn.weight - torch.Size([144]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.0.conv.0.bn.bias - torch.Size([144]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.0.conv.1.conv.weight - torch.Size([144, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.0.conv.1.bn.weight - torch.Size([144]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.0.conv.1.bn.bias - torch.Size([144]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.0.conv.2.conv.weight - torch.Size([32, 144, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.0.conv.2.bn.weight - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.0.conv.2.bn.bias - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.1.conv.0.conv.weight - torch.Size([192, 32, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.1.conv.0.bn.weight - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.1.conv.0.bn.bias - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.1.conv.1.conv.weight - torch.Size([192, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.1.conv.1.bn.weight - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.1.conv.1.bn.bias - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.1.conv.2.conv.weight - torch.Size([32, 192, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.1.conv.2.bn.weight - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.1.conv.2.bn.bias - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.2.conv.0.conv.weight - torch.Size([192, 32, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.2.conv.0.bn.weight - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.2.conv.0.bn.bias - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.2.conv.1.conv.weight - torch.Size([192, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.2.conv.1.bn.weight - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.2.conv.1.bn.bias - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.2.conv.2.conv.weight - torch.Size([32, 192, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer3.2.conv.2.bn.weight - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer3.2.conv.2.bn.bias - torch.Size([32]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.0.conv.0.conv.weight - torch.Size([192, 32, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.0.conv.0.bn.weight - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.0.conv.0.bn.bias - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.0.conv.1.conv.weight - torch.Size([192, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.0.conv.1.bn.weight - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.0.conv.1.bn.bias - torch.Size([192]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.0.conv.2.conv.weight - torch.Size([64, 192, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.0.conv.2.bn.weight - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.0.conv.2.bn.bias - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.1.conv.0.conv.weight - torch.Size([384, 64, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.1.conv.0.bn.weight - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.1.conv.0.bn.bias - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.1.conv.1.conv.weight - torch.Size([384, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.1.conv.1.bn.weight - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.1.conv.1.bn.bias - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.1.conv.2.conv.weight - torch.Size([64, 384, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.1.conv.2.bn.weight - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.1.conv.2.bn.bias - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.2.conv.0.conv.weight - torch.Size([384, 64, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.2.conv.0.bn.weight - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.2.conv.0.bn.bias - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.2.conv.1.conv.weight - torch.Size([384, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.2.conv.1.bn.weight - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.2.conv.1.bn.bias - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.2.conv.2.conv.weight - torch.Size([64, 384, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.2.conv.2.bn.weight - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.2.conv.2.bn.bias - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.3.conv.0.conv.weight - torch.Size([384, 64, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.3.conv.0.bn.weight - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.3.conv.0.bn.bias - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.3.conv.1.conv.weight - torch.Size([384, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.3.conv.1.bn.weight - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.3.conv.1.bn.bias - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.3.conv.2.conv.weight - torch.Size([64, 384, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer4.3.conv.2.bn.weight - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer4.3.conv.2.bn.bias - torch.Size([64]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.0.conv.0.conv.weight - torch.Size([384, 64, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer5.0.conv.0.bn.weight - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.0.conv.0.bn.bias - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.0.conv.1.conv.weight - torch.Size([384, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer5.0.conv.1.bn.weight - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.0.conv.1.bn.bias - torch.Size([384]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.0.conv.2.conv.weight - torch.Size([96, 384, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer5.0.conv.2.bn.weight - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.0.conv.2.bn.bias - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.1.conv.0.conv.weight - torch.Size([576, 96, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer5.1.conv.0.bn.weight - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.1.conv.0.bn.bias - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.1.conv.1.conv.weight - torch.Size([576, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer5.1.conv.1.bn.weight - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.1.conv.1.bn.bias - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.1.conv.2.conv.weight - torch.Size([96, 576, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer5.1.conv.2.bn.weight - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.1.conv.2.bn.bias - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.2.conv.0.conv.weight - torch.Size([576, 96, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer5.2.conv.0.bn.weight - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.2.conv.0.bn.bias - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.2.conv.1.conv.weight - torch.Size([576, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer5.2.conv.1.bn.weight - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.2.conv.1.bn.bias - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.2.conv.2.conv.weight - torch.Size([96, 576, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer5.2.conv.2.bn.weight - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer5.2.conv.2.bn.bias - torch.Size([96]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.0.conv.0.conv.weight - torch.Size([576, 96, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer6.0.conv.0.bn.weight - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.0.conv.0.bn.bias - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.0.conv.1.conv.weight - torch.Size([576, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer6.0.conv.1.bn.weight - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.0.conv.1.bn.bias - torch.Size([576]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.0.conv.2.conv.weight - torch.Size([160, 576, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer6.0.conv.2.bn.weight - torch.Size([160]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.0.conv.2.bn.bias - torch.Size([160]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.1.conv.0.conv.weight - torch.Size([960, 160, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer6.1.conv.0.bn.weight - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.1.conv.0.bn.bias - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.1.conv.1.conv.weight - torch.Size([960, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer6.1.conv.1.bn.weight - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.1.conv.1.bn.bias - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.1.conv.2.conv.weight - torch.Size([160, 960, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer6.1.conv.2.bn.weight - torch.Size([160]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.1.conv.2.bn.bias - torch.Size([160]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.2.conv.0.conv.weight - torch.Size([960, 160, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer6.2.conv.0.bn.weight - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.2.conv.0.bn.bias - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.2.conv.1.conv.weight - torch.Size([960, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer6.2.conv.1.bn.weight - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.2.conv.1.bn.bias - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.2.conv.2.conv.weight - torch.Size([160, 960, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer6.2.conv.2.bn.weight - torch.Size([160]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer6.2.conv.2.bn.bias - torch.Size([160]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer7.0.conv.0.conv.weight - torch.Size([960, 160, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer7.0.conv.0.bn.weight - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer7.0.conv.0.bn.bias - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer7.0.conv.1.conv.weight - torch.Size([960, 1, 3, 3]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer7.0.conv.1.bn.weight - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer7.0.conv.1.bn.bias - torch.Size([960]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer7.0.conv.2.conv.weight - torch.Size([320, 960, 1, 1]): 
+KaimingInit: a=0, mode=fan_out, nonlinearity=relu, distribution =normal, bias=0 
+
+backbone.layer7.0.conv.2.bn.weight - torch.Size([320]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+backbone.layer7.0.conv.2.bn.bias - torch.Size([320]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.conv_seg.weight - torch.Size([2, 512, 1, 1]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+decode_head.conv_seg.bias - torch.Size([2]): 
+NormalInit: mean=0, std=0.01, bias=0 
+
+decode_head.image_pool.1.conv.weight - torch.Size([512, 320, 1, 1]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.image_pool.1.bn.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.image_pool.1.bn.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.0.conv.weight - torch.Size([512, 320, 1, 1]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.0.bn.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.0.bn.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.1.depthwise_conv.conv.weight - torch.Size([320, 1, 3, 3]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.1.depthwise_conv.bn.weight - torch.Size([320]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.1.depthwise_conv.bn.bias - torch.Size([320]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.1.pointwise_conv.conv.weight - torch.Size([512, 320, 1, 1]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.1.pointwise_conv.bn.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.1.pointwise_conv.bn.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.2.depthwise_conv.conv.weight - torch.Size([320, 1, 3, 3]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.2.depthwise_conv.bn.weight - torch.Size([320]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.2.depthwise_conv.bn.bias - torch.Size([320]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.2.pointwise_conv.conv.weight - torch.Size([512, 320, 1, 1]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.2.pointwise_conv.bn.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.2.pointwise_conv.bn.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.3.depthwise_conv.conv.weight - torch.Size([320, 1, 3, 3]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.3.depthwise_conv.bn.weight - torch.Size([320]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.3.depthwise_conv.bn.bias - torch.Size([320]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.3.pointwise_conv.conv.weight - torch.Size([512, 320, 1, 1]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.3.pointwise_conv.bn.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.aspp_modules.3.pointwise_conv.bn.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.bottleneck.conv.weight - torch.Size([512, 2560, 3, 3]): 
+Initialized by user-defined `init_weights` in ConvModule  
+
+decode_head.bottleneck.bn.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.bottleneck.bn.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.c1_bottleneck.conv.weight - torch.Size([12, 24, 1, 1]): 
+Initialized by user-defined `init_weights` in ConvModule  
+
+decode_head.c1_bottleneck.bn.weight - torch.Size([12]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.c1_bottleneck.bn.bias - torch.Size([12]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.0.depthwise_conv.conv.weight - torch.Size([524, 1, 3, 3]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.0.depthwise_conv.bn.weight - torch.Size([524]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.0.depthwise_conv.bn.bias - torch.Size([524]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.0.pointwise_conv.conv.weight - torch.Size([512, 524, 1, 1]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.0.pointwise_conv.bn.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.0.pointwise_conv.bn.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.1.depthwise_conv.conv.weight - torch.Size([512, 1, 3, 3]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.1.depthwise_conv.bn.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.1.depthwise_conv.bn.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.1.pointwise_conv.conv.weight - torch.Size([512, 512, 1, 1]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.1.pointwise_conv.bn.weight - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+
+decode_head.sep_bottleneck.1.pointwise_conv.bn.bias - torch.Size([512]): 
+The value is the same before and after calling `init_weights` of EncoderDecoder  
+2026/07/31 01:47:06 - mmengine - INFO - Auto resumed from the latest checkpoint D:\Projects_\JiaBi_new\results\official_deeplabv3plus_20260730\work_dirs\seed42_scratch_10k\iter_1000.pth.
+2026/07/31 01:47:07 - mmengine - INFO - Load checkpoint from D:\Projects_\JiaBi_new\results\official_deeplabv3plus_20260730\work_dirs\seed42_scratch_10k\iter_1000.pth
+2026/07/31 01:47:07 - mmengine - INFO - resumed epoch: 0, iter: 1000
+2026/07/31 01:47:07 - mmengine - WARNING - "FileClient" will be deprecated in future. Please use io functions in https://mmengine.readthedocs.io/en/latest/api/fileio.html#file-io
+2026/07/31 01:47:07 - mmengine - WARNING - "HardDiskBackend" is the alias of "LocalBackend" and the former will be deprecated in future.
+2026/07/31 01:47:07 - mmengine - INFO - Checkpoints will be saved to D:\Projects_\JiaBi_new\results\official_deeplabv3plus_20260730\work_dirs\seed42_scratch_10k.
+2026/07/31 01:47:07 - mmengine - WARNING - Advance dataloader 1000 steps to skip data that has already been trained
+2026/07/31 01:47:46 - mmengine - INFO - Iter(train) [ 1100/10000]  lr: 9.7079e-04  eta: 0:58:31  time: 0.1336  data_time: 0.0276  memory: 1736  loss: 0.2991  decode.loss_ce: 0.1763  decode.loss_dice: 0.1228  decode.acc_seg: 96.1597
+2026/07/31 01:48:00 - mmengine - INFO - Iter(train) [ 1200/10000]  lr: 9.6530e-04  eta: 0:39:07  time: 0.1365  data_time: 0.0282  memory: 1736  loss: 0.3511  decode.loss_ce: 0.1989  decode.loss_dice: 0.1522  decode.acc_seg: 94.0410
+2026/07/31 01:48:16 - mmengine - INFO - Iter(train) [ 1300/10000]  lr: 9.5935e-04  eta: 0:33:18  time: 0.1511  data_time: 0.0345  memory: 1736  loss: 0.3230  decode.loss_ce: 0.1885  decode.loss_dice: 0.1345  decode.acc_seg: 94.5919
+2026/07/31 01:48:30 - mmengine - INFO - Iter(train) [ 1400/10000]  lr: 9.5296e-04  eta: 0:29:43  time: 0.1352  data_time: 0.0274  memory: 1736  loss: 0.3125  decode.loss_ce: 0.1793  decode.loss_dice: 0.1332  decode.acc_seg: 94.1849
+2026/07/31 01:48:43 - mmengine - INFO - Iter(train) [ 1500/10000]  lr: 9.4612e-04  eta: 0:27:19  time: 0.1370  data_time: 0.0285  memory: 1736  loss: 0.3092  decode.loss_ce: 0.1839  decode.loss_dice: 0.1252  decode.acc_seg: 90.5401
+2026/07/31 01:48:57 - mmengine - INFO - Iter(train) [ 1600/10000]  lr: 9.3885e-04  eta: 0:25:41  time: 0.1406  data_time: 0.0293  memory: 1736  loss: 0.3111  decode.loss_ce: 0.1854  decode.loss_dice: 0.1257  decode.acc_seg: 90.2210
+2026/07/31 01:49:10 - mmengine - INFO - Iter(train) [ 1700/10000]  lr: 9.3115e-04  eta: 0:24:25  time: 0.1323  data_time: 0.0277  memory: 1736  loss: 0.3138  decode.loss_ce: 0.1884  decode.loss_dice: 0.1255  decode.acc_seg: 95.7222
+2026/07/31 01:49:24 - mmengine - INFO - Iter(train) [ 1800/10000]  lr: 9.2303e-04  eta: 0:23:23  time: 0.1348  data_time: 0.0266  memory: 1736  loss: 0.2984  decode.loss_ce: 0.1760  decode.loss_dice: 0.1224  decode.acc_seg: 91.3175
+2026/07/31 01:49:37 - mmengine - INFO - Iter(train) [ 1900/10000]  lr: 9.1449e-04  eta: 0:22:33  time: 0.1312  data_time: 0.0264  memory: 1736  loss: 0.3233  decode.loss_ce: 0.1979  decode.loss_dice: 0.1255  decode.acc_seg: 95.4509
+2026/07/31 01:49:53 - mmengine - INFO - Exp name: deeplabv3plus_mobilenetv2_official_all_filtered_20260731_014700
+2026/07/31 01:49:53 - mmengine - INFO - Iter(train) [ 2000/10000]  lr: 9.0555e-04  eta: 0:22:08  time: 0.1509  data_time: 0.0308  memory: 1736  loss: 0.3260  decode.loss_ce: 0.1956  decode.loss_dice: 0.1304  decode.acc_seg: 93.2560
+2026/07/31 01:49:53 - mmengine - INFO - Saving checkpoint at 2000 iterations
+2026/07/31 01:49:58 - mmengine - INFO - Iter(val) [100/449]    eta: 0:00:13  time: 0.0331  data_time: 0.0055  memory: 348  
+2026/07/31 01:50:01 - mmengine - INFO - Iter(val) [200/449]    eta: 0:00:08  time: 0.0303  data_time: 0.0050  memory: 348  
+2026/07/31 01:50:05 - mmengine - INFO - Iter(val) [300/449]    eta: 0:00:05  time: 0.0297  data_time: 0.0048  memory: 348  
+2026/07/31 01:50:08 - mmengine - INFO - Iter(val) [400/449]    eta: 0:00:01  time: 0.0305  data_time: 0.0050  memory: 348  
+2026/07/31 01:50:10 - mmengine - INFO - per class results:
+2026/07/31 01:50:10 - mmengine - INFO - 
++------------+-------+-------+-------+
+|   Class    |  IoU  |  Acc  |  Dice |
++------------+-------+-------+-------+
+| background | 94.87 | 98.17 | 97.37 |
+|   vessel   | 59.71 | 69.35 | 74.77 |
++------------+-------+-------+-------+
+2026/07/31 01:50:10 - mmengine - INFO - Iter(val) [449/449]    aAcc: 95.2300  mIoU: 77.2900  mAcc: 83.7600  mDice: 86.0700  data_time: 0.0057  time: 0.0342
+2026/07/31 01:50:10 - mmengine - INFO - The best checkpoint with 86.0700 mDice at 2000 iter is saved to best_mDice_iter_2000.pth.
+2026/07/31 01:50:28 - mmengine - INFO - Iter(train) [ 2100/10000]  lr: 8.9622e-04  eta: 0:22:02  time: 0.1660  data_time: 0.0313  memory: 1736  loss: 0.3116  decode.loss_ce: 0.1824  decode.loss_dice: 0.1292  decode.acc_seg: 92.8844
+2026/07/31 01:50:44 - mmengine - INFO - Iter(train) [ 2200/10000]  lr: 8.8650e-04  eta: 0:21:41  time: 0.1499  data_time: 0.0335  memory: 1736  loss: 0.3062  decode.loss_ce: 0.1842  decode.loss_dice: 0.1221  decode.acc_seg: 94.2844
+2026/07/31 01:51:00 - mmengine - INFO - Iter(train) [ 2300/10000]  lr: 8.7641e-04  eta: 0:21:20  time: 0.1520  data_time: 0.0328  memory: 1736  loss: 0.2741  decode.loss_ce: 0.1631  decode.loss_dice: 0.1110  decode.acc_seg: 92.7700
+2026/07/31 01:51:15 - mmengine - INFO - Iter(train) [ 2400/10000]  lr: 8.6595e-04  eta: 0:20:54  time: 0.1487  data_time: 0.0333  memory: 1736  loss: 0.2591  decode.loss_ce: 0.1495  decode.loss_dice: 0.1096  decode.acc_seg: 93.5067
+2026/07/31 01:51:31 - mmengine - INFO - Iter(train) [ 2500/10000]  lr: 8.5513e-04  eta: 0:20:38  time: 0.1635  data_time: 0.0361  memory: 1736  loss: 0.2989  decode.loss_ce: 0.1800  decode.loss_dice: 0.1190  decode.acc_seg: 88.1420
+2026/07/31 01:51:46 - mmengine - INFO - Iter(train) [ 2600/10000]  lr: 8.4396e-04  eta: 0:20:15  time: 0.1484  data_time: 0.0317  memory: 1736  loss: 0.2406  decode.loss_ce: 0.1413  decode.loss_dice: 0.0993  decode.acc_seg: 95.4705
+2026/07/31 01:52:03 - mmengine - INFO - Iter(train) [ 2700/10000]  lr: 8.3247e-04  eta: 0:20:00  time: 0.1604  data_time: 0.0380  memory: 1736  loss: 0.3147  decode.loss_ce: 0.1889  decode.loss_dice: 0.1259  decode.acc_seg: 93.9316
+2026/07/31 01:52:18 - mmengine - INFO - Iter(train) [ 2800/10000]  lr: 8.2064e-04  eta: 0:19:38  time: 0.1517  data_time: 0.0341  memory: 1736  loss: 0.3061  decode.loss_ce: 0.1822  decode.loss_dice: 0.1239  decode.acc_seg: 94.3570
+2026/07/31 01:52:33 - mmengine - INFO - Iter(train) [ 2900/10000]  lr: 8.0851e-04  eta: 0:19:17  time: 0.1585  data_time: 0.0379  memory: 1736  loss: 0.3157  decode.loss_ce: 0.1922  decode.loss_dice: 0.1234  decode.acc_seg: 89.7640
+2026/07/31 01:52:49 - mmengine - INFO - Exp name: deeplabv3plus_mobilenetv2_official_all_filtered_20260731_014700
+2026/07/31 01:52:49 - mmengine - INFO - Iter(train) [ 3000/10000]  lr: 7.9608e-04  eta: 0:18:59  time: 0.2155  data_time: 0.0507  memory: 1736  loss: 0.3294  decode.loss_ce: 0.2003  decode.loss_dice: 0.1291  decode.acc_seg: 93.4813
+2026/07/31 01:52:49 - mmengine - INFO - Saving checkpoint at 3000 iterations
+2026/07/31 01:52:54 - mmengine - INFO - Iter(val) [100/449]    eta: 0:00:13  time: 0.0448  data_time: 0.0061  memory: 348  
+2026/07/31 01:52:58 - mmengine - INFO - Iter(val) [200/449]    eta: 0:00:09  time: 0.0336  data_time: 0.0057  memory: 348  
+2026/07/31 01:53:02 - mmengine - INFO - Iter(val) [300/449]    eta: 0:00:05  time: 0.0301  data_time: 0.0047  memory: 348  
+2026/07/31 01:53:05 - mmengine - INFO - Iter(val) [400/449]    eta: 0:00:01  time: 0.0404  data_time: 0.0044  memory: 348  
+2026/07/31 01:53:06 - mmengine - INFO - per class results:
+2026/07/31 01:53:06 - mmengine - INFO - 
++------------+-------+-------+-------+
+|   Class    |  IoU  |  Acc  |  Dice |
++------------+-------+-------+-------+
+| background | 94.82 |  98.7 | 97.34 |
+|   vessel   | 57.38 | 63.98 | 72.92 |
++------------+-------+-------+-------+
+2026/07/31 01:53:06 - mmengine - INFO - Iter(val) [449/449]    aAcc: 95.1600  mIoU: 76.1000  mAcc: 81.3400  mDice: 85.1300  data_time: 0.0053  time: 0.0355
+2026/07/31 01:53:22 - mmengine - INFO - Iter(train) [ 3100/10000]  lr: 7.8336e-04  eta: 0:18:41  time: 0.1564  data_time: 0.0361  memory: 1736  loss: 0.2711  decode.loss_ce: 0.1566  decode.loss_dice: 0.1145  decode.acc_seg: 94.1899
+2026/07/31 01:53:37 - mmengine - INFO - Iter(train) [ 3200/10000]  lr: 7.7037e-04  eta: 0:18:20  time: 0.1459  data_time: 0.0306  memory: 1736  loss: 0.2864  decode.loss_ce: 0.1724  decode.loss_dice: 0.1140  decode.acc_seg: 88.4899
+2026/07/31 01:53:51 - mmengine - INFO - Iter(train) [ 3300/10000]  lr: 7.5711e-04  eta: 0:17:58  time: 0.1374  data_time: 0.0289  memory: 1736  loss: 0.2903  decode.loss_ce: 0.1707  decode.loss_dice: 0.1196  decode.acc_seg: 95.5833
+2026/07/31 01:54:05 - mmengine - INFO - Iter(train) [ 3400/10000]  lr: 7.4360e-04  eta: 0:17:35  time: 0.1343  data_time: 0.0274  memory: 1736  loss: 0.2913  decode.loss_ce: 0.1744  decode.loss_dice: 0.1169  decode.acc_seg: 93.3536
+2026/07/31 01:54:18 - mmengine - INFO - Iter(train) [ 3500/10000]  lr: 7.2986e-04  eta: 0:17:13  time: 0.1354  data_time: 0.0276  memory: 1736  loss: 0.3000  decode.loss_ce: 0.1842  decode.loss_dice: 0.1157  decode.acc_seg: 88.9166
+2026/07/31 01:54:32 - mmengine - INFO - Iter(train) [ 3600/10000]  lr: 7.1590e-04  eta: 0:16:51  time: 0.1335  data_time: 0.0274  memory: 1736  loss: 0.2711  decode.loss_ce: 0.1602  decode.loss_dice: 0.1109  decode.acc_seg: 91.8991
+2026/07/31 01:54:45 - mmengine - INFO - Iter(train) [ 3700/10000]  lr: 7.0173e-04  eta: 0:16:30  time: 0.1435  data_time: 0.0284  memory: 1736  loss: 0.2746  decode.loss_ce: 0.1567  decode.loss_dice: 0.1179  decode.acc_seg: 94.2315
+2026/07/31 01:54:59 - mmengine - INFO - Iter(train) [ 3800/10000]  lr: 6.8737e-04  eta: 0:16:10  time: 0.1442  data_time: 0.0277  memory: 1736  loss: 0.2762  decode.loss_ce: 0.1639  decode.loss_dice: 0.1124  decode.acc_seg: 91.7851
+2026/07/31 01:55:13 - mmengine - INFO - Iter(train) [ 3900/10000]  lr: 6.7282e-04  eta: 0:15:51  time: 0.1417  data_time: 0.0315  memory: 1736  loss: 0.2960  decode.loss_ce: 0.1812  decode.loss_dice: 0.1148  decode.acc_seg: 96.7172
+2026/07/31 01:55:28 - mmengine - INFO - Exp name: deeplabv3plus_mobilenetv2_official_all_filtered_20260731_014700
+2026/07/31 01:55:28 - mmengine - INFO - Iter(train) [ 4000/10000]  lr: 6.5811e-04  eta: 0:15:33  time: 0.1508  data_time: 0.0311  memory: 1736  loss: 0.2796  decode.loss_ce: 0.1672  decode.loss_dice: 0.1124  decode.acc_seg: 92.4413
+2026/07/31 01:55:28 - mmengine - INFO - Saving checkpoint at 4000 iterations
+2026/07/31 01:55:32 - mmengine - INFO - Iter(val) [100/449]    eta: 0:00:10  time: 0.0280  data_time: 0.0044  memory: 348  
+2026/07/31 01:55:34 - mmengine - INFO - Iter(val) [200/449]    eta: 0:00:06  time: 0.0261  data_time: 0.0039  memory: 348  
+2026/07/31 01:55:37 - mmengine - INFO - Iter(val) [300/449]    eta: 0:00:03  time: 0.0253  data_time: 0.0039  memory: 348  
+2026/07/31 01:55:40 - mmengine - INFO - Iter(val) [400/449]    eta: 0:00:01  time: 0.0268  data_time: 0.0044  memory: 348  
+2026/07/31 01:55:41 - mmengine - INFO - per class results:
+2026/07/31 01:55:41 - mmengine - INFO - 
++------------+-------+-------+-------+
+|   Class    |  IoU  |  Acc  |  Dice |
++------------+-------+-------+-------+
+| background | 94.64 | 99.22 | 97.25 |
+|   vessel   | 53.66 | 57.36 | 69.84 |
++------------+-------+-------+-------+
+2026/07/31 01:55:41 - mmengine - INFO - Iter(val) [449/449]    aAcc: 94.9500  mIoU: 74.1500  mAcc: 78.2900  mDice: 83.5400  data_time: 0.0041  time: 0.0272
+2026/07/31 01:55:55 - mmengine - INFO - Iter(train) [ 4100/10000]  lr: 6.4325e-04  eta: 0:15:15  time: 0.1345  data_time: 0.0260  memory: 1736  loss: 0.2595  decode.loss_ce: 0.1538  decode.loss_dice: 0.1057  decode.acc_seg: 94.6683
+2026/07/31 01:56:09 - mmengine - INFO - Iter(train) [ 4200/10000]  lr: 6.2825e-04  eta: 0:14:56  time: 0.1394  data_time: 0.0302  memory: 1736  loss: 0.2800  decode.loss_ce: 0.1728  decode.loss_dice: 0.1073  decode.acc_seg: 93.2810
+2026/07/31 01:56:23 - mmengine - INFO - Iter(train) [ 4300/10000]  lr: 6.1313e-04  eta: 0:14:38  time: 0.1370  data_time: 0.0275  memory: 1736  loss: 0.2648  decode.loss_ce: 0.1578  decode.loss_dice: 0.1070  decode.acc_seg: 93.1900
+2026/07/31 01:56:37 - mmengine - INFO - Iter(train) [ 4400/10000]  lr: 5.9791e-04  eta: 0:14:20  time: 0.1360  data_time: 0.0276  memory: 1736  loss: 0.3017  decode.loss_ce: 0.1760  decode.loss_dice: 0.1257  decode.acc_seg: 93.8365
+2026/07/31 01:56:50 - mmengine - INFO - Iter(train) [ 4500/10000]  lr: 5.8259e-04  eta: 0:14:02  time: 0.1360  data_time: 0.0269  memory: 1736  loss: 0.2981  decode.loss_ce: 0.1755  decode.loss_dice: 0.1226  decode.acc_seg: 90.6491
+2026/07/31 01:57:04 - mmengine - INFO - Iter(train) [ 4600/10000]  lr: 5.6719e-04  eta: 0:13:44  time: 0.1415  data_time: 0.0279  memory: 1736  loss: 0.2921  decode.loss_ce: 0.1717  decode.loss_dice: 0.1204  decode.acc_seg: 94.9985
+2026/07/31 01:57:18 - mmengine - INFO - Iter(train) [ 4700/10000]  lr: 5.5174e-04  eta: 0:13:26  time: 0.1341  data_time: 0.0270  memory: 1736  loss: 0.2607  decode.loss_ce: 0.1521  decode.loss_dice: 0.1086  decode.acc_seg: 94.4116
+2026/07/31 01:57:31 - mmengine - INFO - Iter(train) [ 4800/10000]  lr: 5.3624e-04  eta: 0:13:09  time: 0.1325  data_time: 0.0269  memory: 1736  loss: 0.2487  decode.loss_ce: 0.1504  decode.loss_dice: 0.0983  decode.acc_seg: 94.8301
+2026/07/31 01:57:44 - mmengine - INFO - Iter(train) [ 4900/10000]  lr: 5.2070e-04  eta: 0:12:51  time: 0.1362  data_time: 0.0272  memory: 1736  loss: 0.2471  decode.loss_ce: 0.1434  decode.loss_dice: 0.1036  decode.acc_seg: 93.4510
+2026/07/31 01:57:59 - mmengine - INFO - Exp name: deeplabv3plus_mobilenetv2_official_all_filtered_20260731_014700
+2026/07/31 01:57:59 - mmengine - INFO - Iter(train) [ 5000/10000]  lr: 5.0516e-04  eta: 0:12:35  time: 0.1459  data_time: 0.0309  memory: 1736  loss: 0.2811  decode.loss_ce: 0.1675  decode.loss_dice: 0.1136  decode.acc_seg: 95.0009
+2026/07/31 01:57:59 - mmengine - INFO - Saving checkpoint at 5000 iterations
+2026/07/31 01:58:03 - mmengine - INFO - Iter(val) [100/449]    eta: 0:00:10  time: 0.0289  data_time: 0.0044  memory: 348  
+2026/07/31 01:58:06 - mmengine - INFO - Iter(val) [200/449]    eta: 0:00:07  time: 0.0272  data_time: 0.0046  memory: 348  
+2026/07/31 01:58:08 - mmengine - INFO - Iter(val) [300/449]    eta: 0:00:04  time: 0.0270  data_time: 0.0041  memory: 348  
+2026/07/31 01:58:11 - mmengine - INFO - Iter(val) [400/449]    eta: 0:00:01  time: 0.0281  data_time: 0.0039  memory: 348  
+2026/07/31 01:58:13 - mmengine - INFO - per class results:
+2026/07/31 01:58:13 - mmengine - INFO - 
++------------+-------+-------+-------+
+|   Class    |  IoU  |  Acc  |  Dice |
++------------+-------+-------+-------+
+| background | 95.19 | 98.67 | 97.54 |
+|   vessel   | 60.67 | 67.77 | 75.52 |
++------------+-------+-------+-------+
+2026/07/31 01:58:13 - mmengine - INFO - Iter(val) [449/449]    aAcc: 95.5300  mIoU: 77.9300  mAcc: 83.2200  mDice: 86.5300  data_time: 0.0044  time: 0.0286
+2026/07/31 01:58:13 - mmengine - INFO - The previous best checkpoint D:\Projects_\JiaBi_new\results\official_deeplabv3plus_20260730\work_dirs\seed42_scratch_10k\best_mDice_iter_2000.pth is removed
+2026/07/31 01:58:13 - mmengine - INFO - The best checkpoint with 86.5300 mDice at 5000 iter is saved to best_mDice_iter_5000.pth.
+2026/07/31 01:58:29 - mmengine - INFO - Iter(train) [ 5100/10000]  lr: 4.8961e-04  eta: 0:12:21  time: 0.1490  data_time: 0.0290  memory: 1736  loss: 0.3098  decode.loss_ce: 0.1825  decode.loss_dice: 0.1273  decode.acc_seg: 94.0841
+2026/07/31 01:58:43 - mmengine - INFO - Iter(train) [ 5200/10000]  lr: 4.7407e-04  eta: 0:12:05  time: 0.1412  data_time: 0.0303  memory: 1736  loss: 0.2603  decode.loss_ce: 0.1569  decode.loss_dice: 0.1034  decode.acc_seg: 91.0937
+2026/07/31 01:58:58 - mmengine - INFO - Iter(train) [ 5300/10000]  lr: 4.5857e-04  eta: 0:11:49  time: 0.1448  data_time: 0.0324  memory: 1736  loss: 0.2580  decode.loss_ce: 0.1533  decode.loss_dice: 0.1047  decode.acc_seg: 95.4118
+2026/07/31 01:59:12 - mmengine - INFO - Iter(train) [ 5400/10000]  lr: 4.4311e-04  eta: 0:11:33  time: 0.1456  data_time: 0.0298  memory: 1736  loss: 0.2505  decode.loss_ce: 0.1465  decode.loss_dice: 0.1040  decode.acc_seg: 94.7967
+2026/07/31 01:59:26 - mmengine - INFO - Iter(train) [ 5500/10000]  lr: 4.2772e-04  eta: 0:11:18  time: 0.1411  data_time: 0.0293  memory: 1736  loss: 0.2895  decode.loss_ce: 0.1736  decode.loss_dice: 0.1159  decode.acc_seg: 95.6713
+2026/07/31 01:59:41 - mmengine - INFO - Iter(train) [ 5600/10000]  lr: 4.1240e-04  eta: 0:11:02  time: 0.1452  data_time: 0.0311  memory: 1736  loss: 0.2508  decode.loss_ce: 0.1496  decode.loss_dice: 0.1012  decode.acc_seg: 96.2525
+2026/07/31 01:59:55 - mmengine - INFO - Iter(train) [ 5700/10000]  lr: 3.9717e-04  eta: 0:10:46  time: 0.1429  data_time: 0.0320  memory: 1736  loss: 0.2442  decode.loss_ce: 0.1431  decode.loss_dice: 0.1011  decode.acc_seg: 95.1945
+2026/07/31 02:00:10 - mmengine - INFO - Iter(train) [ 5800/10000]  lr: 3.8205e-04  eta: 0:10:31  time: 0.1442  data_time: 0.0320  memory: 1736  loss: 0.2775  decode.loss_ce: 0.1662  decode.loss_dice: 0.1113  decode.acc_seg: 95.0351
+2026/07/31 02:00:24 - mmengine - INFO - Iter(train) [ 5900/10000]  lr: 3.6705e-04  eta: 0:10:15  time: 0.1390  data_time: 0.0282  memory: 1736  loss: 0.2644  decode.loss_ce: 0.1560  decode.loss_dice: 0.1084  decode.acc_seg: 95.1755
+2026/07/31 02:00:39 - mmengine - INFO - Exp name: deeplabv3plus_mobilenetv2_official_all_filtered_20260731_014700
+2026/07/31 02:00:39 - mmengine - INFO - Iter(train) [ 6000/10000]  lr: 3.5218e-04  eta: 0:10:00  time: 0.1459  data_time: 0.0304  memory: 1736  loss: 0.2618  decode.loss_ce: 0.1559  decode.loss_dice: 0.1059  decode.acc_seg: 94.6812
+2026/07/31 02:00:39 - mmengine - INFO - Saving checkpoint at 6000 iterations
+2026/07/31 02:00:43 - mmengine - INFO - Iter(val) [100/449]    eta: 0:00:10  time: 0.0306  data_time: 0.0046  memory: 348  
+2026/07/31 02:00:46 - mmengine - INFO - Iter(val) [200/449]    eta: 0:00:07  time: 0.0290  data_time: 0.0045  memory: 348  
+2026/07/31 02:00:49 - mmengine - INFO - Iter(val) [300/449]    eta: 0:00:04  time: 0.0300  data_time: 0.0047  memory: 348  
+2026/07/31 02:00:52 - mmengine - INFO - Iter(val) [400/449]    eta: 0:00:01  time: 0.0271  data_time: 0.0044  memory: 348  
+2026/07/31 02:00:53 - mmengine - INFO - per class results:
+2026/07/31 02:00:53 - mmengine - INFO - 
++------------+-------+-------+-------+
+|   Class    |  IoU  |  Acc  |  Dice |
++------------+-------+-------+-------+
+| background |  95.2 | 98.05 | 97.54 |
+|   vessel   | 62.79 |  73.6 | 77.14 |
++------------+-------+-------+-------+
+2026/07/31 02:00:53 - mmengine - INFO - Iter(val) [449/449]    aAcc: 95.5600  mIoU: 78.9900  mAcc: 85.8200  mDice: 87.3400  data_time: 0.0044  time: 0.0289
+2026/07/31 02:00:53 - mmengine - INFO - The previous best checkpoint D:\Projects_\JiaBi_new\results\official_deeplabv3plus_20260730\work_dirs\seed42_scratch_10k\best_mDice_iter_5000.pth is removed
+2026/07/31 02:00:54 - mmengine - INFO - The best checkpoint with 87.3400 mDice at 6000 iter is saved to best_mDice_iter_6000.pth.
+2026/07/31 02:01:09 - mmengine - INFO - Iter(train) [ 6100/10000]  lr: 3.3747e-04  eta: 0:09:45  time: 0.1434  data_time: 0.0280  memory: 1736  loss: 0.2632  decode.loss_ce: 0.1564  decode.loss_dice: 0.1068  decode.acc_seg: 91.7816
+2026/07/31 02:01:22 - mmengine - INFO - Iter(train) [ 6200/10000]  lr: 3.2292e-04  eta: 0:09:29  time: 0.1368  data_time: 0.0282  memory: 1736  loss: 0.2615  decode.loss_ce: 0.1527  decode.loss_dice: 0.1087  decode.acc_seg: 94.3724
+2026/07/31 02:01:36 - mmengine - INFO - Iter(train) [ 6300/10000]  lr: 3.0855e-04  eta: 0:09:13  time: 0.1348  data_time: 0.0283  memory: 1736  loss: 0.2899  decode.loss_ce: 0.1766  decode.loss_dice: 0.1133  decode.acc_seg: 91.2419
+2026/07/31 02:01:50 - mmengine - INFO - Iter(train) [ 6400/10000]  lr: 2.9438e-04  eta: 0:08:58  time: 0.1470  data_time: 0.0303  memory: 1736  loss: 0.2832  decode.loss_ce: 0.1683  decode.loss_dice: 0.1149  decode.acc_seg: 92.4672
+2026/07/31 02:02:04 - mmengine - INFO - Iter(train) [ 6500/10000]  lr: 2.8041e-04  eta: 0:08:42  time: 0.1424  data_time: 0.0309  memory: 1736  loss: 0.2314  decode.loss_ce: 0.1363  decode.loss_dice: 0.0950  decode.acc_seg: 94.4052
+2026/07/31 02:02:19 - mmengine - INFO - Iter(train) [ 6600/10000]  lr: 2.6667e-04  eta: 0:08:27  time: 0.1417  data_time: 0.0298  memory: 1736  loss: 0.2621  decode.loss_ce: 0.1525  decode.loss_dice: 0.1095  decode.acc_seg: 94.1941
+2026/07/31 02:02:33 - mmengine - INFO - Iter(train) [ 6700/10000]  lr: 2.5316e-04  eta: 0:08:12  time: 0.1445  data_time: 0.0315  memory: 1736  loss: 0.2496  decode.loss_ce: 0.1503  decode.loss_dice: 0.0993  decode.acc_seg: 95.8110
+2026/07/31 02:02:47 - mmengine - INFO - Iter(train) [ 6800/10000]  lr: 2.3990e-04  eta: 0:07:56  time: 0.1446  data_time: 0.0317  memory: 1736  loss: 0.2697  decode.loss_ce: 0.1625  decode.loss_dice: 0.1072  decode.acc_seg: 92.5219
+2026/07/31 02:03:02 - mmengine - INFO - Iter(train) [ 6900/10000]  lr: 2.2690e-04  eta: 0:07:42  time: 0.1457  data_time: 0.0304  memory: 1736  loss: 0.2604  decode.loss_ce: 0.1554  decode.loss_dice: 0.1050  decode.acc_seg: 95.1831
+2026/07/31 02:03:18 - mmengine - INFO - Exp name: deeplabv3plus_mobilenetv2_official_all_filtered_20260731_014700
+2026/07/31 02:03:18 - mmengine - INFO - Iter(train) [ 7000/10000]  lr: 2.1417e-04  eta: 0:07:27  time: 0.1453  data_time: 0.0297  memory: 1736  loss: 0.2377  decode.loss_ce: 0.1396  decode.loss_dice: 0.0981  decode.acc_seg: 94.6434
+2026/07/31 02:03:18 - mmengine - INFO - Saving checkpoint at 7000 iterations
+2026/07/31 02:03:22 - mmengine - INFO - Iter(val) [100/449]    eta: 0:00:10  time: 0.0313  data_time: 0.0048  memory: 348  
+2026/07/31 02:03:25 - mmengine - INFO - Iter(val) [200/449]    eta: 0:00:07  time: 0.0285  data_time: 0.0042  memory: 348  
+2026/07/31 02:03:28 - mmengine - INFO - Iter(val) [300/449]    eta: 0:00:04  time: 0.0289  data_time: 0.0043  memory: 348  
+2026/07/31 02:03:31 - mmengine - INFO - Iter(val) [400/449]    eta: 0:00:01  time: 0.0266  data_time: 0.0044  memory: 348  
+2026/07/31 02:03:32 - mmengine - INFO - per class results:
+2026/07/31 02:03:32 - mmengine - INFO - 
++------------+-------+-------+-------+
+|   Class    |  IoU  |  Acc  |  Dice |
++------------+-------+-------+-------+
+| background | 95.23 | 98.54 | 97.55 |
+|   vessel   |  61.4 | 69.29 | 76.08 |
++------------+-------+-------+-------+
+2026/07/31 02:03:32 - mmengine - INFO - Iter(val) [449/449]    aAcc: 95.5600  mIoU: 78.3100  mAcc: 83.9200  mDice: 86.8200  data_time: 0.0045  time: 0.0291
+2026/07/31 02:03:47 - mmengine - INFO - Iter(train) [ 7100/10000]  lr: 2.0173e-04  eta: 0:07:12  time: 0.1411  data_time: 0.0299  memory: 1736  loss: 0.2259  decode.loss_ce: 0.1326  decode.loss_dice: 0.0933  decode.acc_seg: 95.9775
+2026/07/31 02:04:01 - mmengine - INFO - Iter(train) [ 7200/10000]  lr: 1.8959e-04  eta: 0:06:57  time: 0.1380  data_time: 0.0277  memory: 1736  loss: 0.2712  decode.loss_ce: 0.1594  decode.loss_dice: 0.1118  decode.acc_seg: 94.5312
+2026/07/31 02:04:16 - mmengine - INFO - Iter(train) [ 7300/10000]  lr: 1.7777e-04  eta: 0:06:42  time: 0.1428  data_time: 0.0329  memory: 1736  loss: 0.2521  decode.loss_ce: 0.1495  decode.loss_dice: 0.1026  decode.acc_seg: 91.5122
+2026/07/31 02:04:30 - mmengine - INFO - Iter(train) [ 7400/10000]  lr: 1.6626e-04  eta: 0:06:27  time: 0.1408  data_time: 0.0287  memory: 1736  loss: 0.2539  decode.loss_ce: 0.1507  decode.loss_dice: 0.1031  decode.acc_seg: 94.8483
+2026/07/31 02:04:44 - mmengine - INFO - Iter(train) [ 7500/10000]  lr: 1.5509e-04  eta: 0:06:11  time: 0.1425  data_time: 0.0313  memory: 1736  loss: 0.2384  decode.loss_ce: 0.1413  decode.loss_dice: 0.0971  decode.acc_seg: 94.7798
+2026/07/31 02:04:59 - mmengine - INFO - Iter(train) [ 7600/10000]  lr: 1.4427e-04  eta: 0:05:56  time: 0.1453  data_time: 0.0294  memory: 1736  loss: 0.2443  decode.loss_ce: 0.1468  decode.loss_dice: 0.0975  decode.acc_seg: 95.5753
+2026/07/31 02:05:13 - mmengine - INFO - Iter(train) [ 7700/10000]  lr: 1.3380e-04  eta: 0:05:41  time: 0.1442  data_time: 0.0323  memory: 1736  loss: 0.2501  decode.loss_ce: 0.1461  decode.loss_dice: 0.1040  decode.acc_seg: 93.7765
+2026/07/31 02:05:27 - mmengine - INFO - Iter(train) [ 7800/10000]  lr: 1.2370e-04  eta: 0:05:26  time: 0.1395  data_time: 0.0287  memory: 1736  loss: 0.2217  decode.loss_ce: 0.1298  decode.loss_dice: 0.0919  decode.acc_seg: 94.1093
+2026/07/31 02:05:41 - mmengine - INFO - Iter(train) [ 7900/10000]  lr: 1.1397e-04  eta: 0:05:11  time: 0.1394  data_time: 0.0291  memory: 1736  loss: 0.2473  decode.loss_ce: 0.1460  decode.loss_dice: 0.1014  decode.acc_seg: 92.3546
+2026/07/31 02:05:56 - mmengine - INFO - Exp name: deeplabv3plus_mobilenetv2_official_all_filtered_20260731_014700
+2026/07/31 02:05:56 - mmengine - INFO - Iter(train) [ 8000/10000]  lr: 1.0463e-04  eta: 0:04:56  time: 0.1425  data_time: 0.0301  memory: 1736  loss: 0.2694  decode.loss_ce: 0.1616  decode.loss_dice: 0.1078  decode.acc_seg: 94.9506
+2026/07/31 02:05:56 - mmengine - INFO - Saving checkpoint at 8000 iterations
+2026/07/31 02:06:00 - mmengine - INFO - Iter(val) [100/449]    eta: 0:00:10  time: 0.0302  data_time: 0.0045  memory: 348  
+2026/07/31 02:06:03 - mmengine - INFO - Iter(val) [200/449]    eta: 0:00:07  time: 0.0273  data_time: 0.0045  memory: 348  
+2026/07/31 02:06:06 - mmengine - INFO - Iter(val) [300/449]    eta: 0:00:04  time: 0.0317  data_time: 0.0043  memory: 348  
+2026/07/31 02:06:09 - mmengine - INFO - Iter(val) [400/449]    eta: 0:00:01  time: 0.0287  data_time: 0.0040  memory: 348  
+2026/07/31 02:06:10 - mmengine - INFO - per class results:
+2026/07/31 02:06:10 - mmengine - INFO - 
++------------+-------+-------+-------+
+|   Class    |  IoU  |  Acc  |  Dice |
++------------+-------+-------+-------+
+| background |  95.3 | 97.98 | 97.59 |
+|   vessel   | 63.83 | 75.21 | 77.92 |
++------------+-------+-------+-------+
+2026/07/31 02:06:10 - mmengine - INFO - Iter(val) [449/449]    aAcc: 95.6600  mIoU: 79.5600  mAcc: 86.6000  mDice: 87.7600  data_time: 0.0045  time: 0.0295
+2026/07/31 02:06:10 - mmengine - INFO - The previous best checkpoint D:\Projects_\JiaBi_new\results\official_deeplabv3plus_20260730\work_dirs\seed42_scratch_10k\best_mDice_iter_6000.pth is removed
+2026/07/31 02:06:11 - mmengine - INFO - The best checkpoint with 87.7600 mDice at 8000 iter is saved to best_mDice_iter_8000.pth.
+2026/07/31 02:06:28 - mmengine - INFO - Iter(train) [ 8100/10000]  lr: 9.5683e-05  eta: 0:04:42  time: 0.1415  data_time: 0.0303  memory: 1736  loss: 0.2878  decode.loss_ce: 0.1745  decode.loss_dice: 0.1133  decode.acc_seg: 93.0889
+2026/07/31 02:06:42 - mmengine - INFO - Iter(train) [ 8200/10000]  lr: 8.7141e-05  eta: 0:04:27  time: 0.1436  data_time: 0.0294  memory: 1736  loss: 0.2379  decode.loss_ce: 0.1399  decode.loss_dice: 0.0979  decode.acc_seg: 93.6563
+2026/07/31 02:06:58 - mmengine - INFO - Iter(train) [ 8300/10000]  lr: 7.9012e-05  eta: 0:04:12  time: 0.1486  data_time: 0.0322  memory: 1736  loss: 0.2461  decode.loss_ce: 0.1453  decode.loss_dice: 0.1009  decode.acc_seg: 94.0462
+2026/07/31 02:07:12 - mmengine - INFO - Iter(train) [ 8400/10000]  lr: 7.1303e-05  eta: 0:03:57  time: 0.1441  data_time: 0.0315  memory: 1736  loss: 0.2028  decode.loss_ce: 0.1173  decode.loss_dice: 0.0854  decode.acc_seg: 96.0899
+2026/07/31 02:07:27 - mmengine - INFO - Iter(train) [ 8500/10000]  lr: 6.4022e-05  eta: 0:03:43  time: 0.1499  data_time: 0.0323  memory: 1736  loss: 0.2493  decode.loss_ce: 0.1477  decode.loss_dice: 0.1016  decode.acc_seg: 94.8867
+2026/07/31 02:07:41 - mmengine - INFO - Iter(train) [ 8600/10000]  lr: 5.7177e-05  eta: 0:03:28  time: 0.1443  data_time: 0.0296  memory: 1736  loss: 0.2497  decode.loss_ce: 0.1469  decode.loss_dice: 0.1028  decode.acc_seg: 92.4663
+2026/07/31 02:07:56 - mmengine - INFO - Iter(train) [ 8700/10000]  lr: 5.0773e-05  eta: 0:03:13  time: 0.1503  data_time: 0.0293  memory: 1736  loss: 0.2305  decode.loss_ce: 0.1370  decode.loss_dice: 0.0935  decode.acc_seg: 92.8047
+2026/07/31 02:08:10 - mmengine - INFO - Iter(train) [ 8800/10000]  lr: 4.4818e-05  eta: 0:02:58  time: 0.1429  data_time: 0.0292  memory: 1736  loss: 0.2606  decode.loss_ce: 0.1558  decode.loss_dice: 0.1047  decode.acc_seg: 93.8238
+2026/07/31 02:08:25 - mmengine - INFO - Iter(train) [ 8900/10000]  lr: 3.9317e-05  eta: 0:02:43  time: 0.1432  data_time: 0.0302  memory: 1736  loss: 0.2536  decode.loss_ce: 0.1517  decode.loss_dice: 0.1019  decode.acc_seg: 94.7066
+2026/07/31 02:08:40 - mmengine - INFO - Exp name: deeplabv3plus_mobilenetv2_official_all_filtered_20260731_014700
+2026/07/31 02:08:40 - mmengine - INFO - Iter(train) [ 9000/10000]  lr: 3.4275e-05  eta: 0:02:28  time: 0.1471  data_time: 0.0308  memory: 1736  loss: 0.2556  decode.loss_ce: 0.1495  decode.loss_dice: 0.1060  decode.acc_seg: 94.1404
+2026/07/31 02:08:40 - mmengine - INFO - Saving checkpoint at 9000 iterations
+2026/07/31 02:08:44 - mmengine - INFO - Iter(val) [100/449]    eta: 0:00:10  time: 0.0286  data_time: 0.0046  memory: 348  
+2026/07/31 02:08:47 - mmengine - INFO - Iter(val) [200/449]    eta: 0:00:07  time: 0.0277  data_time: 0.0039  memory: 348  
+2026/07/31 02:08:49 - mmengine - INFO - Iter(val) [300/449]    eta: 0:00:04  time: 0.0271  data_time: 0.0040  memory: 348  
+2026/07/31 02:08:52 - mmengine - INFO - Iter(val) [400/449]    eta: 0:00:01  time: 0.0272  data_time: 0.0045  memory: 348  
+2026/07/31 02:08:54 - mmengine - INFO - per class results:
+2026/07/31 02:08:54 - mmengine - INFO - 
++------------+-------+-------+-------+
+|   Class    |  IoU  |  Acc  |  Dice |
++------------+-------+-------+-------+
+| background | 95.38 | 98.45 | 97.63 |
+|   vessel   |  63.0 | 71.63 |  77.3 |
++------------+-------+-------+-------+
+2026/07/31 02:08:54 - mmengine - INFO - Iter(val) [449/449]    aAcc: 95.7200  mIoU: 79.1900  mAcc: 85.0400  mDice: 87.4700  data_time: 0.0044  time: 0.0284
+2026/07/31 02:09:08 - mmengine - INFO - Iter(train) [ 9100/10000]  lr: 2.9698e-05  eta: 0:02:13  time: 0.1414  data_time: 0.0299  memory: 1736  loss: 0.2478  decode.loss_ce: 0.1483  decode.loss_dice: 0.0995  decode.acc_seg: 95.7069
+2026/07/31 02:09:23 - mmengine - INFO - Iter(train) [ 9200/10000]  lr: 2.5590e-05  eta: 0:01:58  time: 0.1451  data_time: 0.0320  memory: 1736  loss: 0.2253  decode.loss_ce: 0.1327  decode.loss_dice: 0.0926  decode.acc_seg: 94.5575
+2026/07/31 02:09:37 - mmengine - INFO - Iter(train) [ 9300/10000]  lr: 2.1955e-05  eta: 0:01:43  time: 0.1429  data_time: 0.0290  memory: 1736  loss: 0.2497  decode.loss_ce: 0.1499  decode.loss_dice: 0.0998  decode.acc_seg: 92.8727
+2026/07/31 02:09:51 - mmengine - INFO - Iter(train) [ 9400/10000]  lr: 1.8797e-05  eta: 0:01:28  time: 0.1398  data_time: 0.0296  memory: 1736  loss: 0.2554  decode.loss_ce: 0.1518  decode.loss_dice: 0.1035  decode.acc_seg: 95.7150
+2026/07/31 02:10:06 - mmengine - INFO - Iter(train) [ 9500/10000]  lr: 1.6119e-05  eta: 0:01:14  time: 0.1463  data_time: 0.0300  memory: 1736  loss: 0.2597  decode.loss_ce: 0.1549  decode.loss_dice: 0.1048  decode.acc_seg: 94.7449
+2026/07/31 02:10:20 - mmengine - INFO - Iter(train) [ 9600/10000]  lr: 1.3923e-05  eta: 0:00:59  time: 0.1451  data_time: 0.0309  memory: 1736  loss: 0.2616  decode.loss_ce: 0.1577  decode.loss_dice: 0.1040  decode.acc_seg: 94.5843
+2026/07/31 02:10:35 - mmengine - INFO - Iter(train) [ 9700/10000]  lr: 1.2211e-05  eta: 0:00:44  time: 0.1506  data_time: 0.0334  memory: 1736  loss: 0.2488  decode.loss_ce: 0.1480  decode.loss_dice: 0.1008  decode.acc_seg: 94.3094
+2026/07/31 02:10:50 - mmengine - INFO - Iter(train) [ 9800/10000]  lr: 1.0987e-05  eta: 0:00:29  time: 0.1415  data_time: 0.0304  memory: 1736  loss: 0.2308  decode.loss_ce: 0.1347  decode.loss_dice: 0.0962  decode.acc_seg: 95.1276
+2026/07/31 02:11:04 - mmengine - INFO - Iter(train) [ 9900/10000]  lr: 1.0249e-05  eta: 0:00:14  time: 0.1422  data_time: 0.0304  memory: 1736  loss: 0.2323  decode.loss_ce: 0.1381  decode.loss_dice: 0.0942  decode.acc_seg: 94.6831
+2026/07/31 02:11:19 - mmengine - INFO - Exp name: deeplabv3plus_mobilenetv2_official_all_filtered_20260731_014700
+2026/07/31 02:11:19 - mmengine - INFO - Iter(train) [10000/10000]  lr: 1.0000e-05  eta: 0:00:00  time: 0.1424  data_time: 0.0321  memory: 1736  loss: 0.2524  decode.loss_ce: 0.1513  decode.loss_dice: 0.1011  decode.acc_seg: 94.2274
+2026/07/31 02:11:19 - mmengine - INFO - Saving checkpoint at 10000 iterations
+2026/07/31 02:11:23 - mmengine - INFO - Iter(val) [100/449]    eta: 0:00:10  time: 0.0334  data_time: 0.0045  memory: 348  
+2026/07/31 02:11:26 - mmengine - INFO - Iter(val) [200/449]    eta: 0:00:07  time: 0.0285  data_time: 0.0043  memory: 348  
+2026/07/31 02:11:29 - mmengine - INFO - Iter(val) [300/449]    eta: 0:00:04  time: 0.0294  data_time: 0.0048  memory: 348  
+2026/07/31 02:11:32 - mmengine - INFO - Iter(val) [400/449]    eta: 0:00:01  time: 0.0267  data_time: 0.0038  memory: 348  
+2026/07/31 02:11:33 - mmengine - INFO - per class results:
+2026/07/31 02:11:33 - mmengine - INFO - 
++------------+-------+-------+-------+
+|   Class    |  IoU  |  Acc  |  Dice |
++------------+-------+-------+-------+
+| background |  95.4 | 98.24 | 97.65 |
+|   vessel   | 63.85 | 73.77 | 77.94 |
++------------+-------+-------+-------+
+2026/07/31 02:11:33 - mmengine - INFO - Iter(val) [449/449]    aAcc: 95.7500  mIoU: 79.6300  mAcc: 86.0000  mDice: 87.7900  data_time: 0.0045  time: 0.0289
+2026/07/31 02:11:33 - mmengine - INFO - The previous best checkpoint D:\Projects_\JiaBi_new\results\official_deeplabv3plus_20260730\work_dirs\seed42_scratch_10k\best_mDice_iter_8000.pth is removed
+2026/07/31 02:11:34 - mmengine - INFO - The best checkpoint with 87.7900 mDice at 10000 iter is saved to best_mDice_iter_10000.pth.

@@ -1,0 +1,4 @@
+[*] 未加载预训练权重，从头训练
+[K2 evaluation complete]
+Reference_K2_seed42: Dice=0.7977, IoU=0.6706, Recall=0.8196, Precision=0.7936, HD95=18.30, clDice=0.8927, BoundaryF1=0.6971
+Output: D:\Projects_\JiaBi_new\K2_model\outputs\smoke reference script fixed 20260809\20260809_000357

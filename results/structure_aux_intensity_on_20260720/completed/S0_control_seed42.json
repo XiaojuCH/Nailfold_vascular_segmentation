@@ -1,0 +1,15 @@
+﻿{
+    "experiment":  "S0_transunet_intensity_on_seed42",
+    "experiment_name":  "all_filtered/structure_aux_s0_control_20260720",
+    "role":  "control",
+    "variant":  "intensity_on_control",
+    "cgma_prior":  "off",
+    "cgma_auxiliary":  "off",
+    "boundary_weight":  "0.0",
+    "centerline_weight":  "0.0",
+    "seed":  42,
+    "best_val_epoch":  32,
+    "best_val_dice":  0.7904,
+    "hd95_at_best_val_dice":  18.76,
+    "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\structure_aux_s0_control_20260720\\0721_0027\\best_model.pth"
+}

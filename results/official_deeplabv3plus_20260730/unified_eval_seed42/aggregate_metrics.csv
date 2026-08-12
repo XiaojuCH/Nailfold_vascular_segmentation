@@ -1,0 +1,2 @@
+﻿model,checkpoint,n_images,dice,iou,sensitivity,precision,specificity,accuracy,hd95,cldice,boundary_f1
+MMSegmentation DeepLabV3+,D:\Projects_\JiaBi_new\results\official_deeplabv3plus_20260730\work_dirs\seed42_scratch_10k\best_mDice_iter_10000.pth,436,0.738216894818015,0.5955871660119286,0.7196388974515628,0.7809071452849223,0.9755304495870032,0.9488291609185705,23.342069627444868,0.8220580216443316,0.6214256175608192

@@ -1,0 +1,44 @@
+{
+    "experiments":  [
+                        {
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\cgma_m0_transunet_no_prior_no_aux_20260719\\0719_2206\\best_model.pth",
+                            "seg_loss":  "bce_dice",
+                            "name":  "M0_transunet_no_prior_no_aux_seed42",
+                            "cgma_centerline_weight":  0.1,
+                            "model_type":  "cgma",
+                            "cgma_boundary_weight":  0.1,
+                            "cgma_auxiliary":  "off",
+                            "cgma_prior":  "off"
+                        },
+                        {
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\cgma_m1_fixed_prior_20260719\\0719_2333\\best_model.pth",
+                            "seg_loss":  "bce_dice",
+                            "name":  "M1_fixed_prior_seed42",
+                            "cgma_centerline_weight":  0.1,
+                            "model_type":  "cgma",
+                            "cgma_boundary_weight":  0.1,
+                            "cgma_auxiliary":  "off",
+                            "cgma_prior":  "on"
+                        },
+                        {
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\cgma_m2_structure_aux_20260719\\0720_0106\\best_model.pth",
+                            "seg_loss":  "bce_dice",
+                            "name":  "M2_structure_aux_seed42",
+                            "cgma_centerline_weight":  0.1,
+                            "model_type":  "cgma",
+                            "cgma_boundary_weight":  0.1,
+                            "cgma_auxiliary":  "on",
+                            "cgma_prior":  "off"
+                        },
+                        {
+                            "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\cgma_m3_full_20260719\\0720_0237\\best_model.pth",
+                            "seg_loss":  "bce_dice",
+                            "name":  "M3_cgma_full_seed42",
+                            "cgma_centerline_weight":  0.1,
+                            "model_type":  "cgma",
+                            "cgma_boundary_weight":  0.1,
+                            "cgma_auxiliary":  "on",
+                            "cgma_prior":  "on"
+                        }
+                    ]
+}

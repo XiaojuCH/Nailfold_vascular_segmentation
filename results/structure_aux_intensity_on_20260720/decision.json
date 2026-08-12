@@ -1,0 +1,8 @@
+{
+  "control": "S0_transunet_intensity_on_seed42",
+  "best_by_val_dice": "S1_fixed_prior_intensity_on_seed42",
+  "best_by_val_dice_delta": -0.00039845638764435254,
+  "candidate_for_multiseed": false,
+  "recommended_next_step": "stop_structure_auxiliary_line_and_prepare_group_meeting",
+  "rule": "Best candidate must improve val Dice by at least +0.001 over control without worsening val BoundaryF1 or HD95."
+}

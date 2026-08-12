@@ -1,0 +1,15 @@
+﻿{
+    "experiment":  "S3_boundary_centerline_w0p05_intensity_on_seed42",
+    "experiment_name":  "all_filtered/structure_aux_s3_low_20260720",
+    "role":  "structure",
+    "variant":  "boundary_centerline_weight_0p05",
+    "cgma_prior":  "off",
+    "cgma_auxiliary":  "on",
+    "boundary_weight":  "0.05",
+    "centerline_weight":  "0.05",
+    "seed":  42,
+    "best_val_epoch":  25,
+    "best_val_dice":  0.7885,
+    "hd95_at_best_val_dice":  19.53,
+    "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\structure_aux_s3_low_20260720\\0721_0446\\best_model.pth"
+}

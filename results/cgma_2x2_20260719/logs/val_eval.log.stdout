@@ -1,0 +1,24 @@
+
+[Eval] M0_transunet_no_prior_no_aux_seed42
+       model=cgma weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\cgma_m0_transunet_no_prior_no_aux_20260719\0719_2206\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] M1_fixed_prior_seed42
+       model=cgma weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\cgma_m1_fixed_prior_20260719\0719_2333\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] M2_structure_aux_seed42
+       model=cgma weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\cgma_m2_structure_aux_20260719\0720_0106\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] M3_cgma_full_seed42
+       model=cgma weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\cgma_m3_full_20260719\0720_0237\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_cgma_2x2_val_20260719\20260720_034808\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_cgma_2x2_val_20260719\20260720_034808\aggregate_results.xlsx
+M0_transunet_no_prior_no_aux_seed42: Dice=0.7886, IoU=0.6590, Recall=0.7859, Precision=0.8089, Spec=0.9787, Acc=0.9591, HD95=19.85, clDice=0.8838, BoundaryF1=0.6879
+M1_fixed_prior_seed42: Dice=0.7887, IoU=0.6587, Recall=0.7939, Precision=0.8028, Spec=0.9771, Acc=0.9588, HD95=19.90, clDice=0.8828, BoundaryF1=0.6882
+M2_structure_aux_seed42: Dice=0.7885, IoU=0.6587, Recall=0.8051, Precision=0.7913, Spec=0.9750, Acc=0.9580, HD95=19.63, clDice=0.8825, BoundaryF1=0.6897
+M3_cgma_full_seed42: Dice=0.7889, IoU=0.6588, Recall=0.7903, Precision=0.8067, Spec=0.9780, Acc=0.9590, HD95=19.26, clDice=0.8841, BoundaryF1=0.6886

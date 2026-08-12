@@ -1,0 +1,6 @@
+{
+  "m1_prior_signal": false,
+  "m2_auxiliary_signal": false,
+  "m3_multiseed_candidate": false,
+  "recommended_next_step": "stop_cgma_and_review_factors"
+}

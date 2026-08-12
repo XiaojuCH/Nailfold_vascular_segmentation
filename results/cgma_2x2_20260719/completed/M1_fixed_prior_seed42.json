@@ -1,0 +1,12 @@
+﻿{
+    "experiment":  "M1_fixed_prior_seed42",
+    "experiment_name":  "all_filtered/cgma_m1_fixed_prior_20260719",
+    "variant":  "fixed_green_local_contrast",
+    "cgma_prior":  "on",
+    "cgma_auxiliary":  "off",
+    "seed":  42,
+    "best_val_epoch":  23,
+    "best_val_dice":  0.7887,
+    "hd95_at_best_val_dice":  19.9,
+    "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\cgma_m1_fixed_prior_20260719\\0719_2333\\best_model.pth"
+}

@@ -1,0 +1,14 @@
+[Setup] device=cuda images=436 models=9
+[Cache] TransUNet_scratch_seed42
+[Cache] Ours_green_MSE_scratch_seed42
+[Cache] F3_directional_multiscale_scratch_seed42
+[Cache] F0_pretrained_seed42
+[Cache] K2_dual_teacher_KD_seed42
+[Cache] S0_structure_control_seed42
+[Cache] S2_boundary_centerline_seed42
+[Cache] DecoderDistillV2_seed42
+
+[Prediction error review complete]
+HTML: results\prediction_error_review_20260730\index.html
+Summary: results\prediction_error_review_20260730\analysis_summary.md
+Predictions: results\prediction_error_review_20260730\predictions

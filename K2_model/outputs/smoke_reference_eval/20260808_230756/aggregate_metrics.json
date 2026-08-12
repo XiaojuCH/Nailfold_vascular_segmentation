@@ -1,0 +1,20 @@
+{
+  "name": "Reference_K2_seed42",
+  "weight": "D:\\Projects_\\JiaBi_new\\K2_model\\reference_weights\\K2_uniform_lambda1p0_seed42_best_model.pth",
+  "data_dir": "D:\\Projects_\\JiaBi_new\\dataset_all_filtered",
+  "split": "val",
+  "n_images": 449,
+  "img_size": 256,
+  "threshold": 0.5,
+  "boundary_tolerance": 2,
+  "dice": 0.7976912247620019,
+  "iou": 0.6706099442098413,
+  "sensitivity": 0.8196058340652349,
+  "precision": 0.7935874080650821,
+  "specificity": 0.9749200843933443,
+  "accuracy": 0.9593032463096933,
+  "hd95": 18.295321121187886,
+  "cldice": 0.8927046225155391,
+  "boundary_f1": 0.6971338505144414,
+  "per_image_csv": "outputs\\smoke_reference_eval\\20260808_230756\\per_image_metrics.csv"
+}

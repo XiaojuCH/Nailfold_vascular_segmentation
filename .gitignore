@@ -30,3 +30,5 @@ model/vit_checkpoint/
 *.mp4
 *.rar
 *.avi
+
+TYT_Code/

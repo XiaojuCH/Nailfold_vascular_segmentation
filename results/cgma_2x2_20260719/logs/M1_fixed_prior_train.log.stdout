@@ -1,0 +1,66 @@
+[*] mode: CGMA
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/cgma_m1_fixed_prior_20260719\0719_2333
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice
+[*] cgma: prior=on, auxiliary=off, boundary_w=0.1, centerline_w=0.1
+[*] 未加载预训练权重，从头训练
+Ep 001 | Loss(Tot:0.910 Seg:0.910 Bnd:0.000 Skel:0.000) | Dice: 0.7495 | HD95: 26.95 | CGMA(prior_gate_mean:0.678 prior_scale:0.050)
+[*] Update best model: Dice = 0.7495
+Ep 002 | Loss(Tot:0.589 Seg:0.589 Bnd:0.000 Skel:0.000) | Dice: 0.7611 | HD95: 23.65 | CGMA(prior_gate_mean:0.824 prior_scale:0.053)
+[*] Update best model: Dice = 0.7611
+Ep 003 | Loss(Tot:0.521 Seg:0.521 Bnd:0.000 Skel:0.000) | Dice: 0.7428 | HD95: 25.72 | CGMA(prior_gate_mean:0.875 prior_scale:0.055)
+Ep 004 | Loss(Tot:0.499 Seg:0.499 Bnd:0.000 Skel:0.000) | Dice: 0.7699 | HD95: 22.19 | CGMA(prior_gate_mean:0.888 prior_scale:0.057)
+[*] Update best model: Dice = 0.7699
+Ep 005 | Loss(Tot:0.485 Seg:0.485 Bnd:0.000 Skel:0.000) | Dice: 0.7693 | HD95: 21.27 | CGMA(prior_gate_mean:0.897 prior_scale:0.058)
+Ep 006 | Loss(Tot:0.477 Seg:0.477 Bnd:0.000 Skel:0.000) | Dice: 0.7698 | HD95: 21.93 | CGMA(prior_gate_mean:0.903 prior_scale:0.059)
+Ep 007 | Loss(Tot:0.468 Seg:0.468 Bnd:0.000 Skel:0.000) | Dice: 0.7801 | HD95: 20.16 | CGMA(prior_gate_mean:0.896 prior_scale:0.059)
+[*] Update best model: Dice = 0.7801
+Ep 008 | Loss(Tot:0.462 Seg:0.462 Bnd:0.000 Skel:0.000) | Dice: 0.7801 | HD95: 21.83 | CGMA(prior_gate_mean:0.908 prior_scale:0.060)
+[*] Update best model: Dice = 0.7801
+Ep 009 | Loss(Tot:0.458 Seg:0.458 Bnd:0.000 Skel:0.000) | Dice: 0.7857 | HD95: 21.15 | CGMA(prior_gate_mean:0.906 prior_scale:0.060)
+[*] Update best model: Dice = 0.7857
+Ep 010 | Loss(Tot:0.452 Seg:0.452 Bnd:0.000 Skel:0.000) | Dice: 0.7767 | HD95: 21.81 | CGMA(prior_gate_mean:0.914 prior_scale:0.060)
+Ep 011 | Loss(Tot:0.449 Seg:0.449 Bnd:0.000 Skel:0.000) | Dice: 0.7778 | HD95: 20.94 | CGMA(prior_gate_mean:0.918 prior_scale:0.060)
+Ep 012 | Loss(Tot:0.439 Seg:0.439 Bnd:0.000 Skel:0.000) | Dice: 0.7800 | HD95: 19.97 | CGMA(prior_gate_mean:0.924 prior_scale:0.060)
+Ep 013 | Loss(Tot:0.437 Seg:0.437 Bnd:0.000 Skel:0.000) | Dice: 0.7802 | HD95: 22.76 | CGMA(prior_gate_mean:0.916 prior_scale:0.060)
+Ep 014 | Loss(Tot:0.432 Seg:0.432 Bnd:0.000 Skel:0.000) | Dice: 0.7714 | HD95: 22.23 | CGMA(prior_gate_mean:0.922 prior_scale:0.060)
+Ep 015 | Loss(Tot:0.426 Seg:0.426 Bnd:0.000 Skel:0.000) | Dice: 0.7810 | HD95: 20.62 | CGMA(prior_gate_mean:0.923 prior_scale:0.060)
+Ep 016 | Loss(Tot:0.422 Seg:0.422 Bnd:0.000 Skel:0.000) | Dice: 0.7852 | HD95: 20.58 | CGMA(prior_gate_mean:0.926 prior_scale:0.060)
+Ep 017 | Loss(Tot:0.418 Seg:0.418 Bnd:0.000 Skel:0.000) | Dice: 0.7859 | HD95: 20.74 | CGMA(prior_gate_mean:0.924 prior_scale:0.060)
+[*] Update best model: Dice = 0.7859
+Ep 018 | Loss(Tot:0.413 Seg:0.413 Bnd:0.000 Skel:0.000) | Dice: 0.7571 | HD95: 22.86 | CGMA(prior_gate_mean:0.926 prior_scale:0.060)
+Ep 019 | Loss(Tot:0.412 Seg:0.412 Bnd:0.000 Skel:0.000) | Dice: 0.7860 | HD95: 20.22 | CGMA(prior_gate_mean:0.925 prior_scale:0.060)
+[*] Update best model: Dice = 0.7860
+Ep 020 | Loss(Tot:0.408 Seg:0.408 Bnd:0.000 Skel:0.000) | Dice: 0.7840 | HD95: 21.03 | CGMA(prior_gate_mean:0.928 prior_scale:0.060)
+Ep 021 | Loss(Tot:0.401 Seg:0.401 Bnd:0.000 Skel:0.000) | Dice: 0.7883 | HD95: 19.91 | CGMA(prior_gate_mean:0.929 prior_scale:0.060)
+[*] Update best model: Dice = 0.7883
+Ep 022 | Loss(Tot:0.396 Seg:0.396 Bnd:0.000 Skel:0.000) | Dice: 0.7885 | HD95: 21.13 | CGMA(prior_gate_mean:0.928 prior_scale:0.060)
+[*] Update best model: Dice = 0.7885
+Ep 023 | Loss(Tot:0.393 Seg:0.393 Bnd:0.000 Skel:0.000) | Dice: 0.7887 | HD95: 19.90 | CGMA(prior_gate_mean:0.930 prior_scale:0.060)
+[*] Update best model: Dice = 0.7887
+Ep 024 | Loss(Tot:0.387 Seg:0.387 Bnd:0.000 Skel:0.000) | Dice: 0.7864 | HD95: 19.53 | CGMA(prior_gate_mean:0.930 prior_scale:0.060)
+Ep 025 | Loss(Tot:0.380 Seg:0.380 Bnd:0.000 Skel:0.000) | Dice: 0.7799 | HD95: 20.73 | CGMA(prior_gate_mean:0.931 prior_scale:0.060)
+Ep 026 | Loss(Tot:0.378 Seg:0.378 Bnd:0.000 Skel:0.000) | Dice: 0.7835 | HD95: 20.27 | CGMA(prior_gate_mean:0.929 prior_scale:0.060)
+Ep 027 | Loss(Tot:0.371 Seg:0.371 Bnd:0.000 Skel:0.000) | Dice: 0.7826 | HD95: 20.52 | CGMA(prior_gate_mean:0.931 prior_scale:0.060)
+Ep 028 | Loss(Tot:0.370 Seg:0.370 Bnd:0.000 Skel:0.000) | Dice: 0.7860 | HD95: 20.08 | CGMA(prior_gate_mean:0.930 prior_scale:0.060)
+Ep 029 | Loss(Tot:0.364 Seg:0.364 Bnd:0.000 Skel:0.000) | Dice: 0.7870 | HD95: 19.43 | CGMA(prior_gate_mean:0.927 prior_scale:0.060)
+Ep 030 | Loss(Tot:0.361 Seg:0.361 Bnd:0.000 Skel:0.000) | Dice: 0.7840 | HD95: 19.32 | CGMA(prior_gate_mean:0.932 prior_scale:0.060)
+Ep 031 | Loss(Tot:0.357 Seg:0.357 Bnd:0.000 Skel:0.000) | Dice: 0.7856 | HD95: 19.16 | CGMA(prior_gate_mean:0.928 prior_scale:0.060)
+Ep 032 | Loss(Tot:0.355 Seg:0.355 Bnd:0.000 Skel:0.000) | Dice: 0.7816 | HD95: 19.40 | CGMA(prior_gate_mean:0.932 prior_scale:0.060)
+Ep 033 | Loss(Tot:0.349 Seg:0.349 Bnd:0.000 Skel:0.000) | Dice: 0.7822 | HD95: 19.28 | CGMA(prior_gate_mean:0.930 prior_scale:0.060)
+Ep 034 | Loss(Tot:0.345 Seg:0.345 Bnd:0.000 Skel:0.000) | Dice: 0.7872 | HD95: 18.92 | CGMA(prior_gate_mean:0.927 prior_scale:0.060)
+Ep 035 | Loss(Tot:0.341 Seg:0.341 Bnd:0.000 Skel:0.000) | Dice: 0.7854 | HD95: 19.36 | CGMA(prior_gate_mean:0.928 prior_scale:0.059)
+Ep 036 | Loss(Tot:0.339 Seg:0.339 Bnd:0.000 Skel:0.000) | Dice: 0.7821 | HD95: 19.12 | CGMA(prior_gate_mean:0.929 prior_scale:0.059)
+Ep 037 | Loss(Tot:0.336 Seg:0.336 Bnd:0.000 Skel:0.000) | Dice: 0.7820 | HD95: 18.78 | CGMA(prior_gate_mean:0.926 prior_scale:0.059)
+Ep 038 | Loss(Tot:0.334 Seg:0.334 Bnd:0.000 Skel:0.000) | Dice: 0.7869 | HD95: 18.96 | CGMA(prior_gate_mean:0.928 prior_scale:0.059)
+Ep 039 | Loss(Tot:0.329 Seg:0.329 Bnd:0.000 Skel:0.000) | Dice: 0.7831 | HD95: 19.15 | CGMA(prior_gate_mean:0.928 prior_scale:0.059)
+Ep 040 | Loss(Tot:0.327 Seg:0.327 Bnd:0.000 Skel:0.000) | Dice: 0.7861 | HD95: 19.01 | CGMA(prior_gate_mean:0.928 prior_scale:0.059)
+Ep 041 | Loss(Tot:0.322 Seg:0.322 Bnd:0.000 Skel:0.000) | Dice: 0.7817 | HD95: 19.21 | CGMA(prior_gate_mean:0.925 prior_scale:0.059)
+Ep 042 | Loss(Tot:0.324 Seg:0.324 Bnd:0.000 Skel:0.000) | Dice: 0.7836 | HD95: 19.04 | CGMA(prior_gate_mean:0.924 prior_scale:0.059)
+Ep 043 | Loss(Tot:0.321 Seg:0.321 Bnd:0.000 Skel:0.000) | Dice: 0.7835 | HD95: 19.07 | CGMA(prior_gate_mean:0.926 prior_scale:0.059)
+[*] Early stopping after 20 epochs without improvement
+[*] loaded best validation weight: ./results/experiments\all_filtered/cgma_m1_fixed_prior_20260719\0719_2333\best_model.pth
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/cgma_m1_fixed_prior_20260719\0719_2333

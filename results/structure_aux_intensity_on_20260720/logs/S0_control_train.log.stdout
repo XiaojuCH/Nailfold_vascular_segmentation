@@ -1,0 +1,71 @@
+[*] mode: CGMA
+[*] dataset: all_filtered (./dataset_all_filtered)
+[*] save_path: ./results/experiments\all_filtered/structure_aux_s0_control_20260720\0721_0027
+[*] device: cuda
+[*] seed: 42
+[*] seg_loss: bce_dice
+[*] cgma: prior=off, auxiliary=off, boundary_w=0.0, centerline_w=0.0
+[*] 未加载预训练权重，从头训练
+Ep 001 | Loss(Tot:0.930 Seg:0.930 Bnd:0.000 Skel:0.000) | Dice: 0.7567 | HD95: 28.19
+[*] Update best model: Dice = 0.7567
+Ep 002 | Loss(Tot:0.608 Seg:0.608 Bnd:0.000 Skel:0.000) | Dice: 0.7676 | HD95: 25.31
+[*] Update best model: Dice = 0.7676
+Ep 003 | Loss(Tot:0.527 Seg:0.527 Bnd:0.000 Skel:0.000) | Dice: 0.7653 | HD95: 21.45
+Ep 004 | Loss(Tot:0.503 Seg:0.503 Bnd:0.000 Skel:0.000) | Dice: 0.7621 | HD95: 20.04
+Ep 005 | Loss(Tot:0.487 Seg:0.487 Bnd:0.000 Skel:0.000) | Dice: 0.7739 | HD95: 25.61
+[*] Update best model: Dice = 0.7739
+Ep 006 | Loss(Tot:0.479 Seg:0.479 Bnd:0.000 Skel:0.000) | Dice: 0.7753 | HD95: 21.97
+[*] Update best model: Dice = 0.7753
+Ep 007 | Loss(Tot:0.470 Seg:0.470 Bnd:0.000 Skel:0.000) | Dice: 0.7806 | HD95: 21.50
+[*] Update best model: Dice = 0.7806
+Ep 008 | Loss(Tot:0.462 Seg:0.462 Bnd:0.000 Skel:0.000) | Dice: 0.7786 | HD95: 21.58
+Ep 009 | Loss(Tot:0.458 Seg:0.458 Bnd:0.000 Skel:0.000) | Dice: 0.7791 | HD95: 21.03
+Ep 010 | Loss(Tot:0.451 Seg:0.451 Bnd:0.000 Skel:0.000) | Dice: 0.7680 | HD95: 20.69
+Ep 011 | Loss(Tot:0.448 Seg:0.448 Bnd:0.000 Skel:0.000) | Dice: 0.7864 | HD95: 20.04
+[*] Update best model: Dice = 0.7864
+Ep 012 | Loss(Tot:0.442 Seg:0.442 Bnd:0.000 Skel:0.000) | Dice: 0.7783 | HD95: 20.79
+Ep 013 | Loss(Tot:0.437 Seg:0.437 Bnd:0.000 Skel:0.000) | Dice: 0.7852 | HD95: 19.20
+Ep 014 | Loss(Tot:0.434 Seg:0.434 Bnd:0.000 Skel:0.000) | Dice: 0.7847 | HD95: 19.93
+Ep 015 | Loss(Tot:0.429 Seg:0.429 Bnd:0.000 Skel:0.000) | Dice: 0.7813 | HD95: 21.25
+Ep 016 | Loss(Tot:0.424 Seg:0.424 Bnd:0.000 Skel:0.000) | Dice: 0.7821 | HD95: 20.11
+Ep 017 | Loss(Tot:0.419 Seg:0.419 Bnd:0.000 Skel:0.000) | Dice: 0.7754 | HD95: 19.95
+Ep 018 | Loss(Tot:0.413 Seg:0.413 Bnd:0.000 Skel:0.000) | Dice: 0.7830 | HD95: 20.49
+Ep 019 | Loss(Tot:0.411 Seg:0.411 Bnd:0.000 Skel:0.000) | Dice: 0.7849 | HD95: 19.88
+Ep 020 | Loss(Tot:0.407 Seg:0.407 Bnd:0.000 Skel:0.000) | Dice: 0.7873 | HD95: 21.79
+[*] Update best model: Dice = 0.7873
+Ep 021 | Loss(Tot:0.402 Seg:0.402 Bnd:0.000 Skel:0.000) | Dice: 0.7830 | HD95: 21.63
+Ep 022 | Loss(Tot:0.401 Seg:0.401 Bnd:0.000 Skel:0.000) | Dice: 0.7808 | HD95: 18.62
+Ep 023 | Loss(Tot:0.391 Seg:0.391 Bnd:0.000 Skel:0.000) | Dice: 0.7854 | HD95: 18.79
+Ep 024 | Loss(Tot:0.389 Seg:0.389 Bnd:0.000 Skel:0.000) | Dice: 0.7856 | HD95: 18.92
+Ep 025 | Loss(Tot:0.386 Seg:0.386 Bnd:0.000 Skel:0.000) | Dice: 0.7830 | HD95: 19.01
+Ep 026 | Loss(Tot:0.382 Seg:0.382 Bnd:0.000 Skel:0.000) | Dice: 0.7741 | HD95: 20.19
+Ep 027 | Loss(Tot:0.378 Seg:0.378 Bnd:0.000 Skel:0.000) | Dice: 0.7877 | HD95: 19.18
+[*] Update best model: Dice = 0.7877
+Ep 028 | Loss(Tot:0.370 Seg:0.370 Bnd:0.000 Skel:0.000) | Dice: 0.7879 | HD95: 18.82
+[*] Update best model: Dice = 0.7879
+Ep 029 | Loss(Tot:0.368 Seg:0.368 Bnd:0.000 Skel:0.000) | Dice: 0.7784 | HD95: 19.24
+Ep 030 | Loss(Tot:0.363 Seg:0.363 Bnd:0.000 Skel:0.000) | Dice: 0.7844 | HD95: 19.04
+Ep 031 | Loss(Tot:0.356 Seg:0.356 Bnd:0.000 Skel:0.000) | Dice: 0.7857 | HD95: 18.45
+Ep 032 | Loss(Tot:0.355 Seg:0.355 Bnd:0.000 Skel:0.000) | Dice: 0.7904 | HD95: 18.76
+[*] Update best model: Dice = 0.7904
+Ep 033 | Loss(Tot:0.352 Seg:0.352 Bnd:0.000 Skel:0.000) | Dice: 0.7859 | HD95: 20.24
+Ep 034 | Loss(Tot:0.349 Seg:0.349 Bnd:0.000 Skel:0.000) | Dice: 0.7885 | HD95: 18.64
+Ep 035 | Loss(Tot:0.345 Seg:0.345 Bnd:0.000 Skel:0.000) | Dice: 0.7862 | HD95: 19.34
+Ep 036 | Loss(Tot:0.341 Seg:0.341 Bnd:0.000 Skel:0.000) | Dice: 0.7863 | HD95: 19.15
+Ep 037 | Loss(Tot:0.339 Seg:0.339 Bnd:0.000 Skel:0.000) | Dice: 0.7891 | HD95: 19.08
+Ep 038 | Loss(Tot:0.336 Seg:0.336 Bnd:0.000 Skel:0.000) | Dice: 0.7868 | HD95: 18.78
+Ep 039 | Loss(Tot:0.333 Seg:0.333 Bnd:0.000 Skel:0.000) | Dice: 0.7812 | HD95: 19.54
+Ep 040 | Loss(Tot:0.331 Seg:0.331 Bnd:0.000 Skel:0.000) | Dice: 0.7854 | HD95: 19.13
+Ep 041 | Loss(Tot:0.331 Seg:0.331 Bnd:0.000 Skel:0.000) | Dice: 0.7833 | HD95: 18.93
+Ep 042 | Loss(Tot:0.325 Seg:0.325 Bnd:0.000 Skel:0.000) | Dice: 0.7850 | HD95: 19.31
+Ep 043 | Loss(Tot:0.325 Seg:0.325 Bnd:0.000 Skel:0.000) | Dice: 0.7804 | HD95: 19.80
+Ep 044 | Loss(Tot:0.325 Seg:0.325 Bnd:0.000 Skel:0.000) | Dice: 0.7860 | HD95: 19.01
+Ep 045 | Loss(Tot:0.323 Seg:0.323 Bnd:0.000 Skel:0.000) | Dice: 0.7825 | HD95: 19.26
+Ep 046 | Loss(Tot:0.320 Seg:0.320 Bnd:0.000 Skel:0.000) | Dice: 0.7858 | HD95: 19.09
+Ep 047 | Loss(Tot:0.321 Seg:0.321 Bnd:0.000 Skel:0.000) | Dice: 0.7847 | HD95: 19.16
+Ep 048 | Loss(Tot:0.322 Seg:0.322 Bnd:0.000 Skel:0.000) | Dice: 0.7847 | HD95: 19.35
+Ep 049 | Loss(Tot:0.319 Seg:0.319 Bnd:0.000 Skel:0.000) | Dice: 0.7855 | HD95: 19.20
+Ep 050 | Loss(Tot:0.318 Seg:0.318 Bnd:0.000 Skel:0.000) | Dice: 0.7848 | HD95: 19.16
+[*] loaded best validation weight: ./results/experiments\all_filtered/structure_aux_s0_control_20260720\0721_0027\best_model.pth
+
+[*] Training complete. Results saved to: ./results/experiments\all_filtered/structure_aux_s0_control_20260720\0721_0027

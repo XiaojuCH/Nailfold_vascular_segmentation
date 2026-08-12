@@ -1,0 +1,18 @@
+{
+  "manifest": "docs\\prediction_visualization_manifest_20260730.json",
+  "data_dir": ".\\dataset_all_filtered",
+  "split": "test",
+  "out_dir": "results\\prediction_error_review_20260730",
+  "img_size": 256,
+  "batch_size": 4,
+  "threshold": 0.5,
+  "boundary_tolerance": 2,
+  "top_k": 12,
+  "panel_size": 192,
+  "device": "auto",
+  "reuse_predictions": true,
+  "skip_all_case_panels": false,
+  "patient_mapping": "third_party/ANFC_OURS_All_dataset/backup_original_names/rename_mapping.txt",
+  "device_used": "cuda",
+  "n_images": 436
+}

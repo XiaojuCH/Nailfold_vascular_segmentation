@@ -1,0 +1,44 @@
+{
+  "method": "K2 uniform dual-teacher soft-KD",
+  "student": "TransUNet R50-ViT-B_16, initialized from F0 full training weight",
+  "teacher_rgb": "F0 pretrained RGB TransUNet, frozen during target generation",
+  "teacher_morphology": "F3 scratch directional_multiscale green-prior fusion TransUNet, frozen during target generation",
+  "soft_target": "0.5 * sigmoid(F0 logits) + 0.5 * sigmoid(F3 logits)",
+  "student_loss": "BCE-Dice(student logits, ground truth) + 1.0 * BCEWithLogits(student logits, soft target)",
+  "image_size": 256,
+  "threshold": 0.5,
+  "mask_rule": "mask > 127",
+  "augmentations": {
+    "horizontal_flip_probability": 0.5,
+    "rotation_probability": 0.5,
+    "rotation_degrees": [-15, 15],
+    "brightness_contrast_probability": 0.5,
+    "contrast_range": [0.8, 1.2],
+    "brightness_range": [-15, 15]
+  },
+  "f0": {
+    "pretrained": "ImageNet21k R50+ViT-B_16.npz",
+    "epochs": 50,
+    "patience": 20,
+    "batch_size": 4,
+    "learning_rate": 0.0001,
+    "seed": 42
+  },
+  "f3": {
+    "pretrained": false,
+    "variant": "directional_multiscale",
+    "epochs": 50,
+    "patience": 20,
+    "batch_size": 4,
+    "learning_rate": 0.0001,
+    "seed": 42
+  },
+  "k2": {
+    "epochs": 30,
+    "patience": 10,
+    "batch_size": 4,
+    "learning_rate": 0.00003,
+    "lambda_kd": 1.0,
+    "seed": 42
+  }
+}

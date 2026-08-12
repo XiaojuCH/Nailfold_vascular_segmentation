@@ -1,0 +1,5 @@
+﻿"experiment","experiment_name","variant","cgma_prior","cgma_auxiliary","seed","best_val_epoch","best_val_dice","hd95_at_best_val_dice","weight"
+"M0_transunet_no_prior_no_aux_seed42","all_filtered/cgma_m0_transunet_no_prior_no_aux_20260719","baseline_control","off","off","42","32","0.7886","19.85","D:\Projects_\JiaBi_new\results\experiments\all_filtered\cgma_m0_transunet_no_prior_no_aux_20260719\0719_2206\best_model.pth"
+"M1_fixed_prior_seed42","all_filtered/cgma_m1_fixed_prior_20260719","fixed_green_local_contrast","on","off","42","23","0.7887","19.9","D:\Projects_\JiaBi_new\results\experiments\all_filtered\cgma_m1_fixed_prior_20260719\0719_2333\best_model.pth"
+"M2_structure_aux_seed42","all_filtered/cgma_m2_structure_aux_20260719","boundary_centerline_auxiliary","off","on","42","25","0.7885","19.63","D:\Projects_\JiaBi_new\results\experiments\all_filtered\cgma_m2_structure_aux_20260719\0720_0106\best_model.pth"
+"M3_cgma_full_seed42","all_filtered/cgma_m3_full_20260719","fixed_prior_plus_structure_auxiliary","on","on","42","18","0.7889","19.26","D:\Projects_\JiaBi_new\results\experiments\all_filtered\cgma_m3_full_20260719\0720_0237\best_model.pth"

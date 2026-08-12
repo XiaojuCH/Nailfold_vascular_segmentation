@@ -1,0 +1,2 @@
+﻿name,weight,data_dir,split,n_images,img_size,threshold,boundary_tolerance,dice,iou,sensitivity,precision,specificity,accuracy,hd95,cldice,boundary_f1,per_image_csv
+Reference_K2_seed42,D:\Projects_\JiaBi_new\K2_model\reference_weights\K2_uniform_lambda1p0_seed42_best_model.pth,D:\Projects_\JiaBi_new\dataset_all_filtered,val,449,256,0.5,2,0.7976912247620019,0.6706099442098413,0.8196058340652349,0.7935874080650821,0.9749200843933443,0.9593032463096933,18.295321121187886,0.8927046225155391,0.6971338505144414,outputs\smoke_reference_eval\20260808_230756\per_image_metrics.csv

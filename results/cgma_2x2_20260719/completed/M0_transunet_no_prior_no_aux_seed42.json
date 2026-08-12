@@ -1,0 +1,12 @@
+﻿{
+    "experiment":  "M0_transunet_no_prior_no_aux_seed42",
+    "experiment_name":  "all_filtered/cgma_m0_transunet_no_prior_no_aux_20260719",
+    "variant":  "baseline_control",
+    "cgma_prior":  "off",
+    "cgma_auxiliary":  "off",
+    "seed":  42,
+    "best_val_epoch":  32,
+    "best_val_dice":  0.7886,
+    "hd95_at_best_val_dice":  19.85,
+    "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\cgma_m0_transunet_no_prior_no_aux_20260719\\0719_2206\\best_model.pth"
+}

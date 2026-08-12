@@ -1,0 +1,19 @@
+{
+  "created_at": "2026-08-08T23:54:42",
+  "device": "cuda",
+  "data_dir": "D:\\Projects_\\JiaBi_new\\dataset_all_filtered",
+  "f0_weight": "D:\\Projects_\\JiaBi_new\\K2_model\\reference_weights\\F0_pretrained_seed42_best_model.pth",
+  "f3_weight": "D:\\Projects_\\JiaBi_new\\K2_model\\reference_weights\\F3_directional_multiscale_scratch_seed42_best_model.pth",
+  "f3_variant": "directional_multiscale",
+  "ensemble": "0.5 * sigmoid(F0) + 0.5 * sigmoid(F3)",
+  "dtype": "float16 .npy",
+  "img_size": 256,
+  "splits": [
+    {
+      "split": "val",
+      "images": 449,
+      "probability_dir": "K2_model\\outputs\\smoke_dual_teacher_targets_20260808\\val\\ensemble_probabilities",
+      "disagreement_dir": "K2_model\\outputs\\smoke_dual_teacher_targets_20260808\\val\\disagreement"
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+﻿[K2 reference evaluation step] 00_dataset_audit
+[Exit code] 0
+
+[stdout]
+{
+  "data_dir": "D:\\Projects_\\JiaBi_new\\dataset_all_filtered",
+  "splits": {
+    "train": {
+      "images": 1838,
+      "masks": 1838,
+      "image_shapes": {
+        "256x256x3": 1838
+      },
+      "mask_shapes": {
+        "256x256": 1838
+      },
+      "image_mask_shape_mismatches": 0,
+      "mask_unique_values_preview": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "masks_with_gray_values_1_to_254": 1670,
+      "empty_masks_after_threshold_127": 0
+    },
+    "val": {
+      "images": 449,
+      "masks": 449,
+      "image_shapes": {
+        "256x256x3": 449
+      },
+      "mask_shapes": {
+        "256x256": 449
+      },
+      "image_mask_shape_mismatches": 0,
+      "mask_unique_values_preview": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "masks_with_gray_values_1_to_254": 133,
+      "empty_masks_after_threshold_127": 0
+    },
+    "test": {
+      "images": 436,
+      "masks": 436,
+      "image_shapes": {
+        "256x256x3": 436
+      },
+      "mask_shapes": {
+        "256x256": 436
+      },
+      "image_mask_shape_mismatches": 0,
+      "mask_unique_values_preview": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "masks_with_gray_values_1_to_254": 313,
+      "empty_masks_after_threshold_127": 0
+    }
+  }
+}
+
+[stderr]

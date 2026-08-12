@@ -1,0 +1,29 @@
+
+[Eval] S0_transunet_intensity_on_seed42
+       model=cgma weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\structure_aux_s0_control_20260720\0721_0027\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] S1_fixed_prior_intensity_on_seed42
+       model=cgma weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\structure_aux_s1_fixed_prior_20260720\0721_0203\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] S2_boundary_centerline_w0p10_intensity_on_seed42
+       model=cgma weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\structure_aux_s2_full_20260720\0721_0318\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] S3_boundary_centerline_w0p05_intensity_on_seed42
+       model=cgma weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\structure_aux_s3_low_20260720\0721_0446\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Eval] S4_boundary_only_w0p10_intensity_on_seed42
+       model=cgma weight=D:\Projects_\JiaBi_new\results\experiments\all_filtered\structure_aux_s4_boundary_only_20260720\0721_0605\best_model.pth
+[*] 未加载预训练权重，从头训练
+
+[Unified Evaluation Complete]
+Aggregate CSV:  results\unified_eval_structure_aux_intensity_on_20260720\20260721_073348\aggregate_results.csv
+Aggregate XLSX: results\unified_eval_structure_aux_intensity_on_20260720\20260721_073348\aggregate_results.xlsx
+S0_transunet_intensity_on_seed42: Dice=0.7513, IoU=0.6125, Recall=0.7817, Precision=0.7425, Spec=0.9674, Acc=0.9480, HD95=24.58, clDice=0.8405, BoundaryF1=0.6426
+S1_fixed_prior_intensity_on_seed42: Dice=0.7534, IoU=0.6151, Recall=0.7910, Precision=0.7389, Spec=0.9664, Acc=0.9482, HD95=23.95, clDice=0.8423, BoundaryF1=0.6428
+S2_boundary_centerline_w0p10_intensity_on_seed42: Dice=0.7523, IoU=0.6138, Recall=0.7919, Precision=0.7363, Spec=0.9651, Acc=0.9474, HD95=23.45, clDice=0.8440, BoundaryF1=0.6434
+S3_boundary_centerline_w0p05_intensity_on_seed42: Dice=0.7501, IoU=0.6117, Recall=0.7840, Precision=0.7377, Spec=0.9662, Acc=0.9479, HD95=24.99, clDice=0.8383, BoundaryF1=0.6319
+S4_boundary_only_w0p10_intensity_on_seed42: Dice=0.7517, IoU=0.6130, Recall=0.7722, Precision=0.7515, Spec=0.9692, Acc=0.9489, HD95=23.95, clDice=0.8401, BoundaryF1=0.6438

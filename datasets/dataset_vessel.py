@@ -3,6 +3,7 @@ import cv2
 import torch
 import numpy as np
 from torch.utils.data import Dataset
+from skimage.morphology import skeletonize
 
 class VesselDataset(Dataset):
     def __init__(
@@ -15,6 +16,7 @@ class VesselDataset(Dataset):
         img_size=256,
         augment=False,
         intensity_aug=True,
+        structure_targets=False,
     ):
         self.image_dir = image_dir
         self.mask_dir = mask_dir
@@ -24,6 +26,7 @@ class VesselDataset(Dataset):
         self.img_size = img_size
         self.augment = augment
         self.intensity_aug = intensity_aug
+        self.structure_targets = structure_targets
 
         self.filenames = sorted([f for f in os.listdir(image_dir) if f.lower().endswith(('.png', '.jpg', '.jpeg'))])
         self._validate_auxiliary_files(self.soft_target_dir, "soft target")
@@ -64,6 +67,15 @@ class VesselDataset(Dataset):
 
     def __len__(self):
         return len(self.filenames)
+
+    @staticmethod
+    def _structure_targets(mask):
+        """Generate targets after geometric augmentation to keep them aligned."""
+        binary = (mask > 0.5).astype(np.uint8)
+        eroded = cv2.erode(binary, np.ones((3, 3), np.uint8), iterations=1)
+        boundary = (binary & ~eroded).astype(np.float32)
+        centerline = skeletonize(binary.astype(bool)).astype(np.float32)
+        return boundary, centerline
 
     def __getitem__(self, idx):
         filename = self.filenames[idx]
@@ -147,6 +159,11 @@ class VesselDataset(Dataset):
             "image": torch.tensor(image, dtype=torch.float32),
             "mask": torch.tensor(mask, dtype=torch.float32).unsqueeze(0) 
         }
+
+        if self.structure_targets:
+            boundary, centerline = self._structure_targets(mask)
+            sample["boundary_target"] = torch.from_numpy(boundary).unsqueeze(0)
+            sample["centerline_target"] = torch.from_numpy(centerline).unsqueeze(0)
 
         if teacher is not None:
             teacher = (teacher.astype(np.float32) / 255.0).transpose(2, 0, 1)

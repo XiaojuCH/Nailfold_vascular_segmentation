@@ -1,0 +1,12 @@
+﻿{
+    "experiment":  "M2_structure_aux_seed42",
+    "experiment_name":  "all_filtered/cgma_m2_structure_aux_20260719",
+    "variant":  "boundary_centerline_auxiliary",
+    "cgma_prior":  "off",
+    "cgma_auxiliary":  "on",
+    "seed":  42,
+    "best_val_epoch":  25,
+    "best_val_dice":  0.7885,
+    "hd95_at_best_val_dice":  19.63,
+    "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\cgma_m2_structure_aux_20260719\\0720_0106\\best_model.pth"
+}

@@ -1,0 +1,12 @@
+﻿{
+    "experiment":  "M3_cgma_full_seed42",
+    "experiment_name":  "all_filtered/cgma_m3_full_20260719",
+    "variant":  "fixed_prior_plus_structure_auxiliary",
+    "cgma_prior":  "on",
+    "cgma_auxiliary":  "on",
+    "seed":  42,
+    "best_val_epoch":  18,
+    "best_val_dice":  0.7889,
+    "hd95_at_best_val_dice":  19.26,
+    "weight":  "D:\\Projects_\\JiaBi_new\\results\\experiments\\all_filtered\\cgma_m3_full_20260719\\0720_0237\\best_model.pth"
+}

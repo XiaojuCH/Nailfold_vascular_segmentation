@@ -1,0 +1,5 @@
+[*] 未加载预训练权重，从头训练
+[*] 未加载预训练权重，从头训练
+[Dual-teacher targets complete]
+Output: K2_model\outputs\smoke_dual_teacher_targets_20260808
+val: 449 images

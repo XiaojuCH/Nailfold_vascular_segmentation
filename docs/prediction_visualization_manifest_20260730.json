@@ -1,0 +1,109 @@
+{
+  "dataset_note": "dataset_all_filtered/test, 436 images, current development-test",
+  "primary_baseline": "TransUNet_scratch_seed42",
+  "experiments": [
+    {
+      "name": "TransUNet_scratch_seed42",
+      "display_name": "Scratch baseline",
+      "model_type": "transunet",
+      "weight": "results/experiments/all_filtered/baseline_retrain_20260619/0619_0232/best_model.pth"
+    },
+    {
+      "name": "Ours_green_MSE_scratch_seed42",
+      "display_name": "Green MSE",
+      "model_type": "ours",
+      "weight": "results/experiments/all_filtered/ours_green_only_mse_only_20260620/0620_0616/best_model.pth",
+      "teacher_mode": "green_only",
+      "enhancer": "basic",
+      "enhancer_norm": "bn",
+      "joint_model": "v1"
+    },
+    {
+      "name": "F3_directional_multiscale_scratch_seed42",
+      "display_name": "F3 directional",
+      "model_type": "prior_fusion",
+      "weight": "results/experiments/all_filtered/f3_directional_green_multiscale_scratch_seed42_20260715/0715_1556/best_model.pth",
+      "prior_fusion_variant": "directional_multiscale"
+    },
+    {
+      "name": "F0_pretrained_seed42",
+      "display_name": "Pretrained F0",
+      "model_type": "transunet",
+      "weight": "results/experiments/all_filtered/f0_transunet_corrected_pretrained_seed42_20260715/0715_1907/best_model.pth"
+    },
+    {
+      "name": "K2_dual_teacher_KD_seed42",
+      "display_name": "K2 soft KD",
+      "model_type": "transunet",
+      "weight": "results/experiments/all_filtered/K2_uniform_lambda1p0_20260717/0717_0206/best_model.pth"
+    },
+    {
+      "name": "S0_structure_control_seed42",
+      "display_name": "S0 control",
+      "model_type": "cgma",
+      "weight": "results/experiments/all_filtered/structure_aux_s0_control_20260720/0721_0027/best_model.pth",
+      "cgma_prior": "off",
+      "cgma_auxiliary": "off"
+    },
+    {
+      "name": "S2_boundary_centerline_seed42",
+      "display_name": "S2 structure",
+      "model_type": "cgma",
+      "weight": "results/experiments/all_filtered/structure_aux_s2_full_20260720/0721_0318/best_model.pth",
+      "cgma_prior": "off",
+      "cgma_auxiliary": "on",
+      "cgma_boundary_weight": 0.1,
+      "cgma_centerline_weight": 0.1
+    },
+    {
+      "name": "DecoderDistillV2_seed42",
+      "display_name": "Decoder KD V2",
+      "model_type": "ours",
+      "weight": "results/experiments/all_filtered/decoder_distill_v2_direct_green_teacher_pretrained_seed42_20260710/0710_0812/best_model.pth",
+      "enhancer": "basic",
+      "enhancer_norm": "bn",
+      "joint_model": "decoder_distill_v2"
+    },
+    {
+      "name": "F0_F3_probability_ensemble",
+      "display_name": "F0+F3 ensemble",
+      "model_type": "ensemble",
+      "members": [
+        {"name": "F0_pretrained_seed42", "weight": 0.5},
+        {"name": "F3_directional_multiscale_scratch_seed42", "weight": 0.5}
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "Green_MSE_vs_scratch_baseline",
+      "control": "TransUNet_scratch_seed42",
+      "candidate": "Ours_green_MSE_scratch_seed42"
+    },
+    {
+      "name": "F3_vs_scratch_baseline",
+      "control": "TransUNet_scratch_seed42",
+      "candidate": "F3_directional_multiscale_scratch_seed42"
+    },
+    {
+      "name": "K2_vs_pretrained_F0",
+      "control": "F0_pretrained_seed42",
+      "candidate": "K2_dual_teacher_KD_seed42"
+    },
+    {
+      "name": "S2_vs_S0",
+      "control": "S0_structure_control_seed42",
+      "candidate": "S2_boundary_centerline_seed42"
+    },
+    {
+      "name": "DecoderKD_V2_vs_pretrained_F0",
+      "control": "F0_pretrained_seed42",
+      "candidate": "DecoderDistillV2_seed42"
+    },
+    {
+      "name": "Ensemble_vs_pretrained_F0",
+      "control": "F0_pretrained_seed42",
+      "candidate": "F0_F3_probability_ensemble"
+    }
+  ]
+}
