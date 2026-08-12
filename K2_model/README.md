@@ -1,8 +1,8 @@
-# K2 双教师蒸馏复现包
+# K2 双教师蒸馏
 
-本目录用于复现和迁移当前的 K2 模型。K2 是一个 **输出级双教师蒸馏** 方法：以 RGB 语义教师 F0 和绿色形态教师 F3 的平均概率图，监督一个由 F0 完整权重初始化的 TransUNet 学生。最终推理只保留 K2 学生，教师不参与推理。
+本目录用于在新数据集上从零复现 K2 训练流程。K2 是一个 **输出级双教师蒸馏** 方法：以 RGB 语义教师 F0 和绿色形态教师 F3 的平均概率图，监督一个由 F0 完整权重初始化的 TransUNet 学生。最终推理只保留 K2 学生，教师不参与推理。
 
-首次上手请直接看 [中文快速使用说明](docs/QUICKSTART_CN.md)。
+首次上手请直接看 [中文快速使用说明](docs/QUICKSTART_CN.md)。推荐入口是纯 Python 的 `run_k2_pipeline.py`，不依赖 PowerShell。
 
 ## 1. 方法与边界
 
@@ -20,29 +20,31 @@ L = BCE-Dice(p_student, GT) + 1.0 * Soft-BCE(p_student, p_teacher)
 - **K2**：从 F0 的完整训练权重继续微调，使用 F0+F3 的离线 float16 soft targets。
 - **不是**：Green MSE 的 enhancer 图像级先验；也不是之前失败的 decoder feature MSE。
 
-本包保存的是 `2026-07-17, seed42` 的可复现实验协议。它在当前 436 张 development-test 上的单次结果为 Dice `0.7609`、IoU `0.6248`、Recall `0.8041`、Precision `0.7388`、HD95 `21.35`、clDice `0.8537`、Boundary F1 `0.6451`。K2 目前只有一个 seed，不能把该数值作为跨数据集的性能保证。
+本包只保留 ImageNet21k 的 TransUNet 初始化权重；不包含任何甲襞数据训练得到的 F0、F3 或 K2 权重。每个新数据集都必须重训 F0、F3 和 K2。
 
 ## 2. 目录
 
 ```text
 K2_model/
   code/                 K2 专用模型、训练、软标签、评估与数据审计代码
-  scripts/              PowerShell 一键入口
-  configs/              固定实验协议和参考权重校验值
-  reference_weights/    ImageNet 初始化、当前甲襞 F0/F3/K2 参考权重
-  outputs/              默认输出目录（训练、软标签、日志、评估）
-  docs/                 交接与指标说明
+  reference_weights/    ImageNet21k 初始化权重
+  outputs/              本地训练、软标签、日志和评估输出（默认不附带结果）
+  docs/                 方法和使用说明
 ```
 
 ## 3. 环境
 
 当前已验证环境：Python `3.8.20`、PyTorch `2.4.1+cu118`、CUDA `11.8`、NumPy `1.24.4`、OpenCV `4.13.0`、SciPy `1.10.1`、scikit-image `0.21.0`、tqdm `4.67.1`。
 
+**请勿使用 Python 3.12+ 或 NumPy 2.x**：`third_party/TransUNet` 官方代码与 SciPy 的兼容性只在 NumPy 1.x 下验证过，NumPy 2.x 会导致部分指标计算报错。
+
 在已安装匹配 CUDA 的 PyTorch 环境中执行：
 
 ```powershell
 pip install -r .\code\requirements-k2.txt
 ```
+
+运行前先进入自己的 PyTorch 环境，例如 `conda activate pytorch`。随后所有推荐命令都只需要 `python`，不依赖 PowerShell 执行策略。
 
 如需重新安装 PyTorch，请按本机 CUDA 驱动从 PyTorch 官方安装页选择版本；不要盲目安装 `third_party/TransUNet/requirements.txt` 中已过时的 `torch==1.4.0`。
 
@@ -76,8 +78,7 @@ python .\code\audit_dataset.py --data_dir "D:\YourDataset"
 从 `K2_model` 目录执行：
 
 ```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\scripts\run_k2_pipeline.ps1 -DataDir "D:\YourDataset" -OutputRoot "outputs\your_dataset_seed42" -IncludeK0Control
+python .\run_k2_pipeline.py --data_dir "D:\YourDataset" --output_root "outputs\your_dataset_seed42" --include_k0_control
 ```
 
 脚本顺序固定：
@@ -88,25 +89,13 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 4. 依次生成 F0/F3 概率图，保存 `train/val` 的 float16 `.npy` soft target；
 5. 可选训练 K0 control：从 F0 继续训练，但 `lambda_kd=0`；
 6. 训练 K2：从 F0 初始化，`lambda_kd=1.0`；
-7. 默认只在 val 上评估。确认模型方案后，增加 `-EvaluateTest` 才评 test 一次。
+7. 默认只在 val 上评估。确认模型方案后，增加 `--evaluate_test` 才评 test 一次。
 
-若中途因断电、显存或网络问题中断，在确认已有阶段完整后可在原命令末尾增加 `-SkipExisting`。脚本只会跳过同时具备权重、配置和 val 逐图结果的训练阶段；半成品目录不会被自动覆盖。
+若中途因断电、显存或网络问题中断，在确认已有阶段完整后可在原命令末尾增加 `--skip_existing`。脚本只会跳过同时具备权重、配置和 val 逐图结果的训练阶段；半成品目录不会被自动覆盖。
 
-**重要**：新数据集必须重新训练 F0 与 F3，并重新生成 soft targets。`reference_weights/F0/F3` 是甲襞数据训练得到的教师，只用于本项目当前数据的复评、结构检查或受控迁移研究，不能作为新数据集的默认教师。
+**重要**：`reference_weights/` 中只有 ImageNet 初始化文件，不是现成的血管分割教师。新数据集必须重训 F0 与 F3，并重新生成 soft targets。
 
-## 6. 复评当前甲襞 K2 权重
-
-对当前原始 `dataset_all_filtered` 可执行：
-
-```powershell
-.\scripts\evaluate_reference_k2.ps1 `
-  -DataDir "D:\Projects_\JiaBi_new\dataset_all_filtered" `
-  -Split test
-```
-
-若权重和数据没有被修改，结果应接近：Dice `0.7609`、IoU `0.6248`、Recall `0.8041`、Precision `0.7388`、Specificity `0.9656`、Accuracy `0.9494`、HD95 `21.35`、clDice `0.8537`、Boundary F1 `0.6451`。允许因 CUDA/库版本出现很小浮动；大幅差异应先检查阈值、mask 规则、文件对齐和权重 SHA256。
-
-## 7. 分配给师弟时的交付清单
+## 6. 分配给师弟时的交付清单
 
 1. 给每人一份独立 `train/val/test` 文件名清单，确保患者不跨 split。
 2. 先让其运行 `audit_dataset.py`，把 JSON 结果回传。
@@ -115,7 +104,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 5. 汇报必须同时提交 `config.json`、`training_log.txt`、`val_per_image.csv`、soft-target `metadata.json`、最终 `aggregate_metrics.csv`。
 6. 在同一数据集最终选定方案后，再补 seed43/44、患者级 paired CI，并做独立 test 或 outer-CV。
 
-## 8. 代码入口
+## 7. 代码入口
 
 | 文件 | 用途 |
 |---|---|
@@ -123,7 +112,6 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 | `code/generate_dual_teacher_targets.py` | 两教师顺序占用 GPU，生成不量化成 PNG 的 float16 概率图。 |
 | `code/evaluate_k2.py` | 统一模型评估，输出 aggregate 和 per-image CSV。 |
 | `code/audit_dataset.py` | 训练前检查目录、文件名、mask 灰度取值。 |
-| `scripts/run_k2_pipeline.ps1` | 新数据集完整复现主入口。 |
-| `scripts/evaluate_reference_k2.ps1` | 当前甲襞参考 K2 的复评入口。 |
+| `run_k2_pipeline.py` | 推荐：跨平台完整复现主入口。 |
 
 详见 [docs/K2_handoff.md](docs/K2_handoff.md)。

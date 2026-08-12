@@ -6,9 +6,10 @@ import sys
 import os
 import numpy as np
 
-# 添加 TransUNet 到路径
+# 添加 TransUNet 到路径（append 而非 insert(0)：避免遮蔽本项目的 utils 包，
+# 否则 `from utils.metrics import ...` 会命中 TransUNet 官方 utils.py 并触发 medpy 依赖）
 transunet_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'third_party', 'TransUNet')
-sys.path.insert(0, transunet_path)
+sys.path.append(transunet_path)
 
 import torch
 import torch.nn as nn
